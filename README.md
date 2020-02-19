@@ -1,6 +1,6 @@
 # WEB-ToDoList
 
-IUT Paris Descartes - 2019 - Enseignant : PEROIS Cyrille.
+IUT Paris Descartes - 2020 - Enseignant : PEROIS Cyrille.
 
 ## Développement en JavaScript d'une application web de type To Do List. 
 
