@@ -8,13 +8,9 @@ Dans le cadre du cours de Web, Cyrille Perois a proposé de développer une appl
 
 ## Auteurs
 
-BERTHIER Nicolas : nicolas-berthier@orange.fr
-ESCOFFIER Vincent : alainvincentesc@gmail.com
-JALLAIS Adrien : adrien.jallais@protonmail.com
-
-## Objectifs
-
-Évaluer les capacités à développer une application web avec toutes les technologies front et back (client et serveur) qui ont été vues en cours.
+BERTHIER Nicolas : nicolas-berthier@orange.fr  
+ESCOFFIER Vincent : alainvincentesc@gmail.com  
+JALLAIS Adrien : adrien.jallais@protonmail.com  
 
 ## Infos générales
 
