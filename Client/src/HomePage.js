@@ -62,13 +62,15 @@ export default class Home extends Component {
     }
 
     editTask(newTask) {
-        console.log(newTask);
+        console.log(newTask)
         let todoLists = this.state.todoLists
         let id = this.findList(this.state.selectedList.id);
-        for (var i = 0; i < todoLists[id].tasks.length; i++)
+        for (var i = 0; i < todoLists[id].tasks.length; i++){
             if (todoLists[id].tasks[i].index === newTask.index) {
                 todoLists[id].tasks[i] = newTask;
+                break;
             }
+        }
         this.setState({ todoLists: todoLists, onEdit: false });
     }
 

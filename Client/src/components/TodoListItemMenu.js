@@ -15,7 +15,7 @@ export default class TodoListItemMenu extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.createTask = this.createTask.bind(this);
-        this.markTodoDone = this.markTodoDone.bind(this);
+        this.markStageDone = this.markStageDone.bind(this);
         this.removeStage = this.removeStage.bind(this);
         this.baseState = this.state;
     }
@@ -44,28 +44,29 @@ export default class TodoListItemMenu extends React.Component {
         this.props.onSubmit(newTask);
     }
 
-    markTodoDone(index) {
-        let stages = this.state.stages;
-        stages.forEach(stage => {
-            if (stage.index === index) {
-                stage.done = !stage.done;
-                return;
-            }
-        });
-        this.setState({ stages: stages, showError: false })
+    markStageDone(index) {
+        this.setState({
+            stages: this.state.stages.map(stg => (stg.index === index ? {...stg, done : !stg.done} : stg)),
+            showError:false
+          });
     }
+
     createTask(task) {
-        let stages = this.state.stages;
-        stages.push({ title: task.newStageValue, index: stages.length + 1, done: false });
-        this.setState({ stages: stages, showError: false })
+        let newtask = { title: task.newStageValue, index: this.state.stages.length + 1, done: false };
+        this.setState({
+            stages:[...this.state.stages, newtask],
+            showError : false
+          });   
     }
+
     handleChange(event) {
         this.setState({ [event.target.name]: event.target.value, showError: false });
     }
+    
     render() {
         let stages = this.state.stages.length > 0 && this.state.stages.map(stage => {
             return (
-                <StagesItem key={stage.index + stage.title} item={stage} removeStage={this.removeStage} markTodoDone={this.markTodoDone} />
+                <StagesItem key={stage.index + stage.title} item={stage} removeStage={this.removeStage} markTodoDone={this.markStageDone} />
             );
         });
         return (
