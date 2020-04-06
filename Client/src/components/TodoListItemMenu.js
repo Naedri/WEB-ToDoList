@@ -2,6 +2,7 @@ import React from 'react';
 import StagesItem from './StagesItem';
 import StagesForm from './StagesForm';
 
+
 export default class TodoListItemMenu extends React.Component {
     constructor(props) {
         super(props);
@@ -26,10 +27,10 @@ export default class TodoListItemMenu extends React.Component {
         }
     }
 
-    removeStage(index) {/*
+    removeStage(index) {
         let stages = this.state.stages;
-        let newStages = stages.filter( stage => stage.index === index);
-        this.setState({stages : newStages})*/
+        let newStages = stages.filter( stage => stage.index !== index);
+        this.setState({stages : newStages})
     }
 
     onSubmit() {
@@ -52,7 +53,7 @@ export default class TodoListItemMenu extends React.Component {
     }
 
     createTask(task) {
-        let newtask = { title: task.newStageValue, index: this.state.stages.length + 1, done: false };
+        let newtask = { title: task.newStageValue, index: this.state.stages.length + 1+task.newStageValue, done: false };
         this.setState({
             stages:[...this.state.stages, newtask],
             showError : false
