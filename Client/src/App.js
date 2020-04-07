@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import Login from './Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SignIn from './SignIn';
@@ -9,8 +9,8 @@ import Home from './HomePage'
 function App() {
   return (<Router>
     <div className="App">
-      {/*
-      <nav className="navbar navbar-expand-lg navbar-light fixed-top">
+      {
+      <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav ml-auto">
@@ -20,11 +20,14 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
               </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={"/home"}>Home</Link>
+              </li>
             </ul>
           </div>
         </div>
       </nav>
-      */}
+      }
       <Switch>
         <Route exact path='/' component={Login} />
         <Route exact path="/login" component={Login} />
