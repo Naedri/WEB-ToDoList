@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SignIn from './SignIn';
 import Home from './HomePage'
 
-function App() {
+const App = () => {
   return (<Router>
     <div className="App">
       {

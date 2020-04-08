@@ -1,8 +1,8 @@
 import React from 'react';
 
 
-export default class TodoHeader extends React.Component {
-    render () {
+const TodoHeader = () => {
       return <h1>{this.props.title}</h1>;
-    }
   }
+
+export default TodoHeader;

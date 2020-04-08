@@ -5,7 +5,7 @@ import React from 'react';
 const TodoList = (props) => {
     let items = props.items.map(task => {
         return (
-            <TodoListItem key={task.index} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
+            <TodoListItem key={task.index + task.value} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
         );
     });
     return (

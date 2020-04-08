@@ -1,50 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import plus from '../assets/plus.svg';
 
-export default class TodoForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value : ""
-        }
-        this.onSubmit = this.onSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.textInput = null;
 
+const TodoForm = (props) => {
+    let [value, setValue] = useState("");
+    let textInput = null;
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
     }
 
-    handleChange(event){
-        this.setState({value : event.target.value});
-    }
-    onSubmit() {
-        let newItemValue = this.state.value;
+    const onSubmit = () => {
+        let newItemValue = value;
         if (newItemValue) {
-            this.props.addItem({ newItemValue });
-            this.setState({value : ""});
+            props.addItem({ newItemValue });
+            setValue("");
         }
-        this.textInput.focus();
-    }
-    handleKeyPress(event) {
-        if (event.key === 'Enter') {
-            this.onSubmit()
-        }
+        textInput.focus();
     }
 
-    render() {
-        return (
-            <li className="list-group-item ">
-                <div className="row">
-                    <div className="col-lg-12">
-                        <div className="input-group input-group-lg">
-                            <span className="input-group-btn">
-                                <span onClick={this.onSubmit} className="btn "><img src={plus} alt="plus logo"></img></span>
-                            </span>
-                            <input ref={elem => (this.textInput = elem)} type="text" value = {this.state.value} onChange = {this.handleChange} onKeyPress={this.handleKeyPress} className="form-control input-lg mr-2" placeholder="Ajouter une tâche" />
-                        </div>
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            onSubmit()
+        }
+    }
+    return (
+        <li className="list-group-item ">
+            <div className="row">
+                <div className="col-lg-12">
+                    <div className="input-group input-group-lg">
+                        <span className="input-group-btn">
+                            <span onClick={onSubmit} className="btn "><img src={plus} alt="plus logo"></img></span>
+                        </span>
+                        <input ref={elem => (textInput = elem)} type="text" value={value} onChange={handleChange} onKeyPress={handleKeyPress} className="form-control input-lg mr-2" placeholder="Ajouter une tâche" />
                     </div>
                 </div>
-            </li>
-        );
-    }
+            </div>
+        </li>
+    );
 }
+
+export default TodoForm;

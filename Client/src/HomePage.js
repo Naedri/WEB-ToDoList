@@ -26,7 +26,7 @@ export default class Home extends Component {
         this.isHome = this.isHome.bind(this);
         this.state = {
             todoLists: data.lists,
-            selectedList: data.lists[0],
+            selectedList: data.lists[0],//plutot mettre un index lorsqu'on utilisera l'api
             onEdit: false,
             selectedTask: {},
             changeEditBorder: false,
@@ -34,112 +34,159 @@ export default class Home extends Component {
         };
     }
 
-
+    /**
+     * Supprime la liste selectionnée
+     */
     deleteList() {
         if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${this.state.selectedList.title}?`)) {
-            let todoLists = this.state.todoLists
+            let todoLists = this.state.todoLists;
             let id = this.state.selectedList.id;
-            let index = this.findList(id);
-            todoLists.splice(index, 1);
-            this.setState({ todoLists: todoLists, selectedList: data.lists[0], onEdit: false });
+            let newToDos = todoLists.filter(todoList => todoList.id !== id);
+            this.setState({ todoLists: newToDos, renderHome: true, onEdit: false });// L'api devra renvoyer les données à jour.
         }
     }
 
-    findList(id) {
-        for (let i = 0; i < this.state.todoLists.length; ++i) {
-            if (this.state.todoLists[i].id === id)
-                return i;
-        }
-    }
+    /**
+     * Change la liste courante
+     * @param {*} id L'id de la nouvelle liste courante
+     */
     changeList(id) {
         if (this.state.onEdit) {
             this.setState({ changeEditBorder: true });
             return;
         }
-        let index = this.findList(id)
-        let list = this.state.todoLists[index];
-        this.setState({ selectedList: list, onEdit: false, renderHome: false });
+        //let index = this.findList(id)
+        let list = this.state.todoLists.find(list => list.id === id);
+        this.setState({ selectedList: list, onEdit: false, renderHome: false }); // l'api n'intervient pas ici
     }
 
-    editTask(newTask) {
-        console.log(newTask)
-        let todoLists = this.state.todoLists
-        let id = this.findList(this.state.selectedList.id);
-        for (var i = 0; i < todoLists[id].tasks.length; i++){
-            if (todoLists[id].tasks[i].index === newTask.index) {
-                todoLists[id].tasks[i] = newTask;
-                break;
-            }
-        }
-        this.setState({ todoLists: todoLists, onEdit: false });
+    /**
+     * Edite une tâche (note, titre, échéance, sous tâches ...)
+     * @param {*} editedTask La nouvelle tâche éditée
+     */
+    editTask(editedTask) {
+        let selectedList = { ...this.state.selectedList }; //copier l'objet
+        let todoLists = [...this.state.todoLists]; //copier l'array
+        selectedList.tasks = selectedList.tasks.map(task => task.index === editedTask.index ? editedTask : task)
+        todoLists = todoLists.map(list => list.id === selectedList.id ? selectedList : list);
+        this.setState({ selectedList: selectedList, todoLists: todoLists, onEdit: false }) //l'api devra renvoyer la todolist à jour
     }
 
+
+    /**
+     * Ajoute une nouvelle liste
+     * @param {*} list Le titre de la nouvelle liste à ajoutée
+     */
     addList(list) {
         if (this.state.onEdit) {
             this.setState({ changeEditBorder: true });
             return;
         }
-        let todoLists = this.state.todoLists
-        todoLists.push({
-            id: todoLists.length + 1,
-            title: list.newListValue,
+        let newList = {
+            id: this.state.todoLists.length + 1 + list.value,
+            title: list.value,
             tasks: []
-        })
-        let index = this.findList(todoLists.length);
-        this.setState({ todoLists: todoLists, selectedList: data.lists[index], renderHome: false });
+        };
+        this.setState((state) => {
+            return {
+                todoLists: [...state.todoLists, newList],
+                renderHome: false,
+                selectedList: newList
+            }
+        });
     }
 
-    openEditMenu(index) {//plutot mettre id list et id task
+    /**
+     * ouvre le menu d'édition d'une tâche
+     * @param {*} index identifiant de la tâche
+     */
+    openEditMenu(index) {
         if (this.state.onEdit) {
             this.setState({ changeEditBorder: true });
             return;
         }
-        let selectedList = this.state.selectedList
-        this.setState({ changeEditBorder: false });
-        for (var i = 0; i < selectedList.tasks.length; i++)
-            if (selectedList.tasks[i].index === index) {
-                this.setState({ selectedTask: selectedList.tasks[i] })//get task par l'api
-                break;
-            }
-        this.setState({ onEdit: true })
+        this.setState((state) => {
+            return {
+                selectedTask: state.selectedList.tasks.find(task => task.index === index)
+            };
+        });
+        this.setState({ onEdit: true, changeEditBorder: false });
     }
 
+    /**
+     * Annule l'édition d'une tâche, les changements ne sont pas enregistrés
+     */
     onCancelEdit() {
         this.setState({ onEdit: false });
     }
 
+    /**
+     * Ajoute une nouvelle tâche
+     * @param {*} todoItem La tâche à ajouter
+     * @param {*} id L'id de la liste qui contient cette tâche
+     */
     addItem(todoItem, id) {
-        let todoLists = this.state.todoLists
-        id = this.findList(id);
-        todoLists[id].tasks.push({
-            index: todoLists[id].tasks.length + 1,
+        let chosenList = { ...this.state.selectedList }; //copier l'objet
+        let newItem = {
+            index: chosenList.tasks.length + 1 + todoItem.newItemValue,
             value: todoItem.newItemValue,
             done: false
+        };
+        chosenList.tasks.push(newItem);
+        let todoLists = this.state.todoLists.map(list => list.id === id ? chosenList : list);
+        this.setState({
+            todoLists: todoLists,
+            selectedList: chosenList
         });
-        this.setState({ todoLists: todoLists });
     }
+
+    /**
+     * Supprime une tâche dans une liste
+     * @param {*} itemIndex  l'indice de l'item a supprimé
+     * @param {*} id l'indice de la liste en question
+     */
     removeItem(itemIndex, id) {
         if (this.state.onEdit) {
             this.setState({ changeEditBorder: true });
             return;
         }
-        let todoLists = this.state.todoLists
-        id = this.findList(id);
-        for (var i = 0; i < todoLists[id].tasks.length; i++)
-            if (todoLists[id].tasks[i].index === itemIndex) {
-                todoLists[id].tasks.splice(i, 1);
-                break;
-            }
-        this.setState({ todoLists: todoLists });
-    }
-    markTodoDone(itemIndex, id) {
-        let todoLists = this.state.todoLists
-        id = this.findList(id);
-        let todo = todoLists[id].tasks.find(task => task.index === itemIndex);
-        todo.done = !todo.done;
-        this.setState({ todoLists: todoLists });
+        let todoLists = [...this.state.todoLists];
+        let selectedList = { ...this.state.selectedList }; //copier l'objet
+        let updatedTasks = selectedList.tasks.filter(task => task.index !== itemIndex);
+        selectedList.tasks = updatedTasks;
+        todoLists = todoLists.map(list => list.id === id ? selectedList : list);
+        this.setState({
+            todoLists: todoLists,
+            selectedList: selectedList
+        });
     }
 
+    /**
+     * Marque une tâche comme faite/non faite lorsqu'on clique sur la checkbox
+     * @param {*} itemIndex L'id de la tâche
+     * @param {*} id  L'id de la liste
+     */
+    markTodoDone(itemIndex, id) {
+        this.setState(prevState => ({
+            selectedList: {
+                id: prevState.selectedList.id,
+                title: prevState.selectedList.title,
+                tasks: prevState.selectedList.tasks.map(
+                    todo => todo.index === itemIndex ? { ...todo, done: !todo.done } : todo
+                )
+            }
+        }))
+
+        this.setState(prevState => ({
+            todoLists: prevState.todoLists.map(
+                list => list.id === id ? prevState.selectedList : list
+            )
+        }));
+    }
+
+    /**
+     * Renvoie la page d'accueil des listes
+     */
     isHome() {
         if (this.state.onEdit) {
             this.setState({ changeEditBorder: true });
@@ -147,6 +194,7 @@ export default class Home extends Component {
         }
         this.setState({ renderHome: true });
     }
+
     render() {
         let isHome = this.state.renderHome;
         let hasLists = this.state.todoLists.length > 0;
@@ -159,7 +207,7 @@ export default class Home extends Component {
                         <img src={home} onClick={this.isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
                         <Lists changeList={this.changeList} lists={this.state.todoLists} />
                         <ListForm addList={this.addList} />
-                        <div className = "mt-auto">
+                        <div className="mt-auto">
                         </div>
                     </div>
                     <div className={onEdit ? "col-sm-5" : "col-sm-7"}>

@@ -1,46 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import plus from '../assets/plus.svg';
 
-export default class StagesForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: ""
-        }
-        this.onSubmit = this.onSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.textInput = null;
+
+const StagesForm = (props) => {
+    let [value, setValue] = useState("");
+    let textInput = null;
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
     }
 
-    handleChange(event) {
-        this.setState({ value: event.target.value });
-    }
-    onSubmit() {
-        let newStageValue = this.state.value;
+    const onSubmit = () => {
+        let newStageValue = value;
 
         if (newStageValue) {
-            this.props.onSubmit({ newStageValue });
-            this.setState({ value: "" });
+            props.onSubmit({ newStageValue });
+            setValue("");
         }
-        this.textInput.focus();
+        textInput.focus();
     }
-    handleKeyPress(event) {
+    const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            this.onSubmit()
+            onSubmit()
         }
     }
-    render() {
+
         return (
             <div className="input-group mb-3">
-                <input type="text" ref={elem => (this.textInput = elem)} value={this.state.value} onKeyPress={this.handleKeyPress} onChange={this.handleChange} className="form-control mr-1" placeholder="Ajouter une étape ..." />
+                <input type="text" ref={elem => (textInput = elem)} value={value} onKeyPress={handleKeyPress} onChange={handleChange} className="form-control mr-1" placeholder="Ajouter une étape ..." />
                 <div className="input-group-append">
-                    <span type="button" onClick={this.onSubmit} className="input-group-text"><img src={plus} alt="plus logo"></img></span>
+                    <span type="button" onClick={onSubmit} className="input-group-text"><img src={plus} alt="plus logo"></img></span>
                 </div>
             </div>
         )
-    }
 }
+
+
+export default StagesForm;
+
+
 /*
 <div>
     <div className="input-group mb-3">

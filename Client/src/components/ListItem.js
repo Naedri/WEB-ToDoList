@@ -3,7 +3,7 @@ import React from 'react';
 
 const ListItem = (props) => {
 
-    const {onClick, list} = props
+    const { onClick, list } = props
     let countLeft = () => {
         let total = 0;
         for (let i = 0; i < list.tasks.length; ++i) {

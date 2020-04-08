@@ -28,7 +28,7 @@ const Login = (props) => {
             console.log(form.username, form.password);
     };
 
-    const updateField = e => {
+    const handleChange = e => {
         const { name, value } = e.target;
         let err = errors;
         switch (name) {
@@ -69,7 +69,7 @@ const Login = (props) => {
                     value={form.username}
                     id="username"
                     name="username"
-                    onChange={updateField}
+                    onChange={handleChange}
                 />
                 {errors.username &&
                     <p className='error'>{errors.username}</p>}
@@ -83,7 +83,7 @@ const Login = (props) => {
                     id="password"
                     name="password"
                     type="password"
-                    onChange={updateField}
+                    onChange={handleChange}
                 />
                 {errors.password &&
                     <p className='error'>{errors.password}</p>}
