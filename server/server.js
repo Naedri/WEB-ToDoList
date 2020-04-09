@@ -16,8 +16,8 @@ app.use(bodyParser.json())
 
 //Renvoie toutes les listes
 app.get('/lists', (req, res) => {
-    let posts = db.get('lists').value()
-    return res.json(posts)
+    let lists = db.get('lists').value()
+    return res.json(lists)
 })
 
 //créer une liste
@@ -45,13 +45,11 @@ app.delete('/list/:id', (req, res) => {
 app.post('/list/:id', (req, res) => {
 
     let list = db.get('lists').find({ id: req.params.id }).value()
-    console.log(list);
     if (!list) {
         return res.status(404).send()
     }
-
     let newTask = {
-        id: shortid.generate(),
+        index: shortid.generate(),
         value: req.body.title,
         note: req.body.note || "",
         date: req.body.date || "",
@@ -62,7 +60,7 @@ app.post('/list/:id', (req, res) => {
     let tasks = [...list.tasks, newTask]
     db.get('lists').find({ id: req.params.id }).assign({ tasks }).write()
 
-    return res.json(tasks)
+    return res.json(newTask)
 })
 
 
@@ -86,7 +84,7 @@ app.delete('/lists/:idList/tasks/:idTask', (req, res) => {
     }
 
     let tasks = list.tasks.filter(
-        task => task.id !== req.params.idTask
+        task => task.index !== req.params.idTask
     );
 
     db.get('lists')
@@ -102,25 +100,24 @@ app.patch('/lists/:idList/:idTask', (req, res) => {
     let list = db.get('lists').find({ id: req.params.idList }).value();
 
     if (!list) {
-        console.log("pas de liste");
         return res.status(404).send();
     }
-
+    console.log(req.body);
     let newTask = {
-        id: req.params.idTask,
-        value: req.body.title,
+        index: req.params.idTask,
+        value: req.body.value,
         note: req.body.note || "",
         date: req.body.date || "",
         stages: req.body.stages || [],
         done: req.body.done || false
     }
-    let editedTasks = list.tasks.map(task => task.id === req.params.idTask ? newTask : task);
+    let editedTasks = list.tasks.map(task => task.index === req.params.idTask ? newTask : task);
     db.get('lists')
         .find({ id: req.params.idList })
         .assign({ tasks : editedTasks })
         .write()
 
-    return res.json(editedTasks)
+    return res.json(newTask);
 })
 
 app.listen(8001, () => {

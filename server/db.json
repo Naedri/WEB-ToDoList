@@ -1,91 +1,76 @@
 {
   "lists": [
     {
-      "id": "1",
-      "title": "projet tutoré",
+      "id": "2atm965gS",
+      "title": "Liste de test",
       "tasks": [
         {
-          "index": "1",
-          "value": "blabla",
+          "index": "vLuYVrbL_",
+          "value": "test 1",
+          "note": "",
+          "date": "",
+          "stages": [],
           "done": false
         },
         {
-          "index": "2",
-          "value": "blublu",
-          "done": false
-        },
-        {
-          "index": "3",
-          "value": "blibli",
+          "index": "_XYTyNotV",
+          "value": "test 2 edited",
+          "note": "Aucune\n",
+          "date": "2020-04-03",
+          "stages": [
+            {
+              "title": "Sous tache 0",
+              "index": "1Sous tache 0",
+              "done": true
+            },
+            {
+              "title": "Sous tache 1",
+              "index": "2Sous tache 1",
+              "done": false
+            }
+          ],
           "done": true
-        },
-        {
-          "index": "4",
-          "value": "bloblo",
-          "done": false
-        },
-        {
-          "index": "5",
-          "value": "foo",
-          "done": false
-        },
-        {
-          "index": "147",
-          "value": "underscore",
-          "done": false
         }
       ]
     },
     {
-      "id": "2",
+      "id": "hfP6LFh5k",
+      "title": "Liste de test 2",
+      "tasks": []
+    },
+    {
+      "id": "l9UOMmKo4",
       "title": "Minecraft",
       "tasks": [
         {
-          "index": "1",
-          "value": "toto",
-          "done": false
-        },
-        {
-          "index": "2",
-          "value": "tutu",
-          "done": false
-        },
-        {
-          "index": "3",
-          "value": "tititi",
+          "index": "D8LJd3qgw",
+          "value": "Faire une fontaine de lave",
+          "note": "",
+          "date": "",
+          "stages": [],
           "done": true
         },
         {
-          "index": "4",
-          "value": "riri",
+          "index": "X1KVYCmsY",
+          "value": "Battre l'ender dragon",
+          "note": "C'est très difficile",
+          "date": "2020-04-26",
+          "stages": [
+            {
+              "title": "Trouver le portail",
+              "index": "1Trouver le portail",
+              "done": false
+            }
+          ],
           "done": false
         },
         {
-          "index": "5",
-          "value": "fifi",
-          "done": false
-        }
-      ]
-    },
-    {
-      "id": "YzfsPokdS",
-      "title": "ListeTest",
-      "tasks": [
-        {
-          "id": "ax5OVQvs8",
-          "value": "taskTestEdited00",
+          "index": "JqXCRhmxu",
+          "value": "Construire une maison en bouse",
           "note": "",
           "date": "",
           "stages": [],
-          "done": false
-        },
-        {
-          "id": "fwivCHWPT",
-          "value": "taskTest333",
-          "note": "",
-          "date": "",
-          "stages": [],
-          "done": false
+          "done": true
         }
       ]
     }

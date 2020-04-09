@@ -6,14 +6,14 @@ import TodoListItemMenu from './components/TodoListItemMenu'
 import home from './assets/home.svg';
 import del from './assets/delete-forever.svg';
 //import settings from './assets/settings.svg';
-import data from './test_data/fake_data.json';
-
+import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI } from './api.js';
 
 export default class Home extends Component {
 
 
     constructor(props) {
         super(props);
+        this.fetchLists = this.fetchLists.bind(this);
         this.addItem = this.addItem.bind(this);
         this.removeItem = this.removeItem.bind(this);
         this.markTodoDone = this.markTodoDone.bind(this);
@@ -25,7 +25,7 @@ export default class Home extends Component {
         this.editTask = this.editTask.bind(this);
         this.isHome = this.isHome.bind(this);
         this.state = {
-            todoLists: data.lists,
+            todoLists: [],
             selectedListId: 0,
             onEdit: false,
             selectedTask: {},
@@ -34,16 +34,31 @@ export default class Home extends Component {
         };
     }
 
+    componentDidMount() {
+        this.fetchLists();
+    }
+
+    async fetchLists() {
+        this.setState({ fetching: true });
+        let lists = await getLists()
+        this.setState({ todoLists: lists }, () => this.setState({ fetching: false }));
+    }
+
     /**
      * Supprime la liste selectionnée
      */
-    deleteList() {
+    async deleteList() {
         let id = this.state.selectedListId;
         let todoLists = this.state.todoLists;
         let selectedList = todoLists.find(list => list.id === id);
-        if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${selectedList.title}?`)) {
-            let newToDos = todoLists.filter(todoList => todoList.id !== id);
-            this.setState({ todoLists: newToDos, renderHome: true, onEdit: false });// L'api devra renvoyer les données à jour.
+        try {
+            await deletelist(selectedList);
+            if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${selectedList.title}?`)) {
+                let newToDos = todoLists.filter(todoList => todoList.id !== id);
+                this.setState({ todoLists: newToDos, renderHome: true, onEdit: false });// L'api devra renvoyer les données à jour.
+            }
+        } catch (err) {
+            console.log(err);
         }
     }
 
@@ -63,13 +78,19 @@ export default class Home extends Component {
      * Edite une tâche (note, titre, échéance, sous tâches ...)
      * @param {*} editedTask La nouvelle tâche éditée
      */
-    editTask(editedTask) {      
+    async editTask(editedTask) {
         let id = this.state.selectedListId;
         let todoLists = [...this.state.todoLists]; //copier l'array
         let selectedList = todoLists.find(list => list.id === id);
-        selectedList.tasks = selectedList.tasks.map(task => task.index === editedTask.index ? editedTask : task)
-        todoLists = todoLists.map(list => list.id === selectedList.id ? selectedList : list);
-        this.setState({ todoLists: todoLists, onEdit: false }) //l'api devra renvoyer la todolist à jour
+        try {
+            await (editTaskAPI(selectedList, editedTask));
+            selectedList.tasks = selectedList.tasks.map(task => task.index === editedTask.index ? editedTask : task)
+            todoLists = todoLists.map(list => list.id === selectedList.id ? selectedList : list);
+            this.setState({ todoLists: todoLists, onEdit: false }) //l'api devra renvoyer la todolist à jour
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
 
@@ -77,23 +98,25 @@ export default class Home extends Component {
      * Ajoute une nouvelle liste
      * @param {*} list Le titre de la nouvelle liste à ajoutée
      */
-    addList(list) {
+    async addList(list) {
         if (this.state.onEdit) {
             this.setState({ changeEditBorder: true });
             return;
         }
-        let newList = {
-            id: this.state.todoLists.length + 1 + list.value,
-            title: list.value,
-            tasks: []
-        };
-        this.setState((state) => {
-            return {
-                todoLists: [...state.todoLists, newList],
-                renderHome: false,
-                selectedListId: newList.id
-            }
-        });
+        try {
+            let response = await createList(list);
+            console.log(response.newList);
+            let newList = response.newList;
+            this.setState((state) => {
+                return {
+                    todoLists: [...state.todoLists, newList],
+                    renderHome: false,
+                    selectedListId: newList.id
+                }
+            });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     /**
@@ -125,19 +148,27 @@ export default class Home extends Component {
      * @param {*} todoItem La tâche à ajouter
      * @param {*} id L'id de la liste qui contient cette tâche
      */
-    addItem(todoItem, id) {
+    async addItem(todoItem, id) {
         let todoLists = [...this.state.todoLists];
         let chosenList = todoLists.find(list => list.id === id);
-        let newItem = {
-            index: chosenList.tasks.length + 1 + todoItem.newItemValue,
-            value: todoItem.newItemValue,
-            done: false
-        };
-        chosenList.tasks.push(newItem);
-        todoLists = todoLists.map(list => list.id === id ? chosenList : list);
-        this.setState({
-            todoLists: todoLists
-        });
+        try {
+            let response = await createTask(chosenList, { title: todoItem.newItemValue });
+            console.log(response);
+            let newItem = {
+                index: response.index,
+                value: todoItem.newItemValue,
+                done: false
+            };
+            chosenList.tasks.push(newItem);
+            todoLists = todoLists.map(list => list.id === id ? chosenList : list);
+            this.setState({
+                todoLists: todoLists
+            });
+        }
+
+        catch (err) {
+            console.log(err);
+        }
     }
 
     /**
@@ -151,13 +182,20 @@ export default class Home extends Component {
             return;
         }
         let todoLists = [...this.state.todoLists];
-        let selectedList = todoLists.find(list => list.id === id); //copier l'objet
-        let updatedTasks = selectedList.tasks.filter(task => task.index !== itemIndex);
-        selectedList.tasks = updatedTasks;
-        todoLists = todoLists.map(list => list.id === id ? selectedList : list);
-        this.setState({
-            todoLists: todoLists
-        });
+        let selectedList = todoLists.find(list => list.id === id);
+        try {
+            deleteTaskAPI(selectedList, { index: itemIndex });
+            let updatedTasks = selectedList.tasks.filter(task => task.index !== itemIndex);
+            selectedList.tasks = updatedTasks;
+            todoLists = todoLists.map(list => list.id === id ? selectedList : list);
+            this.setState({
+                todoLists: todoLists
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+
     }
 
     /**
@@ -168,13 +206,17 @@ export default class Home extends Component {
     markTodoDone(itemIndex, id) {
         let todoLists = [...this.state.todoLists];
         let selectedList = todoLists.find(list => list.id === id);
-        let updatedTasks = selectedList.tasks.map(
-            task => task.index === itemIndex ? {...task, done : !task.done}: task);
-        selectedList.tasks = updatedTasks;
-        todoLists = todoLists.map(list => list.id === id ? selectedList : list);
-        this.setState({
-            todoLists: todoLists
-        });
+        let selectedTask = selectedList.tasks.find(task => task.index === itemIndex);
+        selectedTask.done = !selectedTask.done;
+        try {
+            editTaskAPI(selectedList,selectedTask);
+            todoLists = todoLists.map(list => list.id === id ? selectedList : list);
+            this.setState({
+                todoLists: todoLists
+            });
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     /**
@@ -189,6 +231,9 @@ export default class Home extends Component {
     }
 
     render() {
+        if (this.state.fetching) {
+            return (<p>loading ...</p>)
+        }
         let id = this.state.selectedListId;
         let todoLists = this.state.todoLists;
         let selectedList = todoLists.find(list => list.id === id);
