@@ -26,7 +26,7 @@ export default class Home extends Component {
         this.isHome = this.isHome.bind(this);
         this.state = {
             todoLists: data.lists,
-            selectedList: data.lists[0],//plutot mettre un index lorsqu'on utilisera l'api
+            selectedListId: 0,
             onEdit: false,
             selectedTask: {},
             changeEditBorder: false,
@@ -38,9 +38,10 @@ export default class Home extends Component {
      * Supprime la liste selectionnée
      */
     deleteList() {
-        if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${this.state.selectedList.title}?`)) {
-            let todoLists = this.state.todoLists;
-            let id = this.state.selectedList.id;
+        let id = this.state.selectedListId;
+        let todoLists = this.state.todoLists;
+        let selectedList = todoLists.find(list => list.id === id);
+        if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${selectedList.title}?`)) {
             let newToDos = todoLists.filter(todoList => todoList.id !== id);
             this.setState({ todoLists: newToDos, renderHome: true, onEdit: false });// L'api devra renvoyer les données à jour.
         }
@@ -55,21 +56,20 @@ export default class Home extends Component {
             this.setState({ changeEditBorder: true });
             return;
         }
-        //let index = this.findList(id)
-        let list = this.state.todoLists.find(list => list.id === id);
-        this.setState({ selectedList: list, onEdit: false, renderHome: false }); // l'api n'intervient pas ici
+        this.setState({ selectedListId: id, onEdit: false, renderHome: false }); // l'api n'intervient pas ici
     }
 
     /**
      * Edite une tâche (note, titre, échéance, sous tâches ...)
      * @param {*} editedTask La nouvelle tâche éditée
      */
-    editTask(editedTask) {
-        let selectedList = { ...this.state.selectedList }; //copier l'objet
+    editTask(editedTask) {      
+        let id = this.state.selectedListId;
         let todoLists = [...this.state.todoLists]; //copier l'array
+        let selectedList = todoLists.find(list => list.id === id);
         selectedList.tasks = selectedList.tasks.map(task => task.index === editedTask.index ? editedTask : task)
         todoLists = todoLists.map(list => list.id === selectedList.id ? selectedList : list);
-        this.setState({ selectedList: selectedList, todoLists: todoLists, onEdit: false }) //l'api devra renvoyer la todolist à jour
+        this.setState({ todoLists: todoLists, onEdit: false }) //l'api devra renvoyer la todolist à jour
     }
 
 
@@ -91,7 +91,7 @@ export default class Home extends Component {
             return {
                 todoLists: [...state.todoLists, newList],
                 renderHome: false,
-                selectedList: newList
+                selectedListId: newList.id
             }
         });
     }
@@ -107,7 +107,7 @@ export default class Home extends Component {
         }
         this.setState((state) => {
             return {
-                selectedTask: state.selectedList.tasks.find(task => task.index === index)
+                selectedTask: state.todoLists.find(list => list.id === state.selectedListId).tasks.find(task => task.index === index)
             };
         });
         this.setState({ onEdit: true, changeEditBorder: false });
@@ -126,17 +126,17 @@ export default class Home extends Component {
      * @param {*} id L'id de la liste qui contient cette tâche
      */
     addItem(todoItem, id) {
-        let chosenList = { ...this.state.selectedList }; //copier l'objet
+        let todoLists = [...this.state.todoLists];
+        let chosenList = todoLists.find(list => list.id === id);
         let newItem = {
             index: chosenList.tasks.length + 1 + todoItem.newItemValue,
             value: todoItem.newItemValue,
             done: false
         };
         chosenList.tasks.push(newItem);
-        let todoLists = this.state.todoLists.map(list => list.id === id ? chosenList : list);
+        todoLists = todoLists.map(list => list.id === id ? chosenList : list);
         this.setState({
-            todoLists: todoLists,
-            selectedList: chosenList
+            todoLists: todoLists
         });
     }
 
@@ -151,13 +151,12 @@ export default class Home extends Component {
             return;
         }
         let todoLists = [...this.state.todoLists];
-        let selectedList = { ...this.state.selectedList }; //copier l'objet
+        let selectedList = todoLists.find(list => list.id === id); //copier l'objet
         let updatedTasks = selectedList.tasks.filter(task => task.index !== itemIndex);
         selectedList.tasks = updatedTasks;
         todoLists = todoLists.map(list => list.id === id ? selectedList : list);
         this.setState({
-            todoLists: todoLists,
-            selectedList: selectedList
+            todoLists: todoLists
         });
     }
 
@@ -167,21 +166,15 @@ export default class Home extends Component {
      * @param {*} id  L'id de la liste
      */
     markTodoDone(itemIndex, id) {
-        this.setState(prevState => ({
-            selectedList: {
-                id: prevState.selectedList.id,
-                title: prevState.selectedList.title,
-                tasks: prevState.selectedList.tasks.map(
-                    todo => todo.index === itemIndex ? { ...todo, done: !todo.done } : todo
-                )
-            }
-        }))
-
-        this.setState(prevState => ({
-            todoLists: prevState.todoLists.map(
-                list => list.id === id ? prevState.selectedList : list
-            )
-        }));
+        let todoLists = [...this.state.todoLists];
+        let selectedList = todoLists.find(list => list.id === id);
+        let updatedTasks = selectedList.tasks.map(
+            task => task.index === itemIndex ? {...task, done : !task.done}: task);
+        selectedList.tasks = updatedTasks;
+        todoLists = todoLists.map(list => list.id === id ? selectedList : list);
+        this.setState({
+            todoLists: todoLists
+        });
     }
 
     /**
@@ -196,6 +189,9 @@ export default class Home extends Component {
     }
 
     render() {
+        let id = this.state.selectedListId;
+        let todoLists = this.state.todoLists;
+        let selectedList = todoLists.find(list => list.id === id);
         let isHome = this.state.renderHome;
         let hasLists = this.state.todoLists.length > 0;
         let onEdit = this.state.onEdit;
@@ -205,7 +201,7 @@ export default class Home extends Component {
                 <div className="row">
                     <div className="col-sm-3 border-right menu">
                         <img src={home} onClick={this.isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
-                        <Lists changeList={this.changeList} lists={this.state.todoLists} />
+                        <Lists changeList={this.changeList} lists={todoLists} />
                         <ListForm addList={this.addList} />
                         <div className="mt-auto">
                         </div>
@@ -213,13 +209,13 @@ export default class Home extends Component {
                     <div className={onEdit ? "col-sm-5" : "col-sm-7"}>
                         <div className="row">
                             <div className="col-sm">
-                                {isHome ? <h1>Prochaines tâches</h1> : hasLists && <h1>{this.state.selectedList.title}</h1>}
+                                {isHome ? <h1>Prochaines tâches</h1> : hasLists && <h1>{selectedList.title}</h1>}
                             </div>
                             <div className="col-sm-auto">
                                 {isHome ? null : hasLists && <button type="button" onClick={this.deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
                             </div>
                         </div>
-                        {isHome ? null : hasLists && <TodoApp id={this.state.selectedList.id} initItems={this.state.selectedList.tasks} title={this.state.selectedList.title} removeItem={this.removeItem} markTodoDone={this.markTodoDone} addItem={this.addItem} showEditMenu={this.openEditMenu} />}
+                        {isHome ? null : hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={this.removeItem} markTodoDone={this.markTodoDone} addItem={this.addItem} showEditMenu={this.openEditMenu} />}
                     </div>
                     {onEdit && <div className={borderClass} >
                         <TodoListItemMenu task={this.state.selectedTask} infoMessage={this.state.changeEditBorder ? "true" : null} onSubmit={this.editTask} onCancelEdit={this.onCancelEdit} />
