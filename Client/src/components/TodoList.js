@@ -3,15 +3,19 @@ import TodoForm from './TodoForm';
 import React from 'react';
 
 const TodoList = (props) => {
+
+    const addItem = (newItem) => {
+        props.addItem(newItem, props.listId);
+    }
     let items = props.items.map(task => {
         return (
-            <TodoListItem key={task.index + task.value} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
+            <TodoListItem key={task.index + task.value} listId={props.listId} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
         );
     });
     return (
         <ul className="list-group-flush pt-2">
             {items}
-            <TodoForm addItem={props.addItem} />
+            <TodoForm addItem={addItem} />
         </ul>
     );
 }

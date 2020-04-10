@@ -42,7 +42,7 @@ export default class TodoListItemMenu extends React.Component {
             index: this.props.task.index,
             done: this.props.task.done
         }
-        this.props.onSubmit(newTask);
+        this.props.onSubmit(newTask, this.props.listId);
     }
 
     markStageDone(index) {

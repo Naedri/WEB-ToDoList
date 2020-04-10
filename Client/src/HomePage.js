@@ -7,6 +7,7 @@ import home from './assets/home.svg';
 import del from './assets/delete-forever.svg';
 //import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI } from './api.js';
+import NextTasks from "./components/NextTasks";
 
 export default class Home extends Component {
 
@@ -78,8 +79,7 @@ export default class Home extends Component {
      * Edite une tâche (note, titre, échéance, sous tâches ...)
      * @param {*} editedTask La nouvelle tâche éditée
      */
-    async editTask(editedTask) {
-        let id = this.state.selectedListId;
+    async editTask(editedTask, id) {
         let todoLists = [...this.state.todoLists]; //copier l'array
         let selectedList = todoLists.find(list => list.id === id);
         try {
@@ -122,15 +122,17 @@ export default class Home extends Component {
     /**
      * ouvre le menu d'édition d'une tâche
      * @param {*} index identifiant de la tâche
+     * @param listIndex identifiant de la liste
      */
-    openEditMenu(index) {
+    openEditMenu(index, listIndex) {
         if (this.state.onEdit) {
             this.setState({ changeEditBorder: true });
             return;
         }
         this.setState((state) => {
             return {
-                selectedTask: state.todoLists.find(list => list.id === state.selectedListId).tasks.find(task => task.index === index)
+                selectedTask: state.todoLists.find(list => list.id === listIndex).tasks.find(task => task.index === index),
+                selectedListId : listIndex
             };
         });
         this.setState({ onEdit: true, changeEditBorder: false });
@@ -209,7 +211,7 @@ export default class Home extends Component {
         let selectedTask = selectedList.tasks.find(task => task.index === itemIndex);
         selectedTask.done = !selectedTask.done;
         try {
-            editTaskAPI(selectedList,selectedTask);
+            editTaskAPI(selectedList, selectedTask);
             todoLists = todoLists.map(list => list.id === id ? selectedList : list);
             this.setState({
                 todoLists: todoLists
@@ -260,10 +262,11 @@ export default class Home extends Component {
                                 {isHome ? null : hasLists && <button type="button" onClick={this.deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
                             </div>
                         </div>
-                        {isHome ? null : hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={this.removeItem} markTodoDone={this.markTodoDone} addItem={this.addItem} showEditMenu={this.openEditMenu} />}
+                        {isHome ? <NextTasks lists={todoLists} removeItem={this.removeItem} markTodoDone={this.markTodoDone} addItem={this.addItem} showEditMenu={this.openEditMenu} />
+                            : hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={this.removeItem} markTodoDone={this.markTodoDone} addItem={this.addItem} showEditMenu={this.openEditMenu} />}
                     </div>
                     {onEdit && <div className={borderClass} >
-                        <TodoListItemMenu task={this.state.selectedTask} infoMessage={this.state.changeEditBorder ? "true" : null} onSubmit={this.editTask} onCancelEdit={this.onCancelEdit} />
+                        <TodoListItemMenu listId = {id} task={this.state.selectedTask} infoMessage={this.state.changeEditBorder ? "true" : null} onSubmit={this.editTask} onCancelEdit={this.onCancelEdit} />
                     </div>
                     }
                 </div>

@@ -3,19 +3,9 @@ import TodoList from './TodoList';
 
 const TodoApp = (props) => {
 
-    const addItem = (todoItem) => {
-        props.addItem(todoItem, props.id);
-    }
-    const removeItem = (itemIndex) => {
-        props.removeItem(itemIndex, props.id);
-    }
-
-    const markTodoDone = (itemIndex) => {
-        props.markTodoDone(itemIndex, props.id)
-    }
     return (
         <div className="container mt-3">
-            <TodoList showEditMenu={props.showEditMenu} items={props.initItems} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} />
+            <TodoList listId={props.id} showEditMenu={props.showEditMenu} items={props.initItems} removeItem={props.removeItem} markTodoDone={props.markTodoDone} addItem={props.addItem} />
         </div>
     );
 
