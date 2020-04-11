@@ -9,44 +9,64 @@ import del from './assets/delete-forever.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI } from './api.js';
 import NextTasks from "./components/NextTasks";
 
-let Home = props => {
+const todoReducer = (state, action) => {
+    switch (action.type) {
+        case 'INIT':
+        case 'EDIT_TASK':
+        case 'ADD_TASK':
+        case 'REMOVE_TASK':
+        case 'MTD':
+            return { ...state, toDos: action.toDos };
+        case 'DELETE':
+        case 'ADD_LIST':
+            return { ...state, toDos: action.toDos, listId: action.listId };
+        case 'CHANGE_LIST':
+        case 'OPEN_EDIT_MENU':
+            return { ...state, listId: action.listId };
+        default:
+            return state;
+    }
+};
 
-    const [todoLists, setTodos] = useState([])
-    const [selectedListId, setSelectedListId] = useState(0);
+let Home = () => {
     const [onEdit, setEdit] = useState(false);
     const [selectedTask, setSelectedTask] = useState({});
-    const [changeEditBorder, setChangeEditBorder] = useState(false);
+    const [changeEditBorder, setWarning] = useState(false);
     const [renderHome, setRenderHome] = useState(true);
     const [isLoading, setLoading] = useState(false);
+    const [state, dispatch] = React.useReducer(
+        todoReducer,
+        {
+            toDos: [],
+            listId: null
+        }
+    );
 
     useEffect(() => {
         async function fetchLists() {
             setLoading(true);
-            let lists = await getLists()
-            setTodos(lists)
+            let lists = await getLists();
+            dispatch({ type: 'INIT', toDos: lists })
             setLoading(false);
         }
 
         fetchLists()
-    }, [])
-
-
+    }, []);
 
     /**
      * Supprime la liste selectionnée
      */
     const deleteList = async () => {
-        let id = selectedListId;
-        let selectedList = todoLists.find(list => list.id === id);
+        let id = state.listId;
+        let selectedList = state.toDos.find(list => list.id === id);
         try {
             if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${selectedList.title}?`)) {
                 setRenderHome(true);
                 setLoading(true);
                 await deletelist(selectedList);
-                let newToDos = todoLists.filter(todoList => todoList.id !== id);
-                setTodos(newToDos);
+                let newToDos = state.toDos.filter(todoList => todoList.id !== id);
+                dispatch({ type: 'DELETE', toDos: newToDos, listId: null })
                 setEdit(false);
-                setSelectedListId(null);
                 setLoading(false);
             }
         } catch (err) {
@@ -60,10 +80,10 @@ let Home = props => {
      */
     const changeList = (id) => {
         if (onEdit) {
-            setChangeEditBorder(true);
+            setWarning(true);
             return;
         }
-        setSelectedListId(id);
+        dispatch({ type: 'CHANGE_LIST', listId: id })
         setEdit(false);
         setRenderHome(false);
     }
@@ -73,13 +93,13 @@ let Home = props => {
      * @param {*} editedTask La nouvelle tâche éditée
      */
     const editTask = async (editedTask, id) => {
-        let newTodos = [...todoLists]; //copier l'array
+        let newTodos = [...state.toDos]; //copier l'array
         let selectedList = newTodos.find(list => list.id === id);
         try {
             await (editTaskAPI(selectedList, editedTask));
             selectedList.tasks = selectedList.tasks.map(task => task.index === editedTask.index ? editedTask : task)
             newTodos = newTodos.map(list => list.id === selectedList.id ? selectedList : list);
-            setTodos(newTodos);
+            dispatch({ type: 'EDIT_TASK', toDos: newTodos })
             setEdit(false);
         }
         catch (err) {
@@ -89,19 +109,18 @@ let Home = props => {
 
     /**
      * Ajoute une nouvelle liste
-     * @param {*} list Le titre de la nouvelle liste à ajoutée
+     * @param {*} list la nouvelle liste à ajoutée
      */
     const addList = async (list) => {
         if (onEdit) {
-            setChangeEditBorder(true);
+            setWarning(true);
             return;
         }
         try {
             //setLoading(true);
-            let response = await createList(list);
+            let response = await createList(list);//appel à l'api
             let newList = response.newList;
-            setTodos([...todoLists, newList]);
-            setSelectedListId(newList.id)
+            dispatch({ type: 'ADD_LIST', toDos: [...state.toDos, newList], listId: newList.id })
             setRenderHome(false);
             //setLoading(false);
         } catch (err) {
@@ -116,13 +135,13 @@ let Home = props => {
      */
     const openEditMenu = (index, listIndex) => {
         if (onEdit) {
-            setChangeEditBorder(true);
+            setWarning(true);
             return;
         }
-        setSelectedTask(todoLists.find(list => list.id === listIndex).tasks.find(task => task.index === index));
-        setSelectedListId(listIndex);
+        setSelectedTask(state.toDos.find(list => list.id === listIndex).tasks.find(task => task.index === index));
+        dispatch({ type: 'OPEN_EDIT_MENU', listId: listIndex });
         setEdit(true);
-        setChangeEditBorder(false);
+        setWarning(false);
     }
 
     /**
@@ -138,13 +157,13 @@ let Home = props => {
      * @param {*} id L'id de la liste qui contient cette tâche
      */
     const addItem = async (todoItem, id) => {
-        let newTodos = [...todoLists];
+        let newTodos = [...state.toDos];
         let chosenList = newTodos.find(list => list.id === id);
         try {
             let response = await createTask(chosenList, { title: todoItem.newItemValue });
             chosenList.tasks.push(response);
             newTodos = newTodos.map(list => list.id === id ? chosenList : list);
-            setTodos(newTodos);
+            dispatch({ type: 'INIT', toDos: newTodos })
         }
         catch (err) {
             console.log(err);
@@ -158,22 +177,21 @@ let Home = props => {
      */
     const removeItem = async (itemIndex, id) => {
         if (onEdit) {
-            setChangeEditBorder(true);
+            setWarning(true);
             return;
         }
-        let newTodos = [...todoLists];
+        let newTodos = [...state.toDos];
         let selectedList = newTodos.find(list => list.id === id);
         try {
             await deleteTaskAPI(selectedList, { index: itemIndex });
             let updatedTasks = selectedList.tasks.filter(task => task.index !== itemIndex);
             selectedList.tasks = updatedTasks;
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
-            setTodos(newTodos);
+            dispatch({ type: 'REMOVE_TASK', toDos: newTodos })
         }
         catch (err) {
             console.log(err);
         }
-
     }
 
     /**
@@ -182,14 +200,14 @@ let Home = props => {
      * @param {*} id  L'id de la liste
      */
     const markTodoDone = async (itemIndex, id) => {
-        let newTodos = [...todoLists];
+        let newTodos = [...state.toDos];
         let selectedList = newTodos.find(list => list.id === id);
         let selectedTask = selectedList.tasks.find(task => task.index === itemIndex);
         selectedTask.done = !selectedTask.done;
         try {
             editTaskAPI(selectedList, selectedTask);
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
-            setTodos(newTodos);
+            dispatch({ type: 'MTD', toDos: newTodos })
         } catch (err) {
             console.log(err);
         }
@@ -200,15 +218,15 @@ let Home = props => {
      */
     const isHome = () => {
         if (onEdit) {
-            setChangeEditBorder(true);
+            setWarning(true);
             return;
         }
         setRenderHome(true);
     }
 
-    let id = selectedListId;
-    let selectedList = todoLists.find(list => list.id === id);
-    let hasLists = todoLists.length > 0;
+    let id = state.listId;
+    let selectedList = state.toDos.find(list => list.id === id);
+    let hasLists = state.toDos.length > 0;
     let borderClass = changeEditBorder ? "col-sm-3 fill border-left border-warning" : "col-sm-3 fill border-left";
 
     if (isLoading)
@@ -218,7 +236,7 @@ let Home = props => {
             <div className="row">
                 <div className="col-sm-3 border-right menu">
                     <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
-                    <Lists changeList={changeList} lists={todoLists} />
+                    <Lists changeList={changeList} lists={state.toDos} />
                     <ListForm addList={addList} />
                     <div className="mt-auto">
                     </div>
@@ -232,7 +250,7 @@ let Home = props => {
                             {renderHome ? null : hasLists && <button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
                         </div>
                     </div>
-                    {renderHome ? <NextTasks lists={todoLists} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
+                    {renderHome ? <NextTasks lists={state.toDos} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
                         : hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />}
                 </div>
                 {onEdit && <div className={borderClass} >
@@ -242,6 +260,5 @@ let Home = props => {
             </div>
         </div>
     );
-
 }
 export default Home;
