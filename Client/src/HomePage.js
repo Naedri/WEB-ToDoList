@@ -132,6 +132,7 @@ let Home = () => {
             let newList = response.newList;
             dispatch({ type: 'ADD_LIST', toDos: [...state.toDos, newList], listId: newList.id })
             setRenderHome(false);
+            renderSettings(false);
             //setLoading(false);
         } catch (err) {
             console.log(err);
@@ -293,7 +294,7 @@ let Home = () => {
                             {centerHeader()}
                         </div>
                         <div className="col-sm-auto">
-                            {(renderHome || renderSettings) ? null : hasLists && <button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
+                            {(renderHome || renderingSettings) ? null : hasLists && <button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
                         </div>
                     </div>
                     {centerContent()}

@@ -1,6 +1,7 @@
 import React from 'react';
 import TodoListItem from './TodoListItem'
 
+
 const NextTasks = (props) => {
 
     let tasks = props.lists.map(list => list.tasks.map(task => ({ ...task, listId: list.id })));

@@ -1,9 +1,32 @@
 import React from 'react';
 import delItem from '../assets/delete.svg'
+import { calculateDays } from '../utils/date.js'
 
 const TodoListItem = (props) => {
 
-    let countTask = () => {
+    const daysLeft = (date) => {
+        let days = calculateDays(date);
+        console.log(days);
+        if (days < 0) 
+            return 'déjà passé'; 
+        switch (days){
+            case 0 : 
+                return 'aujourd\'hui';
+            case 1 :
+                return 'demain';
+            case 2 : 
+                return 'après demain';
+            case 3 :
+            case 4 :
+            case 5 :
+                return `dans ${days} jours`
+            default:
+                return date;
+        }
+    }
+
+
+    const countTask = () => {
         let total = 0;
         props.item.stages && props.item.stages.forEach(stage => {
             if(stage.done)
@@ -21,7 +44,7 @@ const TodoListItem = (props) => {
             <input type="checkbox" className="col-1 col-sm-1 mt-2" onChange={() => props.markTodoDone(index,listId)} checked={props.item.done} />
             <div className="col-9 col-sm-9">
             <p onClick={() => props.showEditMenu(index,listId)} className={todoClass + " cursor-pointer mb-0"}>{props.item.value}</p>
-            <small> {countTask()} sur {(props.item.stages && props.item.stages.length) || "0"} - Echéance {props.item.date} - Note : {props.item.note || ""}</small>
+            <small> {countTask()} sur {(props.item.stages && props.item.stages.length) || "0"} &#183; Echéance : {daysLeft(props.item.date)} &#183; Note : {props.item.note || ""}</small>
             </div>
             <div className="col-1 col-sm-1">
             <span type="button" onClick={() => props.removeItem(index,listId)} className="btn"><img className="pb-2" src={delItem} alt="remove logo"></img></span>
