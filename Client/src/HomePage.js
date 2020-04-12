@@ -5,7 +5,7 @@ import ListForm from './components/ListForm';
 import TodoListItemMenu from './components/TodoListItemMenu'
 import home from './assets/home.svg';
 import del from './assets/delete-forever.svg';
-//import settings from './assets/settings.svg';
+import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI } from './api.js';
 import NextTasks from "./components/NextTasks";
 
@@ -34,6 +34,8 @@ let Home = () => {
     const [changeEditBorder, setWarning] = useState(false);
     const [renderHome, setRenderHome] = useState(true);
     const [isLoading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [renderingSettings, renderSettings] = useState(false);
     const [state, dispatch] = React.useReducer(
         todoReducer,
         {
@@ -44,10 +46,15 @@ let Home = () => {
 
     useEffect(() => {
         async function fetchLists() {
-            setLoading(true);
-            let lists = await getLists();
-            dispatch({ type: 'INIT', toDos: lists })
-            setLoading(false);
+            try {
+                setLoading(true);
+                let lists = await getLists();
+                dispatch({ type: 'INIT', toDos: lists })
+                setLoading(false);
+            }
+            catch (err) {
+                setError(err.message);
+            }
         }
 
         fetchLists()
@@ -71,6 +78,7 @@ let Home = () => {
             }
         } catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -86,6 +94,7 @@ let Home = () => {
         dispatch({ type: 'CHANGE_LIST', listId: id })
         setEdit(false);
         setRenderHome(false);
+        renderSettings(false);
     }
 
     /**
@@ -104,6 +113,7 @@ let Home = () => {
         }
         catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -125,6 +135,7 @@ let Home = () => {
             //setLoading(false);
         } catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -167,6 +178,7 @@ let Home = () => {
         }
         catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -191,6 +203,7 @@ let Home = () => {
         }
         catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -210,6 +223,7 @@ let Home = () => {
             dispatch({ type: 'MTD', toDos: newTodos })
         } catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -221,37 +235,68 @@ let Home = () => {
             setWarning(true);
             return;
         }
+        renderSettings(false);
         setRenderHome(true);
     }
 
+    const isSettings = () => {
+        if (onEdit) {
+            setWarning(true);
+            return;
+        }
+        setRenderHome(false);
+        renderSettings(true);
+    }
     let id = state.listId;
     let selectedList = state.toDos.find(list => list.id === id);
     let hasLists = state.toDos.length > 0;
-    let borderClass = changeEditBorder ? "col-sm-3 fill border-left border-warning" : "col-sm-3 fill border-left";
+    let borderClass = changeEditBorder ? "col-sm-3 fill mt-3 border-left border-warning" : "col-sm-3 mt-3 fill border-left";
+
+    let centerHeader = () => {
+        if (renderHome)
+            return <h1>Prochaines tâches</h1>
+        if (renderingSettings)
+            return <h1>Paramètres</h1>
+        return hasLists && <h1>{selectedList.title}</h1>
+    }
+
+    let centerContent = () => {
+        if (renderHome)
+            return <NextTasks lists={state.toDos} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
+        if (renderingSettings)
+            return null
+        return (
+            hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
+        )
+    }
 
     if (isLoading)
         return (<p>Loading ...</p>)
+    if (error)
+        return <h2>Something went wrong : {error} </h2>
     return (
-        <div className="main-wrapper container-fluid">
-            <div className="row">
-                <div className="col-sm-3 border-right menu">
-                    <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
+        <div className="main-wrapper container-fluid mt-0 h-100">
+            <div className="row h-100">
+                <div className="col-sm-3 border-right border-top menu h-100">
+                    <div className="mt-3">
+                        <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
+                    </div>
+                    <div className="mt-2 mb-2">
+                        <img src={settings} onClick={isSettings} className="cursor-pointer" alt="settings logo" /> <strong>Paramètres</strong>
+                    </div>
                     <Lists changeList={changeList} lists={state.toDos} />
                     <ListForm addList={addList} />
-                    <div className="mt-auto">
-                    </div>
                 </div>
-                <div className={onEdit ? "col-sm-5" : "col-sm-7"}>
+                <div className={onEdit ? "col-sm-5 h-100 mt-3" : "col-sm-7 h-100 mt-3"}>
                     <div className="row">
                         <div className="col-sm">
-                            {renderHome ? <h1>Prochaines tâches</h1> : hasLists && <h1>{selectedList.title}</h1>}
+                            {centerHeader()}
                         </div>
                         <div className="col-sm-auto">
-                            {renderHome ? null : hasLists && <button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
+                            {(renderHome || renderSettings) ? null : hasLists && <button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
                         </div>
                     </div>
-                    {renderHome ? <NextTasks lists={state.toDos} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
-                        : hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />}
+                    {centerContent()}
                 </div>
                 {onEdit && <div className={borderClass} >
                     <TodoListItemMenu listId={id} task={selectedTask} infoMessage={changeEditBorder ? "true" : null} onSubmit={editTask} onCancelEdit={onCancelEdit} />

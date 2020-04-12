@@ -5,14 +5,6 @@
       "title": "Liste de test",
       "tasks": [
         {
-          "index": "vLuYVrbL_",
-          "value": "test 1",
-          "note": "",
-          "date": "",
-          "stages": [],
-          "done": false
-        },
-        {
           "index": "_XYTyNotV",
           "value": "test 2 edited",
           "note": "Aucune\n",
@@ -34,11 +26,6 @@
       ]
     },
     {
-      "id": "hfP6LFh5k",
-      "title": "Liste de test 2",
-      "tasks": []
-    },
-    {
       "id": "l9UOMmKo4",
       "title": "Minecraft",
       "tasks": [
@@ -53,16 +40,16 @@
         {
           "index": "X1KVYCmsY",
           "value": "Battre l'ender dragon",
-          "note": "C'est très difficile",
+          "note": "C'est très difficile!",
           "date": "2020-04-26",
           "stages": [
             {
               "title": "Trouver le portail",
               "index": "1Trouver le portail",
-              "done": false
+              "done": true
             }
           ],
-          "done": false
+          "done": true
         },
         {
           "index": "JqXCRhmxu",

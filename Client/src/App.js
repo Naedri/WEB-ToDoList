@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from './Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SignIn from './SignIn';
@@ -10,6 +10,7 @@ const App = () => {
   return (<Router>
     <div className="App">
       {
+        /*
       <nav className="navbar navbar-expand-lg navbar-light">
         <div className="container">
           <div className="collapse navbar-collapse">
@@ -26,7 +27,7 @@ const App = () => {
             </ul>
           </div>
         </div>
-      </nav>
+      </nav>*/
       }
       <Switch>
         <Route exact path='/' component={Login} />

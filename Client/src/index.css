@@ -1,4 +1,10 @@
 
+html, body, #root,.App {
+  height: 100%;
+  min-height: 100%;
+}
+
+
 body {
   margin : 0;
   font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
@@ -62,4 +68,8 @@ body {
 
 small{
   color : gray;
+}
+
+.menu {
+  background-color: #F5F5F5;
 }
