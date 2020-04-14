@@ -21,25 +21,25 @@ module.exports = {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined, result.rows);
+        callback(undefined,result.rows);
       }
     });
   }
 
 //RAJOUTER WHERE ... AND l.username=$2
 //pour l'avoir pour chaque utilisateur
-  function getById(projectId, callback) {
+  function getById(listeID, callback) {
     const query = 
     `SELECT  l.id, l.username, t.id, t.titre, t.echeance, t.note, t.fait, st.id, st.titre, st.fait
     FROM liste l, tache t, soustache st
     WHERE l.id=$1`;
-    utils.executeQuery(query, [projectId], (err, result) => {
+    utils.executeQuery(query, [listeID], (err, result) => {
       if (err) {
         callback(true, err);
       } else if (result.rows.length === 0) {
-        callback(true, `Impossible de retrouver le projet ${projectId}`);
+        callback(true, `Impossible de retrouver le projet ${listeID}`);
       } else {
-        callback(undefined, result.rows[0]);
+        callback(undefined);
       }
     });
   }
@@ -79,17 +79,20 @@ module.exports = {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined, result.rows[0]);
+        callback(undefined);
       }
     });
   }
 
-  let user="blibli";
+
+  //pour tester
+
+  const user="1";
   let title="bloblo";
-  create({user, title}, (err, result)=>{
+  getById(user,(err, result)=>{
     if(err){
       console.log(result)
     }else{
-      console.log("ajout liste ok")
+      console.log("ok")
     }
   });
