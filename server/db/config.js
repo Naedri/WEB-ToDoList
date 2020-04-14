@@ -1,9 +1,9 @@
 module.exports = {
 	database: {
-		user: "cydjrath",
+		user: "",
 		host: "kandula.db.elephantsql.com",
-		database: "cydjrath",
-		password: "OTnUM0VVLsu9nGzq5ZrYkeDpVIpFl7y_",
+		database: "",
+		password: "",
 		port: 5432
 	},
 	//secret: "thecakeisalie"
