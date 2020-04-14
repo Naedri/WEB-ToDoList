@@ -14,26 +14,26 @@ module.exports = {
   //Pour l'avoir pour chaque utilisateur
   function getAll(callback) {
     const query = 
-    `SELECT  l.id, l.username, t.id, t.titre, t.echeance, t.note, t.fait, st.id, st.titre, st.fait
+    `SELECT  l.id as idListe, l.username, l.titre as TitreListe, t.idliste as idlisteTache, t.id as idTache, t.titre as TitreTache, t.echeance as EcheanceTache, t.note as NoteTache, t.fait as FaitTache, st.id as idSousTache, st.titre as TitreSousTache, st.fait as FaitSousTache
     FROM liste l, tache t, soustache st
     WHERE l.id=t.id AND t.id=st.id`;
     utils.executeQuery(query, [], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined,result.rows);
+        callback(undefined, result.rows);
       }
     });
   }
 
 //RAJOUTER WHERE ... AND l.username=$2
 //pour l'avoir pour chaque utilisateur
-  function getById(listeID, callback) {
+  function getById({listeID,username}, callback) {
     const query = 
-    `SELECT  l.id, l.username, t.id, t.titre, t.echeance, t.note, t.fait, st.id, st.titre, st.fait
+    `SELECT  l.id, l.username, l.titre, t.id, t.titre, t.echeance, t.note, t.fait, st.id, st.titre, st.fait
     FROM liste l, tache t, soustache st
-    WHERE l.id=$1`;
-    utils.executeQuery(query, [listeID], (err, result) => {
+    WHERE l.id=$1 AND l.username=$2`;
+    utils.executeQuery(query, [listeID, username], (err, result) => {
       if (err) {
         callback(true, err);
       } else if (result.rows.length === 0) {
@@ -86,13 +86,14 @@ module.exports = {
 
 
   //pour tester
-
+/*
   const user="1";
   let title="bloblo";
-  getById(user,(err, result)=>{
+  getAll((err, result)=>{
     if(err){
       console.log(result)
     }else{
-      console.log("ok")
+      console.log(result)
     }
   });
+*/

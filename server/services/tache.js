@@ -5,7 +5,8 @@ const utils = require("../db/utils");
 module.exports = {
     create,
     update,
-    deleteById
+    deleteById,
+    updateRealisation
   };
  
 
@@ -24,7 +25,7 @@ module.exports = {
     });
   }
 
-
+//Supprimer une tâche via son identifiant
   function deleteById(projectId, callback) {
     const query = "DELETE FROM TACHE WHERE id=$1";
     utils.executeQuery(query, [projectId], (err, result) => {
@@ -40,6 +41,8 @@ module.exports = {
   //un autre pour simplement mettre que la tâche est faite ?
   //action bouton ?
 
+
+//Modifier une tâche
   function update({titre, date, note, realisation, idTache }, callback) {
     const query = `UPDATE TACHE SET titre=$1, echeance=$2, note=$3, fait=$4 
     WHERE id=$5`;
@@ -52,10 +55,23 @@ module.exports = {
     });
   }
 
+//Modifier l'état de réalisation d'une tâche avec un boolean
+  function updateRealisation({realisation, idTache}, callback) {
+    const query = `UPDATE TACHE SET fait=$1
+    WHERE id=$2`;
+    utils.executeQuery(query, [realisation, idTache], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined);
+      }
+    });
+  }
+
 
 
   //pour tester
-
+/*
   const objreq={
     titre:"Les chemises update",
     date:'2025-05-18',
@@ -73,3 +89,4 @@ module.exports = {
       console.log("ok")
     }
   });
+  */

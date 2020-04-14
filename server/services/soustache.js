@@ -36,6 +36,10 @@ module.exports = {
     });
   }
 
+  //Supprimer et tout recréer
+  //On m'envoie une soustâche, je ne sais pas si elle est en édition
+  //ou si elle est nouvellement créé
+  //je dois vérifier la tâche est déjà créé ou si elle existe déjà
   
 
   function update({titre, realisation }, callback) {
@@ -53,7 +57,7 @@ module.exports = {
 
 
   //pour tester
-
+/*
   const objreq={
     idtache:1,
     titre:"Les chemises vertes",
@@ -68,3 +72,4 @@ module.exports = {
       console.log("ok")
     }
   });
+  */

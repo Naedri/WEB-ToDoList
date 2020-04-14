@@ -23,7 +23,7 @@ CREATE TABLE LISTE(
     --je mets le jour de création c'est gratuit
 );
 
-INSERT INTO LISTE (username, titre) VALUES ('toto', 'Plan pour vénérer GrosChibrax7');
+INSERT INTO LISTE (username, titre) VALUES ('toto', 'Plan pour battre PtitChibrax');
 INSERT INTO LISTE (username, titre) VALUES ('Gilbert', 'Terminer le projet');
 
 DROP TABLE IF EXISTS TACHE CASCADE;
@@ -40,6 +40,13 @@ CREATE TABLE TACHE(
 INSERT INTO TACHE (idListe, titre, echeance, note, fait) 
 VALUES (1, 'Battre PtitChibrax', '2020-05-18','Entrainer sa brute tous les jours', FALSE);
 
+INSERT INTO TACHE (idListe, titre, echeance, note, fait) 
+VALUES (1, 'Battre PtitChibrax 1', '2020-05-18','Entrainer sa brute tous les jours', FALSE);
+
+
+INSERT INTO TACHE (idListe, titre, echeance, note, fait) 
+VALUES (2, 'Battre PtitChibrax2', '2020-05-18','Entrainer sa brute tous les jours2', FALSE);
+
 DROP TABLE IF EXISTS SOUSTACHE CASCADE;
 CREATE TABLE SOUSTACHE(
     ID SERIAL PRIMARY KEY,
@@ -50,6 +57,8 @@ CREATE TABLE SOUSTACHE(
 );
 
 INSERT INTO SOUSTACHE (idTache, titre, fait) 
-VALUES (1, 'Rythme', FALSE);
+VALUES (1, 'Rythme1', FALSE);
 INSERT INTO SOUSTACHE (idTache, titre, fait) 
-VALUES (1, 'Tactique', FALSE);
+VALUES (1, 'Tactique1', FALSE);
+INSERT INTO SOUSTACHE (idTache, titre, fait) 
+VALUES (2, 'Tactique2', FALSE);
