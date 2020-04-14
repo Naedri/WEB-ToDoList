@@ -5,9 +5,44 @@ const utils = require("../db/utils");
 module.exports = {
     create,
     update,
-    deleteById
+    deleteById,
+    getAll,
+    getById
   };
  
+
+
+  function getAll(callback) {
+    const query = 
+    `SELECT *
+    FROM SOUSTACHE`;
+    utils.executeQuery(query, [], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined, result.rows);
+      }
+    });
+  }
+
+
+
+  function getById(SousTacheID,callback) {
+    const query = 
+    `SELECT *
+    FROM SOUSTACHE
+    WHERE id=$1`;
+    utils.executeQuery(query, [SousTacheID], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined, result.rows);
+      }
+    });
+  }
+
+
+
 
 
 //créer une tâche et une sous-tâche en même temps ?

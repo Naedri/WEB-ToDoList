@@ -12,6 +12,8 @@ module.exports = {
 
   //RAJOUTER WHERE ... AND l.username=$1
   //Pour l'avoir pour chaque utilisateur
+
+  /*
   function getAll(callback) {
     const query = 
     `SELECT  l.id as idListe, l.username, l.titre as TitreListe, t.idliste as idlisteTache, t.id as idTache, t.titre as TitreTache, t.echeance as EcheanceTache, t.note as NoteTache, t.fait as FaitTache, st.id as idSousTache, st.titre as TitreSousTache, st.fait as FaitSousTache
@@ -24,10 +26,26 @@ module.exports = {
         callback(undefined, result.rows);
       }
     });
+  }*/
+
+
+  function getAll(callback) {
+    const query = 
+    `SELECT *
+    FROM LISTE`;
+    utils.executeQuery(query, [], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined, result.rows);
+      }
+    });
   }
 
 //RAJOUTER WHERE ... AND l.username=$2
 //pour l'avoir pour chaque utilisateur
+
+/*
   function getById({listeID,username}, callback) {
     const query = 
     `SELECT  l.id, l.username, l.titre, t.id, t.titre, t.echeance, t.note, t.fait, st.id, st.titre, st.fait
@@ -40,6 +58,24 @@ module.exports = {
         callback(true, `Impossible de retrouver le projet ${listeID}`);
       } else {
         callback(undefined);
+      }
+    });
+  }*/
+
+
+  function getById(listeID, callback) {
+    const query = 
+    `SELECT *
+    FROM LISTE
+    WHERE id=$1`;
+    utils.executeQuery(query, [listeID], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } //else if (result.rows.length === 0) {
+        //callback(true, `Impossible de retrouver le projet ${listeID}`);
+     // } 
+      else {
+        callback(undefined, result.rows);
       }
     });
   }
