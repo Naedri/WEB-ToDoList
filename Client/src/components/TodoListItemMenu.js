@@ -7,67 +7,67 @@ export default class TodoListItemMenu extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: this.props.task.value || "",
+            title: this.props.task.titre || "",
             note: this.props.task.note || "",
-            date: this.props.task.date || "",
-            stages: this.props.task.stages || [],
+            date: this.props.task.echeance || "",
+            stages: this.props.task.sousTaches || [],
             showError: this.props.infoMessage || false
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.createTask = this.createTask.bind(this);
-        this.markStageDone = this.markStageDone.bind(this);
-        this.removeStage = this.removeStage.bind(this);
-        this.baseState = this.state;
+        this.nameInput = null;
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate = (prevProps) => {
         if (this.props.infoMessage !== prevProps.infoMessage) {
             this.setState({ showError: this.props.infoMessage });
+            this.nameInput.focus();
         }
     }
 
-    removeStage(index) {
+    componentDidMount = () => {
+        this.nameInput.focus();
+    }
+
+    removeStage = (index) => {
         let stages = this.state.stages;
-        let newStages = stages.filter( stage => stage.index !== index);
-        this.setState({stages : newStages})
+        let newStages = stages.filter(stage => stage.id !== index);
+        this.setState({ stages: newStages })
     }
 
-    onSubmit() {
+    onSubmit = () => {
         let newTask = {
-            value: this.state.title || this.props.task.value,
+            titre: this.state.title || this.props.task.value,
             note: this.state.note,
-            date: this.state.date,
-            stages: this.state.stages,
-            index: this.props.task.index,
-            done: this.props.task.done
+            echeance: this.state.date,
+            sousTaches: this.state.stages,
+            id: this.props.task.id,
+            fait: this.props.task.fait
         }
-        this.props.onSubmit(newTask, this.props.listId);
+        this.props.onSubmit(newTask, this.props.task.idListe);
     }
 
-    markStageDone(index) {
+    markStageDone = (index) => {
         this.setState({
-            stages: this.state.stages.map(stg => (stg.index === index ? {...stg, done : !stg.done} : stg)),
-            showError:false
-          });
+            stages: this.state.stages.map(stg => (stg.id === index ? { ...stg, fait: !stg.fait } : stg)),
+            showError: false
+        });
     }
 
-    createTask(task) {
-        let newtask = { title: task.newStageValue, index: this.state.stages.length + 1+task.newStageValue, done: false };
+    createTask = (task) => {
+        let newtask = { titre: task.newStageValue, id: this.state.stages.length + 1 + task.newStageValue, fait: false };
         this.setState({
-            stages:[...this.state.stages, newtask],
-            showError : false
-          });   
+            stages: [...this.state.stages, newtask],
+            showError: false
+        });
     }
 
-    handleChange(event) {
+    handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value, showError: false });
     }
-    
-    render() {
+
+    render = () => {
         let stages = this.state.stages.length > 0 && this.state.stages.map(stage => {
             return (
-                <StagesItem key={stage.index + stage.title} item={stage} removeStage={this.removeStage} markTodoDone={this.markStageDone} />
+                <StagesItem key={stage.id + stage.titre} item={stage} removeStage={this.removeStage} markTodoDone={this.markStageDone} />
             );
         });
         return (
@@ -84,7 +84,7 @@ export default class TodoListItemMenu extends React.Component {
                 <label>Notes</label>
                 <textarea type="text" onChange={this.handleChange} value={this.state.note} name="note" className="form-control mb-3" placeholder="Quelques détails ..." />
                 <div className="row">
-                    <button type="button" ref={input => input && this.state.showError && input.focus()} onClick={this.onSubmit} className="btn btn-secondary ml-2">Enregistrer</button>
+                    <button type="button" ref={input => this.nameInput = input} onClick={this.onSubmit} className="btn btn-secondary ml-2">Enregistrer</button>
                     <button type="button" onClick={this.props.onCancelEdit} className="btn btn-danger ml-2">Annuler</button>
                 </div>
                 {this.props.infoMessage && <p className="error">Veuillez enregistrer vos modifications</p>}

@@ -9,7 +9,8 @@ const Lists = (props) => {
         )
     });
     return (
-        <ul className="list-group pt-2"> <h5>Mes listes</h5>
+        <ul className="list-group pt-2">
+            <h5>Mes listes </h5>
             {lists}
         </ul>
 

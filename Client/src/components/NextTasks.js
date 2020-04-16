@@ -1,13 +1,14 @@
 import React from 'react';
 import TodoListItem from './TodoListItem'
 
+
 const NextTasks = (props) => {
 
-    let tasks = props.lists.map(list => list.tasks.map(task => ({ ...task, listId: list.id })));
-    tasks = Array.prototype.concat(...tasks).filter(task => task.date !== '').sort((a, b) => new Date(a.date) - new Date(b.date));
+    let tasks = props.lists.map(list => list.taches.map(task => task));
+    tasks = Array.prototype.concat(...tasks).filter(task => task.echeance !== '').sort((a, b) => new Date(a.date) - new Date(b.date));
     const Nexts = tasks.map(task => {
-        return <TodoListItem key={task.index + task.value} listId={task.listId} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
-    })
+        return <TodoListItem key={task.id + task.titre} listId={task.idListe} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
+    }) 
     let hasTasks = tasks.length > 0;
     return (
         <div>
