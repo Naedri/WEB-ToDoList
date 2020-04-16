@@ -9,7 +9,8 @@ const TodoList = (props) => {
     }
     let items = props.items.map(task => {
         return (
-            <TodoListItem key={task.index + task.value} listId={props.listId} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
+            <TodoListItem key={task.id + task.titre} listId={props.listId} item={task}
+                removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
         );
     });
     return (

@@ -48,9 +48,9 @@ let Home = () => {
         async function fetchLists() {
             try {
                 setLoading(true);
-                let lists = await getLists();
-                dispatch({ type: 'INIT', toDos: lists })
-                setLoading(false);
+                //let lists = await getLists();
+                //dispatch({ type: 'INIT', toDos: lists })
+                //setLoading(false);
             }
             catch (err) {
                 setError(err.message);
@@ -106,7 +106,7 @@ let Home = () => {
         let selectedList = newTodos.find(list => list.id === id);
         try {
             await (editTaskAPI(selectedList, editedTask));
-            selectedList.tasks = selectedList.tasks.map(task => task.index === editedTask.index ? editedTask : task)
+            selectedList.tasks = selectedList.taches.map(task => task.id === editedTask.id ? editedTask : task)
             newTodos = newTodos.map(list => list.id === selectedList.id ? selectedList : list);
             dispatch({ type: 'EDIT_TASK', toDos: newTodos })
             setEdit(false);
@@ -145,12 +145,12 @@ let Home = () => {
      * @param {*} index identifiant de la tâche
      * @param listIndex identifiant de la liste
      */
-    const openEditMenu = (index, listIndex) => {
+    const openEditMenu = (taskId, listIndex) => {
         if (onEdit) {
             setWarning(true);
             return;
         }
-        setSelectedTask(state.toDos.find(list => list.id === listIndex).tasks.find(task => task.index === index));
+        setSelectedTask(state.toDos.find(list => list.id === listIndex).taches.find(task => task.id === taskId));
         dispatch({ type: 'OPEN_EDIT_MENU', listId: listIndex });
         setEdit(true);
         setWarning(false);
@@ -172,8 +172,8 @@ let Home = () => {
         let newTodos = [...state.toDos];
         let chosenList = newTodos.find(list => list.id === id);
         try {
-            let response = await createTask(chosenList, { title: todoItem.newItemValue });
-            chosenList.tasks.push(response);
+            let response = await createTask(chosenList, { titre: todoItem.newItemValue });
+            chosenList.taches.push(response);
             newTodos = newTodos.map(list => list.id === id ? chosenList : list);
             dispatch({ type: 'INIT', toDos: newTodos })
         }
@@ -196,9 +196,9 @@ let Home = () => {
         let newTodos = [...state.toDos];
         let selectedList = newTodos.find(list => list.id === id);
         try {
-            await deleteTaskAPI(selectedList, { index: itemIndex });
-            let updatedTasks = selectedList.tasks.filter(task => task.index !== itemIndex);
-            selectedList.tasks = updatedTasks;
+            await deleteTaskAPI(selectedList, { id: itemIndex });
+            let updatedTasks = selectedList.taches.filter(task => task.id !== itemIndex);
+            selectedList.taches = updatedTasks;
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
             dispatch({ type: 'REMOVE_TASK', toDos: newTodos })
         }
@@ -216,8 +216,8 @@ let Home = () => {
     const markTodoDone = async (itemIndex, id) => {
         let newTodos = [...state.toDos];
         let selectedList = newTodos.find(list => list.id === id);
-        let selectedTask = selectedList.tasks.find(task => task.index === itemIndex);
-        selectedTask.done = !selectedTask.done;
+        let selectedTask = selectedList.taches.find(task => task.id === itemIndex);
+        selectedTask.fait = !selectedTask.fait;
         try {
             editTaskAPI(selectedList, selectedTask);
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
@@ -251,14 +251,14 @@ let Home = () => {
     let id = state.listId;
     let selectedList = state.toDos.find(list => list.id === id);
     let hasLists = state.toDos.length > 0;
-    let borderClass = changeEditBorder ? "col-sm-3 fill mt-3 border-left border-warning" : "col-sm-3 mt-3 fill border-left";
+    let borderClass = changeEditBorder ? "col-xl-3 fill mt-3 border-left border-warning" : "col-xl-3 mt-3 fill border-left";
 
     let centerHeader = () => {
         if (renderHome)
             return <h1>Prochaines tâches</h1>
         if (renderingSettings)
             return <h1>Paramètres</h1>
-        return hasLists && <h1>{selectedList.title}</h1>
+        return hasLists && <h1>{selectedList.titre}</h1>
     }
 
     let centerContent = () => {
@@ -267,7 +267,7 @@ let Home = () => {
         if (renderingSettings)
             return null
         return (
-            hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
+            hasLists && <TodoApp id={selectedList.id} initItems={selectedList.taches} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
         )
     }
 
@@ -276,9 +276,9 @@ let Home = () => {
     if (error)
         return <h2>Something went wrong : {error} </h2>
     return (
-        <div className="main-wrapper container-fluid mt-0 h-100">
-            <div className="row h-100">
-                <div className="col-sm-3 border-right border-top menu h-100">
+        <div className="main-wrapper container-fluid mt-0 full-h ">
+            <div className="row full-h ">
+                <div className="col-xl-3 border-right border-top menu full-h">
                     <div className="mt-3">
                         <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
                     </div>
@@ -288,7 +288,7 @@ let Home = () => {
                     <Lists changeList={changeList} lists={state.toDos} />
                     <ListForm addList={addList} />
                 </div>
-                <div className={onEdit ? "col-sm-5 h-100 mt-3" : "col-sm-7 h-100 mt-3"}>
+                <div className={onEdit ? "col-xl-5 full-h  mt-3" : "col-xl-7 full-h  mt-3"}>
                     <div className="row">
                         <div className="col-sm">
                             {centerHeader()}

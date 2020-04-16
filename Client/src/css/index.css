@@ -73,3 +73,17 @@ small{
 .menu {
   background-color: #F5F5F5;
 }
+.full-h {
+  height: 100%;
+} 
+@media all and (max-width: 1024px)
+{
+   .full-h {
+     height: auto !important;
+   }
+
+   .hide{
+     display: none;
+   }
+}
+
