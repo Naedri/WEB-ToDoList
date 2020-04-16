@@ -10,6 +10,8 @@ module.exports = {
   };
  
 
+  
+
   //RAJOUTER WHERE ... AND l.username=$1
   //Pour l'avoir pour chaque utilisateur
 
@@ -81,15 +83,19 @@ module.exports = {
   }
 
 
-  function create({username, titre}, callback) {
+  //AJOUTER USERNAME POUR LIER A UN USER
+  //INSERT INTO LISTE (USERNAME, TITRE)
+  function create(titre, callback) {
     const query = 
-    `INSERT INTO LISTE (username, titre) 
-    VALUES ($1, $2)`;
-    utils.executeQuery(query, [username, titre], (err, result) => {
+    `INSERT INTO LISTE (titre) 
+    VALUES ($1)
+    RETURNING *`;
+    utils.executeQuery(query, [titre], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined);
+        callback(undefined, { idlist: result.rows[0].id });
+        //console.log(""+result.rows[0].id)
       }
     });
   }
@@ -122,14 +128,21 @@ module.exports = {
 
 
   //pour tester
-/*
+
   const user="1";
   let title="bloblo";
+  let blabla;
+
+  /*
   getAll((err, result)=>{
     if(err){
       console.log(result)
     }else{
-      console.log(result)
+     // console.log(result)
     }
   });
+
+  console.log(essai);
+
 */
+  

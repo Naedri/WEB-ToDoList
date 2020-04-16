@@ -17,7 +17,7 @@ module.exports = {
   function getAll(callback) {
     const query = 
     `SELECT *
-    FROM SOUSTACHE`;
+    FROM TACHE`;
     utils.executeQuery(query, [], (err, result) => {
       if (err) {
         callback(true, err);
@@ -52,12 +52,13 @@ module.exports = {
   function create({idListe, titre, date, note}, callback) {
     const query = 
     `INSERT INTO TACHE (idListe, titre, echeance, note, fait) 
-    VALUES ($1, $2, $3, $4, FALSE);`;
+    VALUES ($1, $2, $3, $4, FALSE)
+    RETURNING *`;
     utils.executeQuery(query, [idListe, titre, date, note], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined);
+        callback(undefined, { idlist: result.rows[0].id });
       }
     });
   }
