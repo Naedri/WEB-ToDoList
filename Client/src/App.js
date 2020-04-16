@@ -1,10 +1,14 @@
 import React from 'react';
-import './App.css';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Login from './Login';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import SignIn from './SignIn';
+
+import LogIn from './components_usersConnection/LogIn';
+import SignUp from './components_usersConnection/SignUp';
+import ForgetPassWord from './components_usersConnection/ForgetPassWord';
 import Home from './HomePage'
+
+import './css/App.css';
+import './css/bootstrap.css' ;
+import './css/style.css' ;
 
 const App = () => {
   return (<Router>
@@ -30,11 +34,12 @@ const App = () => {
       </nav>*/
       }
       <Switch>
-        <Route exact path='/' component={Login} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/sign-up" component={SignIn} />
+      <Route exact path='/' component={LogIn} />
+        <Route exact path="/login" component={LogIn} />
+        <Route exact path="/signup" component={SignUp} />
+        <Route exact path="/forgetpassword" component={ForgetPassWord} />
         <Route exact path="/home" component={Home} />
-
+        
       </Switch>
     </div></Router>
   );
