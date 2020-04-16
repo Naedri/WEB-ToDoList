@@ -6,7 +6,8 @@ module.exports = {
     getById,
     create,
     update,
-    deleteById
+    deleteById,
+    getAllComplete
   };
  
 
@@ -30,6 +31,28 @@ module.exports = {
     });
   }*/
 
+  function getAllComplete(callback) {
+    const query =
+      `SELECT
+    l.*,
+    CASE WHEN count(t) = 0 THEN ARRAY[]::json[] ELSE array_agg(t.tache) END AS taches
+  FROM liste l
+    LEFT OUTER JOIN
+    (
+      SELECT t1.idListe, json_build_object('id', t1.id, 'idListe', t1.idListe, 'titre', t1.titre, 'echeance', t1.echeance, 'note', t1.note, 'fait', t1.fait, 'sousTaches', NULL ) as tache
+      FROM tache t1
+    )t
+      ON l.id = t.idListe
+  WHERE t.idListe = l.id
+  GROUP BY l.id`;
+    utils.executeQuery(query, [], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined, result.rows);
+      }
+    });
+  }
 
   function getAll(callback) {
     const query = 

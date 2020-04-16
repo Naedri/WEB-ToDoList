@@ -7,7 +7,8 @@ module.exports = {
     update,
     deleteById,
     getAll,
-    getById
+    getById,
+    updateRealisation
   };
  
 
