@@ -9,10 +9,12 @@ CREATE TABLE USERS (
   created_at timestamp default current_timestamp
 );
 
+ALTER TABLE USERS ADD CONSTRAINT U_MailUser UNIQUE (email) ;
+
 INSERT INTO USERS (username, firstname, lastname, email, encrypted_password)
 VALUES ('toto','Dublanc','Bernard','bernard@wanadoo.fr','blabla');
 INSERT INTO USERS (username, firstname, lastname, email, encrypted_password)
-VALUES ('Gilbert','Dublanc','Bernard','bernard@wanadoo.fr','blabla');
+VALUES ('Gilbert','Dublanc','Bernard','bernard2@wanadoo.fr','blabla');
 
 DROP TABLE IF EXISTS LISTE CASCADE;
 CREATE TABLE LISTE(
