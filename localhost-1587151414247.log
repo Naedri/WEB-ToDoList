@@ -1,0 +1,27 @@
+log.js:24 [HMR] Waiting for update signal from WDS...
+SignUp.js:46 TypeError: Cannot read property 'email' of undefined
+    at try_signup (SignUp.js:37)
+    at HTMLUnknownElement.callCallback (react-dom.development.js:188)
+    at Object.invokeGuardedCallbackDev (react-dom.development.js:237)
+    at invokeGuardedCallback (react-dom.development.js:292)
+    at invokeGuardedCallbackAndCatchFirstError (react-dom.development.js:306)
+    at executeDispatch (react-dom.development.js:389)
+    at executeDispatchesInOrder (react-dom.development.js:414)
+    at executeDispatchesAndRelease (react-dom.development.js:3278)
+    at executeDispatchesAndReleaseTopLevel (react-dom.development.js:3287)
+    at forEachAccumulated (react-dom.development.js:3259)
+    at runEventsInBatch (react-dom.development.js:3304)
+    at runExtractedPluginEventsInBatch (react-dom.development.js:3514)
+    at handleTopLevel (react-dom.development.js:3558)
+    at batchedEventUpdates$1 (react-dom.development.js:21902)
+    at batchedEventUpdates (react-dom.development.js:1060)
+    at dispatchEventForLegacyPluginEventSystem (react-dom.development.js:3568)
+    at attemptToDispatchEvent (react-dom.development.js:4267)
+    at dispatchEvent (react-dom.development.js:4189)
+    at unstable_runWithPriority (scheduler.development.js:653)
+    at runWithPriority$1 (react-dom.development.js:11061)
+    at discreteUpdates$1 (react-dom.development.js:21918)
+    at discreteUpdates (react-dom.development.js:1071)
+    at dispatchDiscreteEvent (react-dom.development.js:4168)
+webpackHotDevClient.js:76 The development server has disconnected.
+Refresh the page if necessary.

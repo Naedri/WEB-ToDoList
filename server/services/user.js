@@ -20,9 +20,8 @@ function isFree(email , callback) {
     if (err) {
         callback(true, err);
     } else {
-        // callback(undefined, result.rows[0]);
-        let count = result.row[0];
-        let free = (count === '0') ? true : false ; 
+        let count = result.rows[0].count;
+        let free = (count === '0') ? 'true' : 'false' ; 
         callback(undefined, free);
     }
     });

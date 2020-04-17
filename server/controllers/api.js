@@ -203,14 +203,14 @@ router.delete("/soustache/:id([0-9]*)", (req, res) => {
 // state : done
 // does an email is already used
 // @param: email
-router.post('/user/free', (req, res, next) => {
+router.post('/user/free', (req, res) => {
 
-  ServiceUser.isFree(req.body, (err, result) => {
+  ServiceUser.isFree(req.body.email, (err, result) => {
     if (err) {
       res.status(500).json({ message: result });
       return ;
     } else {
-      let state = (result === true)? 'available' : 'busy';
+      let state = result ? 'available' : 'busy' ;
       console.log('email '+ state);
       res.json(result);
     }

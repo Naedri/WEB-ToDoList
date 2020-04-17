@@ -1,20 +1,31 @@
 import React, { useState } from "react";
 import '../css/styleUser.css' ;
+import { isFreeUserApi } from '../api.js';
 
 const SignUp = (props) => {
 
     const [form, setValues] = useState({
-        username: "",
+        email: "",
         password: "",
-        password2: ""
+        password2: "",
+        emailBusy: "",
+        isLoading: "",
+        isCreate: "",
+
     });
 
     const [errors, setErrors] = useState({
-        username: false,
+        email: false,
         password: false,
-        password2: false
+        password2: false,
     });
-
+/*
+    const [sign, setSign] = useState({
+        emailBusy: "",
+        isLoading: "",
+        isCreate: "",
+    })
+*/
     // eslint-disable-next-line 
     const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
@@ -25,24 +36,57 @@ const SignUp = (props) => {
         return valid;
     }
 
-    const printValues = e => {
+    const try_signup = async (e) =>  {
         e.preventDefault();
-        if (validateForm(errors))
-            console.log(form.username, form.password, form.password2);
         
+        if (validateForm(errors)){
+            try {
+                setValues({
+                    ...form,
+                    ['isLoading']: 'Chargement...'
+                });
+
+                let status = await isFreeUserApi(form.email) ;
+                if (status ==='true'){
+                    console.log("il faut utiliser createUserApi");
+                    setValues({
+                        ...form,
+                        ['isCreate'] : 'Un email vient de vous être envoyé', 
+                        ['emailBusy'] : 'Cette adresse e-mail est déjà utilisée'
+                    });
+                } else {
+                    setValues({
+                        ...form,
+                        ['emailBusy']: 'Cette adresse e-mail est déjà utilisée'
+                    });
+                }
+            }
+            catch (err) {
+                console.log(err);
+                setErrors(err.message);
+            }
+            setValues({
+                ...form,
+                ['isLoading']: ''
+            });
+        }
     };
+
 
     const handleChange = e => {
         const { name, value } = e.target;
         let err = errors;
         switch (name) {
-            case 'username':
+            case 'email':
                 err =
                     !value.trim() ? 'Veuillez renseigner une adresse e-mail'
                         : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
                             : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
                                 : '' ;
-
+                setValues({
+                    ...form,
+                    ['emailBusy']: ''
+                });
                 break;
             case 'password':
                 err =
@@ -59,15 +103,16 @@ const SignUp = (props) => {
             default:
                 break;
         }
-
-        setValues({
-            ...form,
-            [name]: value
-        });
-        setErrors({
-            ...errors,
-            [name]: err
-        });
+        if (name=='email'||name=='password'||name=='password2'){
+            setValues({
+                ...form,
+                [name]: value
+            });
+            setErrors({
+                ...errors,
+                [name]: err
+            });
+        }
     };
 
     return (
@@ -76,10 +121,10 @@ const SignUp = (props) => {
 
                 <div className="auth-wrapper mt-2">
 
-                    <form onSubmit={printValues}>
+                    <form onSubmit={try_signup}>
 
                         <div className="form-group">
-                            <label htmlFor="username"> 
+                            <label htmlFor="email"> 
                                 Adresse e-mail
                                 </label>
                             <input
@@ -87,16 +132,22 @@ const SignUp = (props) => {
                                 className="form-control"
                                 placeholder="mail@provider"
                                 
-                                value={form.username}
-                                id="username"
-                                name="username"
+                                value={form.email}
+                                id="email"
+                                name="email"
                                 onChange={handleChange}
                             />
-                            {errors.username &&
+                            {errors.email &&
                                 <small 
                                     id="mailNull"
                                     className='form-text text-error'>
-                                        {errors.username}
+                                        {errors.email}
+                                </small>
+                            }
+                            {form.emailBusy &&
+                                <small 
+                                    className="form-text text-error">
+                                       {form.emailBusy}
                                 </small>
                             }
                         </div>
@@ -151,10 +202,25 @@ const SignUp = (props) => {
                         </div>
 
                         <button type="submit" 
-                            disabled={form.username==="" || form.password==="" || form.password2==="" || form.password!==form.password2 } 
+                            disabled={ form.isLoading && form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2 } 
                             className="btn btn-primary btn-lg btn-block">
                                 Inscription
                         </button>
+
+
+                                <small 
+                                    id="isLoading"
+                                    name="isLoading"
+                                    className='form-text'>
+                                        {form.isLoading}
+                                </small>
+
+                                <small 
+                                    id="isCreate"
+                                    name="isCreate"
+                                    className='form-text text-valide'>
+                                        {form.isCreate}
+                                </small>
 
                         <div className="form-group">
                             <a href="login" className="form-text form-text--alt">
