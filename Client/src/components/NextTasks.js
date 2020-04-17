@@ -5,7 +5,7 @@ import TodoListItem from './TodoListItem'
 const NextTasks = (props) => {
 
     let tasks = props.lists.map(list => list.taches.map(task => task));
-    tasks = Array.prototype.concat(...tasks).filter(task => task.echeance !== '').sort((a, b) => new Date(a.date) - new Date(b.date));
+    tasks = Array.prototype.concat(...tasks).filter(task => task.echeance !== null).sort((a, b) => new Date(a.date) - new Date(b.date));
     const Nexts = tasks.map(task => {
         return <TodoListItem key={task.id + task.titre} listId={task.idListe} item={task} removeItem={props.removeItem} markTodoDone={props.markTodoDone} showEditMenu={props.showEditMenu} />
     }) 

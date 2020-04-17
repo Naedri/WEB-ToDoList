@@ -23,7 +23,7 @@ const TodoListItem = (props) => {
     let todoClass = props.item.fait ?
         "done" : "undone";
     let index = props.item.id;
-    let listId = props.listId;
+    let listId = props.item.idliste;
     return (
         <li className="list-group-item">
             <div className ="form-input row">

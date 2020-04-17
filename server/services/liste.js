@@ -40,7 +40,7 @@ module.exports = {
   FROM liste l
     LEFT OUTER JOIN
     (
-      SELECT t1.idListe, json_build_object('id', t1.id, 'idListe', t1.idListe, 'titre', t1.titre, 'echeance', t1.echeance, 'note', t1.note, 'fait', t1.fait, 'sousTaches', NULL ) as tache
+      SELECT t1.idListe, json_build_object('id', t1.id, 'idliste', t1.idListe, 'titre', t1.titre, 'echeance', t1.echeance, 'note', t1.note, 'fait', t1.fait ) as tache
       FROM tache t1
     )t
       ON l.id = t.idListe

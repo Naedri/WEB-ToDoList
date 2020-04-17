@@ -2,12 +2,12 @@
 
 // service list and task
 const ServiceListe = require("../services/liste.js");
-const ServiceSousTache=require("../services/soustache.js");
-const ServiceTache=require("../services/tache.js");
+const ServiceSousTache = require("../services/soustache.js");
+const ServiceTache = require("../services/tache.js");
 
 // service user
-const ServiceUser =  require("../services/user.js");
-const ServiceEmail =  require("../services/email.js");
+const ServiceUser = require("../services/user.js");
+const ServiceEmail = require("../services/email.js");
 //const jwt = require('jsonwebtoken');
 //const helpers = require("../helpers/helpers");
 
@@ -19,15 +19,20 @@ const router = express.Router();
 
 
 //Retourner toutes les listes
-  router.get("/api/everything/", (req, res) => {
-    ServiceListe.getAll((err, result)=>{
-        if(err){
-            res.status(500).json({ message: err });
-        }else{
-            res.json(result);
-        }
-      });
+//Retourner toutes les listes et les taches
+router.get("/everything", (req, res) => {
+  ServiceListe.getAllComplete((err, result) => {
+    if (err) {
+      console.log(result);
+      res.status(500).json({ message: err });
+    } else {
+      console.log(result);
+      result.forEach(liste => {
+        liste.taches.forEach(tache => tache.sousTache = []) });
+      res.json(result);
+    }
   });
+});
 
 
 //Créer une nouvelle liste à partir d'un titre envoyé par le body
@@ -79,52 +84,50 @@ router.post("/lists", (req, res) => {
 
   // tâche ajouter supprimer modifier
 
-  router.post("/tache", (req, res) => {
-    const infoCreaTache={
-      ...req.body
+router.post("/tache", (req, res) => {
+  const infoCreaTache = {
+    ...req.body
+  }
+  ServiceTache.create(infoCreaTache, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: err });
+    } else {
+      res.json(result);
     }
-    console.log(infoCreaTache);
-    ServiceTache.create(infoCreaTache ,(err, result)=>{
-      if(err){
-          console.log(result);
-          res.status(500).json({ message: err });
-      }else{
-          res.json(result);
-      }
-    });
   });
+});
 
 
-  router.patch("/tache/:id([0-9]*)", (req, res) => {
-    const infoTache={
-      ...req.body,
-      idTache: req.params.id
+router.patch("/tache/:id([0-9]*)", (req, res) => {
+  const infoTache = {
+    ...req.body,
+    idTache: req.params.id
+  }
+  ServiceTache.update(infoTache, (err, result) => {
+    if (err) {
+      console.log(result);
+      res.status(500).json({ message: err });
+    } else {
+      console.log("MAJ de la tache : " + req.params.id);
+      res.json(req.params.id);
     }
-    ServiceTache.update(infoTache,(err, result)=>{
-        if(err){
-            console.log(result);
-            res.status(500).json({ message: err });
-        }else{
-            console.log("MAJ de la tache : "+req.params.id);
-            res.json(req.params.id);
-        }
-      });
   });
+});
 
 
 
-  router.delete("/tache/:id([0-9]*)", (req, res) => {
-    ServiceTache.deleteById(req.params.id, (err, result) => {
-      if (err) {
-        res.status(500).send();
-        console.log("erreur 500");
-      }
-      else{
-        console.log("Liste supprimée : "+req.params.id);
-        res.json(req.params.id);
-      }
-    });
+router.delete("/tache/:id([0-9]*)", (req, res) => {
+  ServiceTache.deleteById(req.params.id, (err, result) => {
+    if (err) {
+      res.status(500).send();
+      console.log("erreur 500");
+    }
+    else {
+      console.log("Liste supprimée : " + req.params.id);
+      res.json(req.params.id);
+    }
   });
+});
 
 
 
@@ -276,22 +279,10 @@ router.get("/user/logout", (req, res, next) => {
 });
 
 
-//Retourner toutes les listes et les taches
-router.get("/everything", (req, res) => {
-  ServiceListe.getAllComplete((err, result)=>{
-      if(err){
-          console.log(result);
-          res.status(500).json({ message: err });
-      }else{
-          console.log(result);
-          res.json(result);
-      }
-    });
-});
 
 
 
 
 
 
-  module.exports = router;
+module.exports = router;
