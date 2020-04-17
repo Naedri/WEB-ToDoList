@@ -1,6 +1,4 @@
-// Client/src/api.js
-
-export const BASE_URL = 'http://localhost:8001'
+export const BASE_URL = 'http://localhost:8000'
 
 /* general functions ****************************/
 
@@ -11,7 +9,7 @@ function getEndpointURL(endpoint) {
 /* list and task functions ****************************/
 
 export async function getLists() {
-    let url = getEndpointURL('/lists')
+    let url = getEndpointURL('/api/everything')
     let response = await fetch(url)
 
     // 👉 Parser la réponse en JSON
@@ -21,7 +19,7 @@ export async function getLists() {
 }
 
 export async function createList(list) {
-    let url = getEndpointURL('/lists')
+    let url = getEndpointURL('/api/lists')
     let response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -36,7 +34,7 @@ export async function createList(list) {
     if (response.status >= 300) {
         throw new Error(data.message)
     }
-
+    console.log(data);
     // 👉 Renvoyer les données
     return data
 }
@@ -45,7 +43,7 @@ export async function deletelist(list) {
     // 👉 Faire une requête DELETE sur l'URL
     // http://localhost:3000/posts/{id du post} grâce à fetch
     // (cf https://slides.com/drazik/programmation-web-client-riche-la-programmation-asynchrone-en-js#/25)
-    let url = getEndpointURL(`/list/${list.id}`)
+    let url = getEndpointURL(`/api/lists/${list.id}`)
     await fetch(url, {
         method: 'DELETE',
     })

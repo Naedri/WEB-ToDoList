@@ -44,7 +44,6 @@ module.exports = {
       FROM tache t1
     )t
       ON l.id = t.idListe
-  WHERE t.idListe = l.id
   GROUP BY l.id`;
     utils.executeQuery(query, [], (err, result) => {
       if (err) {
@@ -118,7 +117,7 @@ module.exports = {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined, { idlist: result.rows[0].id });
+        callback(undefined, result.rows[0]);
         //console.log(""+result.rows[0].id)
       }
     });

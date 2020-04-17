@@ -18,8 +18,8 @@ const router = express.Router();
 /* router for Lists and tasks *****************************/
 
 //Retourner toutes les listes
-  router.get("/lists", (req, res) => {
-    ServiceListe.getAllComplete((err, result)=>{
+  router.get("/api/everything/", (req, res) => {
+    ServiceListe.getAll((err, result)=>{
         if(err){
             console.log(result);
             res.status(500).json({ message: err });
@@ -123,8 +123,8 @@ const router = express.Router();
             console.log(result);
             res.status(500).json({ message: err });
         }else{
-            console.log(""+result.idlist);
-            res.json(result.idlist);
+            console.log(result);
+            res.json(result);
         }
       });
   });
@@ -183,84 +183,21 @@ router.post("/user/login", (req, res, next) => {
 });
 
 
-// state : not done  (falt heplersMW.checkToken, should check if email2 is free)
-// Trigger destruction of session
-// @param
-router.get("/user/logout", (req, res, next) => {
 
-  ServiceUser.quitSessionUser(req.body, (err, result) => {
-    if(err){
-      res.status(500).json({message: result});
-      return;
-    }
-
-    res.json({
-      message: `Utilisateur ${resut.email} déconnecté.`
+//Retourner toutes les listes et les taches
+router.get("/everything", (req, res) => {
+  ServiceListe.getAllComplete((err, result)=>{
+      if(err){
+          console.log(result);
+          res.status(500).json({ message: err });
+      }else{
+          console.log(result);
+          res.json(result);
+      }
     });
-
-  });
 });
 
 
-// state : done
-// Trigger an email sending to the user's email including its password
-// GET a message telling that an email was sent
-// @param: email
-router.get("/user/forgetpassword", (req, res, next) => {
-
-  ServiceEmail.sendEmail({}, (err, result) => {
-    if (err) {
-      res.status(500).json({ message: err });
-      return;
-    }
-    res.json({ 
-      message: 'Message sent: ' + result.response
-     });
-
-  });
-});
-
-// state : not finished (falt heplersMW.checkToken, should check if email2 is free)
-// Updating email to email2
-// @param: email, password, email2
-router.patch("/user/update/email",(req, res, next)=> {
-  ServiceUser.updateEmailUser({},(err,result) => {
-    if (err){
-      res.status(500).json({ message: err });
-      return;
-    }
-    res.json({
-      message: `Email ${req.body.email2} mis à jour avec succès.`
-    });
-  });
-});
-
-// state : not finished (falt heplersMW.checkToken)
-// Updating email to email2
-// @param: email, password, password2
-router.patch("/user/update/password",(req, res, next)=> {
-    
-  ServiceUser.updatePwdUser({},(err,result) => {
-    if (err) {
-      res.status(500).json({ message: err });
-      return;
-    }
-    res.json({
-      message: `Mot de passe mis à jour avec succès.`
-    });
-  });
-});
-
-/*
-  // On controle que tous les info necessaires ont bien été passées.
-  if ((projectDetails.id && Object.values(projectDetails).length >= 2) === false) {
-    res.status(500).json({ 
-      'message': `Un ou plusieurs paramètres sont manquant.`
-    });
-    return; // Pour sortir de la fonction
-  }
-
-*/
 
 
 
