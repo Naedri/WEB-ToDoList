@@ -1,8 +1,12 @@
 export const BASE_URL = 'http://localhost:8000'
 
+/* general functions ****************************/
+
 function getEndpointURL(endpoint) {
     return `${BASE_URL}${endpoint}`
 }
+
+/* list and task functions ****************************/
 
 export async function getLists() {
     let url = getEndpointURL('/api/everything')
@@ -92,6 +96,173 @@ export async function editTaskAPI(list, task) {
 
     // 👉 Parser la réponse en JSON
     let data = await response.json()
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+/* user functions ****************************/
+
+/**
+ * creation of a user with an email and its encrypted password
+ * @param {*} email 
+ * @param {*} password 
+ */
+export async function createUserApi(email,password) {
+    let url = getEndpointURL('/api/user/signup')
+    let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email,password)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+/**
+ * authentification of a user with its email and its encrypted password
+ * @param {*} email 
+ * @param {*} password 
+ */
+export async function authentificateUserApi(email,password) {
+    let url = getEndpointURL('/api/user/login')
+    let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email,password)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+
+/**
+ * logout of an user
+ * @param {*} email 
+ * @param {*} password 
+ */
+export async function quitSessionUserApi(email,password) {
+    let url = getEndpointURL('/api/user/logout')
+    let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email,password)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+
+/**
+ * ask to send an email to the given adress
+ * @param {*} email 
+ */
+export async function forgetPwdUserApi(email) {
+    let url = getEndpointURL('/api/user/forgetpassword')
+    let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+/**
+ * update of the email of a user
+ * autentificate with its email and its encrypted password (the current one )
+ * user should contain ass well another email (the new)
+ * @param {*} email 
+ * @param {*} password 
+ * @param {*} email2
+ */
+export async function updateEmailUserApi(email,password,email2) {
+    let url = getEndpointURL('/api/user/update/email')
+    let response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email,password,email2)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+
+/**
+ * update of the password of a user
+ * autentificate with its email and its encrypted password (the current one = old)
+ * user should contain ass well another encrypted password (the new)
+ * it is more safe to ask to send both password (old and new)
+ * @param {*} email 
+ * @param {*} password 
+ * @param {*} password2
+ */
+export async function updatePwdUserApi(email,password,password2) {
+    let url = getEndpointURL('/api/user/update/password')
+    let response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(email,password,password2)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
 
     // 👉 Renvoyer les données
     return data

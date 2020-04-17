@@ -13,5 +13,5 @@ app.use("/api", apiRoutes);
 
 
 let server = app.listen(8000, () => {
-  console.log(`Server started. Listening on port`);
+  console.log(`Server started. Listening on port 8000`);
 });

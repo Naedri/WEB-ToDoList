@@ -38,7 +38,9 @@ const ForgetPassWord = (props) => {
                 err =
                     !value.trim()
                         ? 'Veuillez renseigner une adresse e-mail'
-                        : validEmailRegex.test(value) ? '' : 'L adresse e-mail n est pas valide';
+                        : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
+                            : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
+                                : '' ;
                 break;
             default:
                 break;

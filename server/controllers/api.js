@@ -1,9 +1,21 @@
+// server/controllers/api.js
+
+// service list and task
 const ServiceListe = require("../services/liste.js");
 const ServiceSousTache=require("../services/soustache.js");
 const ServiceTache=require("../services/tache.js");
+
+// service user
+const ServiceUser =  require("../services/user.js");
+const ServiceEmail =  require("../services/email.js");
+//const jwt = require('jsonwebtoken');
+//const helpers = require("../helpers/helpers");
+
+// router
 const express = require("express");
 const router = express.Router();
 
+/* router for Lists and tasks *****************************/
 
 //Retourner toutes les listes
   router.get("/api/everything/", (req, res) => {
@@ -61,6 +73,58 @@ const router = express.Router();
   });
 
 
+/* router for user *****************************/
+
+// state : not done (should check if email2 is free)
+// Adding an user
+// @param: email, password
+router.post('/user/signup', (req, res, next) => {
+
+  ServiceUser.createUser(req.body, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
+
+    res.json({
+      message: `Utilisateur ${result.email} crée avec succès.`,
+      id: result.id,
+      username: result.username,
+      email: result.email
+    });
+  });
+});
+
+// state : done
+// Authentification and JWT token recuperation
+// @param: email, password
+router.post("/user/login", (req, res, next) => {
+
+  ServiceUser.authentificateUser(req.body, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
+
+    const userFound = result;
+    if (userFound) {
+      const token = jwt.sign(
+        { username: req.body.username }, 
+        config.secret, 
+        { expiresIn: '24h' }
+      );
+      res.json({
+        message: 'Authentication successful!',
+        token: token
+      });
+    } else {
+      res.status(403).json({
+        message: 'Incorrect username or password'
+      });
+    }
+  });
+});
+
 
 
 //Retourner toutes les listes et les taches
@@ -75,6 +139,7 @@ router.get("/everything", (req, res) => {
       }
     });
 });
+
 
 
 

@@ -37,14 +37,16 @@ const LogIn = (props) => {
                 err =
                     !value.trim()
                         ? 'Veuillez renseigner une adresse e-mail'
-                        : validEmailRegex.test(value) ? '' : 'L adresse e-mail n est pas valide';
+                        : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
+                            : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
+                                : '' ;
                 break;
             case 'password':
                 err =
-                    !value ? "Veuillez renseigner un mot de passe" :
-                        value.length < 8
-                            ? 'Il doit contenir au moins 8 caractères'
-                            : '';
+                    !value ? "Veuillez renseigner un mot de passe"
+                         : value.length < 8 ? 'Il doit contenir au moins 8 caractères'
+                            : value.length > 15 ? 'Il doit contenir moins de 16 caractères'
+                                : '';
                 break;
             default:
                 break;

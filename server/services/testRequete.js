@@ -1,23 +1,22 @@
-/*
-const servicesUsers = require("./users.js");
-const utils = require("../db/utils");
-
-//js
-//pour tester
-//enoyer un seul element
+const servicesUser = require("./user.js");
 
     const user={
-    email: "jean@mailcom",
+    email: "jean@mail.com",
     pwd: "blablabla"
   };
 
-  let free = false ;
-
-  servicesUsers.isFree(user, (err,result) => {
+  servicesUser.isFreeUser(user.email, (err,result) => {
     if(err){
         console.log(result);
     } else {
-        console.log('ok');
+        console.log('requete lancée');
+        console.log(result);
+        if (result.count === '0'){
+          console.log('nom user dispo');
+          return true;
+        }else{
+          console.log('nom user non dispo');
+          return false;
+        }
     }
   });
-*/

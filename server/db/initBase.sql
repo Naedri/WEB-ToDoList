@@ -12,9 +12,12 @@ CREATE TABLE USERS (
 ALTER TABLE USERS ADD CONSTRAINT U_MailUser UNIQUE (email) ;
 
 INSERT INTO USERS (username, firstname, lastname, email, encrypted_password)
-VALUES ('toto','Dublanc','Bernard','bernard@wanadoo.fr','blabla');
+    VALUES ('toto','Bernard','Dublanc','bernard@wanadoo.fr','blablabla');
 INSERT INTO USERS (username, firstname, lastname, email, encrypted_password)
-VALUES ('Gilbert','Dublanc','Bernard','bernard2@wanadoo.fr','blabla');
+    VALUES ('Gilbert','Dublanc','Bernard-Arneau','bernard2@wanadoo.fr','blablabla');
+INSERT INTO USERS (email, encrypted_password)
+    VALUES ('jean@mail.com','blablabla');
+
 
 DROP TABLE IF EXISTS LISTE CASCADE;
 CREATE TABLE LISTE(

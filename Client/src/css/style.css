@@ -28,7 +28,8 @@ body#menu {
 
 /*wrapper*/
 .container {
-  margin: 50% auto;
+  /*margin: 50% auto;*/
+  margin: 50 px;
   /*centering*/
   display: flex;
   justify-content: center ;
