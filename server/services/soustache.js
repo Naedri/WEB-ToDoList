@@ -7,7 +7,8 @@ module.exports = {
     update,
     deleteById,
     getAll,
-    getById
+    getById,
+    updateRealisation
   };
  
 
@@ -49,12 +50,13 @@ module.exports = {
   function create({idtache, titre}, callback) {
     const query = 
     `INSERT INTO SOUSTACHE (idtache, titre, fait) 
-    VALUES ($1, $2, FALSE);`;
+    VALUES ($1, $2, FALSE)
+    RETURNING *`;
     utils.executeQuery(query, [idtache, titre], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined);
+        callback(undefined, { idlist: result.rows[0].id });
       }
     });
   }
@@ -89,6 +91,19 @@ module.exports = {
     });
   }
 
+
+  //Modifier l'état de réalisation d'une sous-tâche avec un boolean
+  function updateRealisation({realisation, idTache}, callback) {
+    const query = `UPDATE SOUSTACHE SET fait=$1
+    WHERE id=$2`;
+    utils.executeQuery(query, [realisation, idTache], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined);
+      }
+    });
+  }
 
 
   //pour tester

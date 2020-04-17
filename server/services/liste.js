@@ -6,9 +6,12 @@ module.exports = {
     getById,
     create,
     update,
-    deleteById
+    deleteById,
+    getAllComplete
   };
  
+
+  
 
   //RAJOUTER WHERE ... AND l.username=$1
   //Pour l'avoir pour chaque utilisateur
@@ -28,6 +31,28 @@ module.exports = {
     });
   }*/
 
+  function getAllComplete(callback) {
+    const query =
+      `SELECT
+    l.*,
+    CASE WHEN count(t) = 0 THEN ARRAY[]::json[] ELSE array_agg(t.tache) END AS taches
+  FROM liste l
+    LEFT OUTER JOIN
+    (
+      SELECT t1.idListe, json_build_object('id', t1.id, 'idListe', t1.idListe, 'titre', t1.titre, 'echeance', t1.echeance, 'note', t1.note, 'fait', t1.fait, 'sousTaches', NULL ) as tache
+      FROM tache t1
+    )t
+      ON l.id = t.idListe
+  WHERE t.idListe = l.id
+  GROUP BY l.id`;
+    utils.executeQuery(query, [], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined, result.rows);
+      }
+    });
+  }
 
   function getAll(callback) {
     const query = 
@@ -81,15 +106,19 @@ module.exports = {
   }
 
 
-  function create({username, titre}, callback) {
+  //AJOUTER USERNAME POUR LIER A UN USER
+  //INSERT INTO LISTE (USERNAME, TITRE)
+  function create(titre, callback) {
     const query = 
-    `INSERT INTO LISTE (username, titre) 
-    VALUES ($1, $2)`;
-    utils.executeQuery(query, [username, titre], (err, result) => {
+    `INSERT INTO LISTE (titre) 
+    VALUES ($1)
+    RETURNING *`;
+    utils.executeQuery(query, [titre], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined);
+        callback(undefined, { idlist: result.rows[0].id });
+        //console.log(""+result.rows[0].id)
       }
     });
   }
@@ -122,14 +151,21 @@ module.exports = {
 
 
   //pour tester
-/*
+
   const user="1";
   let title="bloblo";
+  let blabla;
+
+  /*
   getAll((err, result)=>{
     if(err){
       console.log(result)
     }else{
-      console.log(result)
+     // console.log(result)
     }
   });
+
+  console.log(essai);
+
 */
+  
