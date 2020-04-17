@@ -193,4 +193,19 @@ router.patch("/user/update/password",(req, res, next)=> {
     });
   });
 });
+
+/*
+  // On controle que tous les info necessaires ont bien été passées.
+  if ((projectDetails.id && Object.values(projectDetails).length >= 2) === false) {
+    res.status(500).json({ 
+      'message': `Un ou plusieurs paramètres sont manquant.`
+    });
+    return; // Pour sortir de la fonction
+  }
+
+*/
+
+
+
+
   module.exports = router;

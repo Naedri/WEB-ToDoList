@@ -10,7 +10,15 @@ module.exports = {
     updatePwdUser
 };
 
-function isFreeUser({email} , callback) {
+
+
+
+
+
+//{user}
+//{email,pwd}
+
+function isFreeUser(email , callback) {
     const query = 
     `SELECT COUNT(*) 
     FROM USERS
@@ -24,6 +32,14 @@ function isFreeUser({email} , callback) {
     }
     });
 }
+
+
+
+
+
+
+
+
 
 function createUser( {email,pwd} , callback) {
 const query = 
