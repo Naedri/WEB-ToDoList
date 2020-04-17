@@ -67,8 +67,8 @@ export async function createTask(list, task) {
     return data
 }
 
-export async function deleteTaskAPI(list, task) {
-    let url = getEndpointURL(`/lists/${list.id}/tasks/${task.index}`)
+export async function deleteTaskAPI(idTache) {
+    let url = getEndpointURL(`/api/tache/${idTache}`)
     await fetch(url, {
         method: 'DELETE',
     })
@@ -85,8 +85,8 @@ export async function getList(list) {
     return data
 }
 
-export async function editTaskAPI(list, task) {
-    let url = getEndpointURL(`/lists/${list.id}/${task.index}`);
+export async function editTaskAPI(task) {
+    let url = getEndpointURL(`/api/tache/${task.id}`);
     let response = await fetch(url, {
         method: 'PATCH',
         headers: {

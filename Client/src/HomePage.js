@@ -105,8 +105,8 @@ let Home = () => {
         let newTodos = [...state.toDos]; //copier l'array
         let selectedList = newTodos.find(list => list.id === id);
         try {
-            await (editTaskAPI(selectedList, editedTask));
-            selectedList.tasks = selectedList.taches.map(task => task.id === editedTask.id ? editedTask : task)
+            await (editTaskAPI(editedTask));
+            selectedList.taches = selectedList.taches.map(task => task.id === editedTask.id ? editedTask : task)
             newTodos = newTodos.map(list => list.id === selectedList.id ? selectedList : list);
             dispatch({ type: 'EDIT_TASK', toDos: newTodos })
             setEdit(false);
@@ -196,7 +196,7 @@ let Home = () => {
         let newTodos = [...state.toDos];
         let selectedList = newTodos.find(list => list.id === id);
         try {
-            await deleteTaskAPI(selectedList, { id: itemIndex });
+            await deleteTaskAPI(itemIndex);
             let updatedTasks = selectedList.taches.filter(task => task.id !== itemIndex);
             selectedList.taches = updatedTasks;
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
@@ -219,7 +219,7 @@ let Home = () => {
         let selectedTask = selectedList.taches.find(task => task.id === itemIndex);
         selectedTask.fait = !selectedTask.fait;
         try {
-            editTaskAPI(selectedList, selectedTask);
+            //await editTaskAPI(selectedTask);
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
             dispatch({ type: 'MTD', toDos: newTodos })
         } catch (err) {

@@ -18,15 +18,18 @@ const router = express.Router();
 /* router for Lists and tasks *****************************/
 
 //Retourner toutes les listes
-  router.get("/api/everything/", (req, res) => {
-    ServiceListe.getAll((err, result)=>{
-        if(err){
-            res.status(500).json({ message: err });
-        }else{
-            res.json(result);
-        }
-      });
-  });
+//Retourner toutes les listes et les taches
+router.get("/everything", (req, res) => {
+  ServiceListe.getAllComplete((err, result)=>{
+      if(err){
+          console.log(result);
+          res.status(500).json({ message: err });
+      }else{
+          console.log(result);
+          res.json(result);
+      }
+    });
+});
 
   //Retourne toutes les sous-tâches
   router.get("/soustache", (req, res) => {
@@ -187,18 +190,6 @@ router.post("/user/login", (req, res, next) => {
 
 
 
-//Retourner toutes les listes et les taches
-router.get("/everything", (req, res) => {
-  ServiceListe.getAllComplete((err, result)=>{
-      if(err){
-          console.log(result);
-          res.status(500).json({ message: err });
-      }else{
-          console.log(result);
-          res.json(result);
-      }
-    });
-});
 
 
 
