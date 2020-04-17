@@ -52,7 +52,7 @@ const router = express.Router();
           console.log(result);
           res.status(500).json({ message: err });
       }else{
-          console.log(""+result.idlist);
+          console.log(""+result.idTache);
           res.json(result.idlist);
       }
     });
@@ -60,13 +60,17 @@ const router = express.Router();
 
 
   router.patch("/tache/:id([0-9]*", (req, res) => {
-    ServiceTache.update((err, result)=>{
+    const infoTache={
+      ...req.body,
+      idTache: req.params.id
+    }
+    ServiceTache.update(infoTache,(err, result)=>{
         if(err){
             console.log(result);
             res.status(500).json({ message: err });
         }else{
-            console.log(result);
-            res.json(result);
+            console.log("MAJ de la tache : "+req.params.id);
+            res.json(req.params.id);
         }
       });
   });
