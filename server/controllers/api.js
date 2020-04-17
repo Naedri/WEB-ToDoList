@@ -139,25 +139,41 @@ const router = express.Router();
 
 /* router for user *****************************/
 
+
+// state : done
+// does an email is already used
+// @param: email
+router.post('/user/free', (req, res, next) => {
+
+  ServiceUser.isFree(req.body, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return ;
+    } else {
+      let state = (result === true)? 'available' : 'busy';
+      console.log('email '+ state);
+      res.json(result);
+    }
+  });
+});
+
 // state : not done (should check if email2 is free)
 // Adding an user
 // @param: email, password
 router.post('/user/signup', (req, res, next) => {
 
-  ServiceUser.createUser(req.body, (err, result) => {
-    if (err) {
-      res.status(500).json({ message: result });
-      return;
+  ServiceUser.create(req ,(err, result)=>{
+    if(err){
+        console.log(result);
+        res.status(500).json({ message: err });
+    }else{
+        console.log(result);
+        res.json(result);
     }
-
-    res.json({
-      message: `Utilisateur ${result.email} crée avec succès.`,
-      id: result.id,
-      username: result.username,
-      email: result.email
-    });
   });
 });
+
+
 
 // state : done
 // Authentification and JWT token recuperation
@@ -173,7 +189,7 @@ router.post("/user/login", (req, res, next) => {
     const userFound = result;
     if (userFound) {
       const token = jwt.sign(
-        { username: req.body.username }, 
+        { email: req.body.email }, 
         config.secret, 
         { expiresIn: '24h' }
       );
@@ -189,6 +205,15 @@ router.post("/user/login", (req, res, next) => {
   });
 });
 
+
+// state : done
+// Deleting session of a session
+// @param: email, password
+router.get("/user/logout", (req, res, next) => {
+        // Suppression de la session
+        req.session.destroy();
+        res.redirect("/");
+});
 
 
 //Retourner toutes les listes et les taches
