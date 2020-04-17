@@ -6,7 +6,6 @@ import SignUp from './components_usersConnection/SignUp';
 import ForgetPassWord from './components_usersConnection/ForgetPassWord';
 import Home from './HomePage'
 
-import './css/App.css';
 import './css/bootstrap.css' ;
 import './css/style.css' ;
 

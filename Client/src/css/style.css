@@ -1,17 +1,5 @@
 /*style.css*/
 
-
-/*ATTENTION A MODIFIER SI NE CONVIENT PAS*/
-.App{
-  display : flex;
-  align-content: center;
-  align-items: center;
-}
-
-.App.main-wrapper{
-  display : block;
-}
-
 /*root color*/
 :root {
   --red: #D63031;

@@ -2,23 +2,15 @@ const utils = require("../db/utils");
 /*const bcrypt = require('bcrypt');*/
 
 module.exports = {
-    createUser,
-    isFreeUser,
-    authentificateUser,
-    quitSessionUser,
-    updateEmailUser,
-    updatePwdUser
+    isFree,
+    create,
+    authentificate,
+    updateEmail,
+    updatePwd
 };
 
 
-
-
-
-
-//{user}
-//{email,pwd}
-
-function isFreeUser(email , callback) {
+function isFree(email , callback) {
     const query = 
     `SELECT COUNT(*) 
     FROM USERS
@@ -28,20 +20,16 @@ function isFreeUser(email , callback) {
     if (err) {
         callback(true, err);
     } else {
-        callback(undefined, result.rows[0]);
+        // callback(undefined, result.rows[0]);
+        let count = result.row[0];
+        let free = (count === '0') ? true : false ; 
+        callback(undefined, free);
     }
     });
 }
 
 
-
-
-
-
-
-
-
-function createUser( {email,pwd} , callback) {
+function create( {email,pwd} , callback) {
 const query = 
 `INSERT INTO USERS (email,encrypted_password)
 VALUES ($1, $2);`;
@@ -54,10 +42,8 @@ utils.executeQuery(query, [email,pwd], (err, result) => {
 });
 }
 
-function authentificateUser(){} ;
+function authentificate(){} ;
 
-function quitSessionUser(){} ;
+function updateEmail(){} ;
 
-function updateEmailUser(){} ;
-
-function updatePwdUser(){} ;
+function updatePwd(){} ;

@@ -64,20 +64,20 @@ function create({ idListe, titre}, callback) {
 }
 
 //Supprimer une tâche via son identifiant
-function deleteById(projectId, callback) {
-  const query = "DELETE FROM TACHE WHERE id=$1";
-  utils.executeQuery(query, [projectId], (err, result) => {
-    if (err) {
-      callback(true, err);
-    } else {
-      callback(undefined);
-    }
-  });
-}
+  function deleteById(tacheID, callback) {
+    const query = "DELETE FROM TACHE WHERE id=$1";
+    utils.executeQuery(query, [tacheID], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(undefined);
+      }
+    });
+  }
 
-//Un Update pour changer "tout"
-//un autre pour simplement mettre que la tâche est faite ?
-//action bouton ?
+  //Un Update pour changer "tout"
+  //un autre pour simplement mettre que la tâche est faite ?
+  //action bouton ?
 
 
 //Modifier une tâche

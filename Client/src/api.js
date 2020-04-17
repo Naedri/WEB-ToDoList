@@ -105,18 +105,51 @@ export async function editTaskAPI(task) {
 /* user functions ****************************/
 
 /**
+ * does an email is already used
+ * @param {*} email 
+ */
+export async function isFreeUserApi(email) {
+    let url = getEndpointURL('/api/user/free')
+    let user = {
+        email : email ,
+    }
+    let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+
+/**
  * creation of a user with an email and its encrypted password
  * @param {*} email 
  * @param {*} password 
  */
 export async function createUserApi(email,password) {
     let url = getEndpointURL('/api/user/signup')
+    let user = {
+        email : email ,
+        password : password
+    }
     let response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(email,password)
+        body: JSON.stringify(user)
     })
 
     // 👉 Parser la réponse en JSON
@@ -136,14 +169,18 @@ export async function createUserApi(email,password) {
  * @param {*} password 
  */
 export async function authentificateUserApi(email,password) {
-    let url = getEndpointURL('/api/user/login')
+    let url = getEndpointURL('/api/user/login');
+    let user = {
+        email : email ,
+        password : password
+    };
     let response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(email,password)
-    })
+        body: JSON.stringify(user)
+    });
 
     // 👉 Parser la réponse en JSON
     let data = await response.json()
@@ -163,13 +200,17 @@ export async function authentificateUserApi(email,password) {
  * @param {*} password 
  */
 export async function quitSessionUserApi(email,password) {
-    let url = getEndpointURL('/api/user/logout')
+    let url = getEndpointURL('/api/user/logout');
+    let user = {
+        email : email ,
+        password : password
+    };
     let response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(email,password)
+        body: JSON.stringify(user)
     })
 
     // 👉 Parser la réponse en JSON
@@ -180,7 +221,7 @@ export async function quitSessionUserApi(email,password) {
     }
 
     // 👉 Renvoyer les données
-    return data
+    return data;
 }
 
 
@@ -190,12 +231,15 @@ export async function quitSessionUserApi(email,password) {
  */
 export async function forgetPwdUserApi(email) {
     let url = getEndpointURL('/api/user/forgetpassword')
+    let user = {
+        email : email
+    };
     let response = await fetch(url, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(email)
+        body: JSON.stringify(user)
     })
 
     // 👉 Parser la réponse en JSON
@@ -219,12 +263,17 @@ export async function forgetPwdUserApi(email) {
  */
 export async function updateEmailUserApi(email,password,email2) {
     let url = getEndpointURL('/api/user/update/email')
+    let user = {
+        email : email ,
+        password : password,
+        email2 : email2
+    };
     let response = await fetch(url, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(email,password,email2)
+        body: JSON.stringify(user)
     })
 
     // 👉 Parser la réponse en JSON
@@ -250,12 +299,17 @@ export async function updateEmailUserApi(email,password,email2) {
  */
 export async function updatePwdUserApi(email,password,password2) {
     let url = getEndpointURL('/api/user/update/password')
+    let user = {
+        email : email ,
+        password : password,
+        password2 : password2
+    };
     let response = await fetch(url, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(email,password,password2)
+        body: JSON.stringify(user)
     })
 
     // 👉 Parser la réponse en JSON
