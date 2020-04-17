@@ -104,6 +104,8 @@ let Home = () => {
     const editTask = async (editedTask, id) => {
         let newTodos = [...state.toDos]; //copier l'array
         let selectedList = newTodos.find(list => list.id === id);
+        console.log(`id est ${id}`)
+
         try {
             await (editTaskAPI(editedTask));
             selectedList.taches = selectedList.taches.map(task => task.id === editedTask.id ? editedTask : task)
@@ -173,6 +175,7 @@ let Home = () => {
         let chosenList = newTodos.find(list => list.id === id);
         try {
             let response = await createTask(chosenList, { titre: todoItem.newItemValue, fait : false });
+            console.log(response)
             chosenList.taches.push({...response, sousTaches : []});
             newTodos = newTodos.map(list => list.id === id ? chosenList : list);
             dispatch({ type: 'INIT', toDos: newTodos })
@@ -219,7 +222,8 @@ let Home = () => {
         let selectedTask = selectedList.taches.find(task => task.id === itemIndex);
         selectedTask.fait = !selectedTask.fait;
         try {
-            //await editTaskAPI(selectedTask);
+            console.log(selectedTask)
+            await editTaskAPI(selectedTask);
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
             dispatch({ type: 'MTD', toDos: newTodos })
         } catch (err) {
@@ -300,7 +304,7 @@ let Home = () => {
                     {centerContent()}
                 </div>
                 {onEdit && <div className={borderClass} >
-                    <TodoListItemMenu listId={id} task={selectedTask} infoMessage={changeEditBorder ? "true" : null} onSubmit={editTask} onCancelEdit={onCancelEdit} />
+                    <TodoListItemMenu task={selectedTask} infoMessage={changeEditBorder ? "true" : null} onSubmit={editTask} onCancelEdit={onCancelEdit} />
                 </div>
                 }
             </div>

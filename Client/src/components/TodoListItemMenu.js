@@ -35,14 +35,15 @@ export default class TodoListItemMenu extends React.Component {
 
     onSubmit = () => {
         let newTask = {
+            id : this.props.task.id,
+            idliste : this.props.task.idliste,
             titre: this.state.title || this.props.task.value,
-            note: this.state.note,
             echeance: this.state.date,
-            sousTaches: this.state.stages,
-            id: this.props.task.id,
-            fait: this.props.task.fait
+            note : this.state.note,
+            fait: this.props.task.fait,
+            sousTaches : this.props.task.sousTaches
         }
-        this.props.onSubmit(newTask, this.props.task.idListe);
+        this.props.onSubmit(newTask, this.props.task.idliste);
     }
 
     markStageDone = (index) => {
