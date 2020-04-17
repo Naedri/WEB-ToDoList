@@ -21,10 +21,8 @@ const router = express.Router();
   router.get("/api/everything/", (req, res) => {
     ServiceListe.getAll((err, result)=>{
         if(err){
-            console.log(result);
             res.status(500).json({ message: err });
         }else{
-            console.log(result);
             res.json(result);
         }
       });
@@ -34,10 +32,8 @@ const router = express.Router();
   router.get("/soustache", (req, res) => {
     ServiceSousTache.getAll((err, result)=>{
         if(err){
-            console.log(result);
             res.status(500).json({ message: err });
         }else{
-            console.log(result);
             res.json(result);
         }
       });
@@ -50,12 +46,12 @@ const router = express.Router();
     const infoCreaTache={
       ...req.body
     }
+    console.log(infoCreaTache);
     ServiceTache.create(infoCreaTache ,(err, result)=>{
       if(err){
           console.log(result);
           res.status(500).json({ message: err });
       }else{
-          console.log(""+result);
           res.json(result);
       }
     });

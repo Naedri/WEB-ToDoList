@@ -58,7 +58,7 @@ module.exports = {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined, { idlist: result.rows[0].id });
+        callback(undefined, result.rows[0]);
       }
     });
   }

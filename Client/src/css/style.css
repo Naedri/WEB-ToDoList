@@ -1,5 +1,17 @@
 /*style.css*/
 
+
+/*ATTENTION A MODIFIER SI NE CONVIENT PAS*/
+.App{
+  display : flex;
+  align-content: center;
+  align-items: center;
+}
+
+.App.main-wrapper{
+  display : block;
+}
+
 /*root color*/
 :root {
   --red: #D63031;
@@ -20,6 +32,7 @@ body {
   color: #222222;
   text-align: left;
   background-color: #FDFDFD;
+  height: 100%;
 }
 
 body#menu {
@@ -28,13 +41,9 @@ body#menu {
 
 /*wrapper*/
 .container {
-  /*margin: 50% auto;*/
-  margin: 50 px;
-  /*centering*/
-  display: flex;
-  justify-content: center ;
-  align-items: center;
+  margin: 5%;
 }
+
 
 /*Buton*/
 .btn-primary{color:#FDFDFD ;background-color:#FF7675;border-color:#FF7675}

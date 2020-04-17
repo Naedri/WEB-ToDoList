@@ -172,8 +172,8 @@ let Home = () => {
         let newTodos = [...state.toDos];
         let chosenList = newTodos.find(list => list.id === id);
         try {
-            let response = await createTask(chosenList, { titre: todoItem.newItemValue });
-            chosenList.taches.push(response);
+            let response = await createTask(chosenList, { titre: todoItem.newItemValue, fait : false });
+            chosenList.taches.push({...response, sousTaches : []});
             newTodos = newTodos.map(list => list.id === id ? chosenList : list);
             dispatch({ type: 'INIT', toDos: newTodos })
         }
