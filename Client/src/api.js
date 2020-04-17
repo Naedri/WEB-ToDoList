@@ -50,18 +50,19 @@ export async function deletelist(list) {
 }
 
 export async function createTask(list, task) {
-    let url = getEndpointURL(`/list/${list.id}`)
+    let url = getEndpointURL(`/api/tache`)
+    let toSend = {...task, idListe : list.id}
     let response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(task)
+        body: JSON.stringify(toSend)
     })
 
     // 👉 Parser la réponse en JSON
     let data = await response.json()
-
+    console.log(data);
     // 👉 Renvoyer les données
     return data
 }

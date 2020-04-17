@@ -58,15 +58,15 @@ module.exports = {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined, { idlist: result.rows[0].id });
+        callback(undefined, result.rows[0]);
       }
     });
   }
 
 //Supprimer une tâche via son identifiant
-  function deleteById(projectId, callback) {
+  function deleteById(tacheID, callback) {
     const query = "DELETE FROM TACHE WHERE id=$1";
-    utils.executeQuery(query, [projectId], (err, result) => {
+    utils.executeQuery(query, [tacheID], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
