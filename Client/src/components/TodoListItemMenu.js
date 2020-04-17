@@ -38,7 +38,7 @@ export default class TodoListItemMenu extends React.Component {
             id : this.props.task.id,
             idliste : this.props.task.idliste,
             titre: this.state.title || this.props.task.value,
-            echeance: this.state.date,
+            echeance: this.state.date || null,
             note : this.state.note,
             fait: this.props.task.fait,
             sousTaches : this.props.task.sousTaches
