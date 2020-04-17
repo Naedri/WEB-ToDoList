@@ -59,7 +59,7 @@ const router = express.Router();
   });
 
 
-  router.patch("/tache/:id([0-9]*", (req, res) => {
+  router.patch("/tache/:id([0-9]*)", (req, res) => {
     const infoTache={
       ...req.body,
       idTache: req.params.id
@@ -77,7 +77,7 @@ const router = express.Router();
 
 
 
-  router.delete("/tache/:id([0-9]*", (req, res) => {
+  router.delete("/tache/:id([0-9]*)", (req, res) => {
     ServiceTache.deleteById(req.params.id, (err, result) => {
       if (err) {
         res.status(500).send();
