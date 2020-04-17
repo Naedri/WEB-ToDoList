@@ -6,7 +6,7 @@ const router = express.Router();
 
 
 //Retourner toutes les listes
-  router.get("/lists", (req, res) => {
+  router.get("/api/everything/", (req, res) => {
     ServiceListe.getAll((err, result)=>{
         if(err){
             console.log(result);
@@ -54,8 +54,8 @@ const router = express.Router();
             console.log(result);
             res.status(500).json({ message: err });
         }else{
-            console.log(""+result.idlist);
-            res.json(result.idlist);
+            console.log(result);
+            res.json(result);
         }
       });
   });
@@ -63,7 +63,18 @@ const router = express.Router();
 
 
 
-
+//Retourner toutes les listes et les taches
+router.get("/everything", (req, res) => {
+  ServiceListe.getAllComplete((err, result)=>{
+      if(err){
+          console.log(result);
+          res.status(500).json({ message: err });
+      }else{
+          console.log(result);
+          res.json(result);
+      }
+    });
+});
 
 
 

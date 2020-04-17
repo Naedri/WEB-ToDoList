@@ -48,9 +48,9 @@ let Home = () => {
         async function fetchLists() {
             try {
                 setLoading(true);
-                //let lists = await getLists();
-                //dispatch({ type: 'INIT', toDos: lists })
-                //setLoading(false);
+                let lists = await getLists();
+                dispatch({ type: 'INIT', toDos: lists })
+                setLoading(false);
             }
             catch (err) {
                 setError(err.message);
@@ -128,8 +128,8 @@ let Home = () => {
         }
         try {
             //setLoading(true);
-            let response = await createList(list);//appel à l'api
-            let newList = response.newList;
+            let response = await createList({titre : list.value});//appel à l'api
+            let newList = {...response, taches : []};
             dispatch({ type: 'ADD_LIST', toDos: [...state.toDos, newList], listId: newList.id })
             setRenderHome(false);
             renderSettings(false);
