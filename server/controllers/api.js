@@ -47,13 +47,16 @@ const router = express.Router();
   // tâche ajouter supprimer modifier
 
   router.post("/tache", (req, res) => {
-    ServiceTache.create(req.body.titreTache ,(err, result)=>{
+    const infoCreaTache={
+      ...req.body
+    }
+    ServiceTache.create(infoCreaTache ,(err, result)=>{
       if(err){
           console.log(result);
           res.status(500).json({ message: err });
       }else{
           console.log(""+result.idTache);
-          res.json(result.idlist);
+          res.json(result.idTache);
       }
     });
   });
