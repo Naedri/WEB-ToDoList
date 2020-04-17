@@ -51,10 +51,10 @@ module.exports = {
 //créer une tâche et une sous-tâche en même temps ?
   function create({idListe, titre, date, note}, callback) {
     const query = 
-    `INSERT INTO TACHE (idListe, titre, echeance, note, fait) 
-    VALUES ($1, $2, $3, $4, FALSE)
+    `INSERT INTO TACHE (idListe, titre, fait) 
+    VALUES ($1, $2, FALSE)
     RETURNING *`;
-    utils.executeQuery(query, [idListe, titre, date, note], (err, result) => {
+    utils.executeQuery(query, [idListe, titre], (err, result) => {
       if (err) {
         callback(true, err);
       } else {

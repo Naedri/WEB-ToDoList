@@ -47,33 +47,40 @@ const router = express.Router();
   // tâche ajouter supprimer modifier
 
   router.post("/tache", (req, res) => {
-    ServiceTache.create(req.body.titreTache ,(err, result)=>{
+    const infoCreaTache={
+      ...req.body
+    }
+    ServiceTache.create(infoCreaTache ,(err, result)=>{
       if(err){
           console.log(result);
           res.status(500).json({ message: err });
       }else{
-          console.log(""+result.idlist);
-          res.json(result.idlist);
+          console.log(""+result);
+          res.json(result);
       }
     });
   });
 
 
-  router.patch("/tache/:id([0-9]*", (req, res) => {
-    ServiceTache.update((err, result)=>{
+  router.patch("/tache/:id([0-9]*)", (req, res) => {
+    const infoTache={
+      ...req.body,
+      idTache: req.params.id
+    }
+    ServiceTache.update(infoTache,(err, result)=>{
         if(err){
             console.log(result);
             res.status(500).json({ message: err });
         }else{
-            console.log(result);
-            res.json(result);
+            console.log("MAJ de la tache : "+req.params.id);
+            res.json(req.params.id);
         }
       });
   });
 
 
 
-  router.delete("/tache/:id([0-9]*", (req, res) => {
+  router.delete("/tache/:id([0-9]*)", (req, res) => {
     ServiceTache.deleteById(req.params.id, (err, result) => {
       if (err) {
         res.status(500).send();
