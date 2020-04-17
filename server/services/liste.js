@@ -31,6 +31,7 @@ module.exports = {
     });
   }*/
 
+  //Retourne toutes les listes et leurs tâches
   function getAllComplete(callback) {
     const query =
       `SELECT

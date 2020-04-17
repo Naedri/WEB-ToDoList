@@ -19,7 +19,7 @@ const router = express.Router();
 
 //Retourner toutes les listes
   router.get("/lists", (req, res) => {
-    ServiceListe.getAll((err, result)=>{
+    ServiceListe.getAllComplete((err, result)=>{
         if(err){
             console.log(result);
             res.status(500).json({ message: err });
@@ -29,6 +29,63 @@ const router = express.Router();
         }
       });
   });
+
+  //Retourne toutes les sous-tâches
+  router.get("/soustache", (req, res) => {
+    ServiceSousTache.getAll((err, result)=>{
+        if(err){
+            console.log(result);
+            res.status(500).json({ message: err });
+        }else{
+            console.log(result);
+            res.json(result);
+        }
+      });
+  });
+
+
+  // tâche ajouter supprimer modifier
+
+  router.post("/tache", (req, res) => {
+    ServiceTache.create(req.body.titreTache ,(err, result)=>{
+      if(err){
+          console.log(result);
+          res.status(500).json({ message: err });
+      }else{
+          console.log(""+result.idlist);
+          res.json(result.idlist);
+      }
+    });
+  });
+
+
+  router.patch("/tache/:id([0-9]*", (req, res) => {
+    ServiceTache.update((err, result)=>{
+        if(err){
+            console.log(result);
+            res.status(500).json({ message: err });
+        }else{
+            console.log(result);
+            res.json(result);
+        }
+      });
+  });
+
+
+
+  router.delete("/tache/:id([0-9]*", (req, res) => {
+    ServiceTache.deleteById(req.params.id, (err, result) => {
+      if (err) {
+        res.status(500).send();
+        console.log("erreur 500");
+      }
+      else{
+        console.log("Liste supprimée : "+req.params.id);
+        res.json(req.params.id);
+      }
+    });
+  });
+
 
 //retourne une liste en particulier (par ID)
   router.get("/lists/:id([0-9]*)", (req, res) => {
@@ -53,7 +110,7 @@ const router = express.Router();
       }
       else{
         console.log("Liste supprimée : "+req.params.id);
-        res.json("Liste supprimée : "+req.params.id);
+        res.json(req.params.id);
       }
     });
   });
