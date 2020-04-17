@@ -2,11 +2,28 @@ const utils = require("../db/utils");
 /*const bcrypt = require('bcrypt');*/
 
 module.exports = {
-createUser,
-isFree,
-updatePassword,
-updateMail
+    createUser,
+    isFreeUser,
+    authentificateUser,
+    quitSessionUser,
+    updateEmailUser,
+    updatePwdUser
 };
+
+function isFreeUser({email} , callback) {
+    const query = 
+    `SELECT COUNT(*) 
+    FROM USERS
+    WHERE EMAIL=$1`;
+    
+    utils.executeQuery(query, [email], (err, result) => {
+    if (err) {
+        callback(true, err);
+    } else {
+        callback(undefined, result.rows[0]);
+    }
+    });
+}
 
 function createUser( {email,pwd} , callback) {
 const query = 
@@ -21,20 +38,10 @@ utils.executeQuery(query, [email,pwd], (err, result) => {
 });
 }
 
-function updatePassword(){} ;
+function authentificateUser(){} ;
 
-function updateMail(){} ;
+function quitSessionUser(){} ;
 
-function isFree(email , callback) {
-    const query = 
-    `SELECT COUNT(*) 
-    FROM USERS
-    WHERE mail=$1`;
-    utils.executeQuery(query, [email], (err, result) => {
-    if (err) {
-        callback(true, err);
-    } else {
-        callback(undefined, result.rows[0]);
-    }
-    });
-}
+function updateEmailUser(){} ;
+
+function updatePwdUser(){} ;
