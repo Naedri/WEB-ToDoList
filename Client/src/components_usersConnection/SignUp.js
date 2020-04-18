@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import '../css/styleUser.css' ;
 import { isFreeUserApi } from '../api.js';
 
-
 const SignUp = (props) => {
 
     const [form, setValues] = useState({
         email: "",
         password: "",
         password2: "",
-        emailBusy:""
+        emailBusy: "",
+        isLoading: "",
+        isCreate: "",
+
     });
     const [errors, setErrors] = useState({
-        email: "",
-        password: "",
-        password2: "",
-        emailBusy: ""
+        email: false,
+        password: false,
+        password2: false,
     });
-
-    // eslint-disable-next-line
+/*
+    const [sign, setSign] = useState({
+        emailBusy: "",
+        isLoading: "",
+        isCreate: "",
+    })
+*/
+    // eslint-disable-next-line 
     const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
     const validateForm = (errors) => {
@@ -30,19 +37,26 @@ const SignUp = (props) => {
 
     const try_signup = async (e) =>  {
         e.preventDefault();
+        
         if (validateForm(errors)){
             try {
+                setValues({
+                    ...form,
+                    ['isLoading']: 'Chargement...'
+                });
+
                 let status = await isFreeUserApi(form.email) ;
-                console.log(status);
-                if (status){
-                    setErrors({
-                        ...errors,
-                        emailBusy: 'coucou c est ok'
+                if (status ==='true'){
+                    console.log("il faut utiliser createUserApi");
+                    setValues({
+                        ...form,
+                        ['isCreate'] : 'Un email vient de vous être envoyé', 
+                        ['emailBusy'] : 'Cette adresse e-mail est déjà utilisée'
                     });
                 } else {
-                    setErrors({
-                        ...errors,
-                        emailBusy: 'Cette adresse e-mail est déjà utilisée'
+                    setValues({
+                        ...form,
+                        ['emailBusy']: 'Cette adresse e-mail est déjà utilisée'
                     });
                 }
             }
@@ -50,8 +64,13 @@ const SignUp = (props) => {
                 console.log(err);
                 setErrors(err.message);
             }
+            setValues({
+                ...form,
+                ['isLoading']: ''
+            });
         }
     };
+
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -63,6 +82,10 @@ const SignUp = (props) => {
                         : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
                             : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
                                 : '' ;
+                setValues({
+                    ...form,
+                    ['emailBusy']: ''
+                });
                 break;
             case 'password':
                 err =
@@ -79,15 +102,16 @@ const SignUp = (props) => {
             default:
                 break;
         }
-
-        setValues({
-            ...form,
-            [name]: value
-        });
-        setErrors({
-            ...errors,
-            [name]: err
-        });
+        if (name=='email'||name=='password'||name=='password2'){
+            setValues({
+                ...form,
+                [name]: value
+            });
+            setErrors({
+                ...errors,
+                [name]: err
+            });
+        }
     };
 /*
     if (isLoading)
@@ -99,9 +123,9 @@ const SignUp = (props) => {
             <div className="row"> 
 ​
                 <div className="auth-wrapper mt-2">
-​
+
                     <form onSubmit={try_signup}>
-​
+
                         <div className="form-group">
                             <label htmlFor="email"> 
                                 Adresse e-mail
@@ -123,11 +147,10 @@ const SignUp = (props) => {
                                         {errors.email}
                                 </small>
                             }
-                            {errors.emailBusy &&
+                            {form.emailBusy &&
                                 <small 
-                                    id="mailUsed" 
-                                    className="form-text text-error ">
-                                       {errors.emailBusy}
+                                    className="form-text text-error">
+                                       {form.emailBusy}
                                 </small>
                             }
                         </div>
@@ -182,10 +205,25 @@ const SignUp = (props) => {
                         </div>
 
                         <button type="submit" 
-                            disabled={ form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2 } 
+                            disabled={ form.isLoading && form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2 } 
                             className="btn btn-primary btn-lg btn-block">
                                 Inscription
                         </button>
+
+
+                                <small 
+                                    id="isLoading"
+                                    name="isLoading"
+                                    className='form-text'>
+                                        {form.isLoading}
+                                </small>
+
+                                <small 
+                                    id="isCreate"
+                                    name="isCreate"
+                                    className='form-text text-valide'>
+                                        {form.isCreate}
+                                </small>
 
                         <div className="form-group">
                             <a href="login" className="form-text form-text--alt">

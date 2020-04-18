@@ -5,7 +5,7 @@ const servicesUser = require("./user.js");
     pwd: "blablabla"
   };
 
-  servicesUser.isFree(user.email, (err,result) => {
+ servicesUser.isFree(user.email, (err,result) => {
     if(err){
         console.log(result);
     } else {
@@ -13,14 +13,10 @@ const servicesUser = require("./user.js");
         console.log(result);
         if (result.count === '0'){
           console.log('email available');
-          return true;
         }else{
           console.log('email busy');
-          return false;
         }
     }
   });
 
-  servicesUser.create( user , (err,result) => {
-
-  });
+  console.log('resultat = ', resultat)
