@@ -47,16 +47,16 @@ module.exports = {
 
 
 //créer une tâche et une sous-tâche en même temps ?
-  function create({idtache, titre}, callback) {
+  function create({idtache, titre, fait}, callback) {
     const query = 
     `INSERT INTO SOUSTACHE (idtache, titre, fait) 
-    VALUES ($1, $2, FALSE)
+    VALUES ($1, $2, $3)
     RETURNING *`;
-    utils.executeQuery(query, [idtache, titre], (err, result) => {
+    utils.executeQuery(query, [idtache, titre, fait], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
-        callback(undefined, { idlist: result.rows[0] });
+        callback(undefined, result.rows[0]);
       }
     });
   }
@@ -79,10 +79,10 @@ module.exports = {
   //je dois vérifier la tâche est déjà créé ou si elle existe déjà
   
 
-  function update({titre, realisation }, callback) {
-    const query = `UPDATE SOUSTACHE SET titre=$1, fait=$2 
-    WHERE id=$3`;
-    utils.executeQuery(query, [titre, realisation], (err, result) => {
+  function update({fait, id}, callback) {
+    const query = `UPDATE SOUSTACHE SET fait=$1 
+    WHERE id=$2`;
+    utils.executeQuery(query, [fait, id], (err, result) => {
       if (err) {
         callback(true, err);
       } else {

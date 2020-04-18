@@ -33,7 +33,6 @@ const SignUp = (props) => {
         isLoading: "",
         isCreate: "",
     });
-
     const [errors, setErrors] = useState({
         email: '',
         password: '',
@@ -45,7 +44,7 @@ const SignUp = (props) => {
 
     const validateForm = (errors) => {
         let valid = Object.values(errors).every(
-            (val) => val.length === 0
+            (val) => val.length === 0 
         );
         return valid;
     }
@@ -145,6 +144,10 @@ const SignUp = (props) => {
             });
         }
     };
+/*
+    if (isLoading)
+    return (<p>Loading ...</p>)
+*/
 
     const checkSubmit = () => {
         return !form.isLoading && (form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2) ;
@@ -182,12 +185,12 @@ const SignUp = (props) => {
                             }
 
                         </div>
-
+​
                         <div className="form-group">
                             <label htmlFor="password">
                                 Mot de passe
                             </label>
-
+​
                             <input
                                 type="password"
                                 className="form-control"
@@ -212,7 +215,7 @@ const SignUp = (props) => {
                             <label htmlFor="password2">
                                 Répétez le mot de passe
                             </label>
-
+​
                             <input
                                 type="password"
                                 className="form-control"
