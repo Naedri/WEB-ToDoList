@@ -2,7 +2,27 @@ import React, { useState } from "react";
 import { Ripple } from 'react-spinners-css';
 
 import '../css/styleUser.css' ;
-import { isFreeUserApi } from '../api.js';
+import { isFreeUserApi, createUserApi } from '../api.js';
+
+
+/**
+ * 
+ * ATTENTION 
+ * 
+ * 
+ * LES CONSOLES 
+ * 
+ * LE BOUCLES IF ELSE
+ * 
+ * N ONT TOUJOURS PAS ETE ENLEVES
+ * 
+ * 
+ * 
+ * 
+ * 
+ *
+ */
+
 
 const SignUp = (props) => {
 
@@ -15,9 +35,9 @@ const SignUp = (props) => {
     });
 
     const [errors, setErrors] = useState({
-        email: false,
-        password: false,
-        password2: false,
+        email: '',
+        password: '',
+        password2: '',
     });
 
     // eslint-disable-next-line
@@ -30,6 +50,13 @@ const SignUp = (props) => {
         return valid;
     }
 
+    const endLoading = () => {
+        setValues({
+            ...form,
+            isLoading: '',
+        });
+    }
+
     const try_signup = async (e) =>  {
         e.preventDefault();
 
@@ -37,33 +64,43 @@ const SignUp = (props) => {
             try {
                 setValues({
                     ...form,
-                    ['isLoading']: 'Chargement...',
-                    ['isCreate'] : '',
+                     isLoading  : 'Chargement...',
+                     isCreate   : '',
                 });
 
-                let status = await isFreeUserApi(form.email) ;
-                if (status ==='true'){
-                    console.log("il faut utiliser createUserApi");
-                    setValues({
-                        ...form,
-                        ['isCreate'] : 'Un email de confirmation vous a été envoyé',
-                        ['isLoading']: '',
-                    });
+                let statusFree = await isFreeUserApi(form.email) ;
+                if (statusFree){
+                    try {
+                        let statusCreate = await createUserApi(form.email, form.password) ;
+                        if(statusCreate){
+                            setValues({
+                                ...form,
+                                isCreate : 'Un email de confirmation vous a été envoyé',
+                                isLoading : '',
+                            });
+                        } else {
+                            console.log("Problème dans la création de l utilisateur");
+                            endLoading();
+                        }
+                    }
+                    catch (err) {
+                        console.log(err);
+                        setErrors(err.message);
+                        endLoading();
+                    }
                 } else {
                     console.log("il faut choisir un autre email");
-                    setValues({
-                        ...form,
-                        ['isLoading']: '',
-                    });
                     setErrors({
                         ...errors,
-                        ['email']: 'Cette adresse e-mail est déjà utilisée',
+                        email: 'Cette adresse e-mail est déjà utilisée',
                     });
+                    endLoading();
                 }
             }
             catch (err) {
                 console.log(err);
                 setErrors(err.message);
+                endLoading();
             }
         }
     };
@@ -95,12 +132,12 @@ const SignUp = (props) => {
             default:
                 break;
         }
-        if (name=='email'||name=='password'||name=='password2'){
+        if (name==='email'||name==='password'||name==='password2'){
             setValues({
                 ...form,
                 [name]: value,
-                ['isCreate'] : '',
-                ['isLoading']: '',
+                isCreate: '',
+                isLoading: '',
             });
             setErrors({
                 ...errors,
@@ -108,6 +145,11 @@ const SignUp = (props) => {
             });
         }
     };
+
+    const checkSubmit = () => {
+        return !form.isLoading && (form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2) ;
+
+    }
 
     return (
         <div className="container">
@@ -192,8 +234,8 @@ const SignUp = (props) => {
 
                         <div className="form-group">
                           <button type="submit"
-                              disabled={ !form.isLoading && (form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2) }
-                              className="btn btn-primary btn-lg btn-block">
+                                disabled={checkSubmit()}
+                                className="btn btn-primary btn-lg btn-block">
                                   Inscription
                           </button>
 

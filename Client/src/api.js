@@ -94,10 +94,8 @@ export async function editTaskAPI(task) {
         },
         body: JSON.stringify(task)
     });
-
     // 👉 Parser la réponse en JSON
-    let data = await response.json()
-
+    let data = await response.json();
     // 👉 Renvoyer les données
     return data
 }
@@ -111,15 +109,15 @@ export async function editTaskAPI(task) {
 export async function isFreeUserApi(email) {
     let url = getEndpointURL('/api/user/free')
     let user = {
-        email : email ,
-    }
+        email : email
+    };
     let response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(user)
-    })
+    });
 
     // 👉 Parser la réponse en JSON
     let data = await response.json()
@@ -127,9 +125,9 @@ export async function isFreeUserApi(email) {
     if (response.status >= 300) {
         throw new Error(data.message)
     }
-
+    
     // 👉 Renvoyer les données
-    return data
+    return data;
 }
 
 
@@ -142,23 +140,21 @@ export async function createUserApi(email,password) {
     let url = getEndpointURL('/api/user/signup')
     let user = {
         email : email ,
-        password : password
-    }
+        password : password ,
+    };
     let response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(user)
-    })
-
+    });
     // 👉 Parser la réponse en JSON
-    let data = await response.json()
+    let data = await response.json();
 
     if (response.status >= 300) {
         throw new Error(data.message)
     }
-
     // 👉 Renvoyer les données
     return data
 }
@@ -172,7 +168,7 @@ export async function authentificateUserApi(email,password) {
     let url = getEndpointURL('/api/user/login');
     let user = {
         email : email ,
-        password : password
+        password : password ,
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -203,7 +199,7 @@ export async function quitSessionUserApi(email,password) {
     let url = getEndpointURL('/api/user/logout');
     let user = {
         email : email ,
-        password : password
+        password : password,
     };
     let response = await fetch(url, {
         method: 'GET',
@@ -232,7 +228,7 @@ export async function quitSessionUserApi(email,password) {
 export async function forgetPwdUserApi(email) {
     let url = getEndpointURL('/api/user/forgetpassword')
     let user = {
-        email : email
+        email : email,
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -266,7 +262,7 @@ export async function updateEmailUserApi(email,password,email2) {
     let user = {
         email : email ,
         password : password,
-        email2 : email2
+        email2 : email2 ,
     };
     let response = await fetch(url, {
         method: 'PATCH',
@@ -302,7 +298,7 @@ export async function updatePwdUserApi(email,password,password2) {
     let user = {
         email : email ,
         password : password,
-        password2 : password2
+        password2 : password2,
     };
     let response = await fetch(url, {
         method: 'PATCH',

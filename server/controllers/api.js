@@ -206,7 +206,7 @@ router.delete("/soustache/:id([0-9]*)", (req, res) => {
 // state : done
 // does an email is already used
 // @param: email
-router.post('/user/free', (req, res) => {
+router.post('/user/free', (req, res, next) => {
 
   ServiceUser.isFree(req.body.email, (err, result) => {
     if (err) {
@@ -225,13 +225,14 @@ router.post('/user/free', (req, res) => {
 // @param: email, password
 router.post('/user/signup', (req, res, next) => {
 
-  ServiceUser.create(req ,(err, result)=>{
-    if(err){
-        console.log(result);
-        res.status(500).json({ message: err });
-    }else{
-        console.log(result);
-        res.json(result);
+  ServiceUser.create(req.body ,(err, result)=>{
+    if (err) {
+      res.status(500).json({ message: result });
+      return ;
+    } else {
+      let state = result ? ' ' : ' not ' ;
+      console.log('user'+ state + 'created');
+      res.json(result);
     }
   });
 });

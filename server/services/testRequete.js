@@ -1,10 +1,23 @@
 const servicesUser = require("./user.js");
 
     const user={
-    email: "jean@chocomail.com",
+    email: "jean2@chocomail.com",
     pwd: "blablabla"
   };
 
+
+  servicesUser.create(user,(err, result)=>{
+    if(err){
+      console.log(result);
+  } else {
+      console.log("ATTENTION RESULTAT de create api js arrive");
+      let state = result ? '' : 'not' ;
+      console.log('user '+ state + ' created');
+      console.log(result);
+    }
+  });
+
+  /*
  servicesUser.isFree(user.email, (err,result) => {
     if(err){
         console.log(result);
@@ -18,5 +31,5 @@ const servicesUser = require("./user.js");
         }
     }
   });
+  */
 
-  console.log('resultat = ', resultat)
