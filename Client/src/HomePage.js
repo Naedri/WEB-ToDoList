@@ -6,7 +6,7 @@ import TodoListItemMenu from './components/TodoListItemMenu'
 import home from './assets/home.svg';
 import del from './assets/delete-forever.svg';
 import settings from './assets/settings.svg';
-import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI } from './api.js';
+import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
 import NextTasks from "./components/NextTasks";
 
 const todoReducer = (state, action) => {
@@ -107,6 +107,30 @@ let Home = () => {
         console.log(`id est ${id}`)
 
         try {
+            //comparaison des nouvelles sous taches et des anciennes
+            for (let i = 0; i < editedTask.sousTaches.length; ++i){
+                try{
+                    let toCreate = editedTask.sousTaches[i];
+                    let toSend = {
+                        id : toCreate.id,
+                        idtache : selectedTask.id,
+                        titre : toCreate.titre,
+                        fait : toCreate.fait
+                    }
+                    if (!selectedTask.sousTaches.find(st => st.id === toCreate.id))
+                        await createStageApi(toSend)
+                    else    
+                        await editStageApi(toSend)
+                }catch(err){
+                    console.log(err);
+                }
+            }
+            //comparaison des anciennes sous taches et des nouvelles pour voir lesquelles ont été supprimés.
+            for (let i = 0; i < selectedTask.sousTaches.length; ++i){
+                let toDelete = selectedTask.sousTaches[i];
+                if (!editedTask.sousTaches.find(st => st.id === toDelete.id))
+                    await deleteStageApi(toDelete);
+            }
             await (editTaskAPI(editedTask));
             selectedList.taches = selectedList.taches.map(task => task.id === editedTask.id ? editedTask : task)
             newTodos = newTodos.map(list => list.id === selectedList.id ? selectedList : list);
@@ -280,7 +304,7 @@ let Home = () => {
     if (error)
         return <h2>Something went wrong : {error} </h2>
     return (
-        <div className="main-wrapper container-fluid mt-0 full-h ">
+        <div className="container-fluid mt-0 full-h ">
             <div className="row full-h ">
                 <div className="col-xl-3 border-right border-top menu full-h">
                     <div className="mt-3">

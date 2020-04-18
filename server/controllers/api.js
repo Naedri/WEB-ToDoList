@@ -26,9 +26,8 @@ router.get("/everything", (req, res) => {
       console.log(result);
       res.status(500).json({ message: err });
     } else {
-      console.log(result);
       result.forEach(liste => {
-        liste.taches.forEach(tache => tache.sousTache = []) });
+        liste.taches.forEach(tache => tache.sousTaches = []) });
       res.json(result);
     }
   });
@@ -43,7 +42,6 @@ router.post("/lists", (req, res) => {
           console.log(result);
           res.status(500).json({ message: err });
       }else{
-          console.log(result);
           res.json(result);
       }
     });
@@ -151,7 +149,7 @@ router.post("/soustache", (req, res) => {
     ...req.body
   }
   console.log(infoCreaSouSTache);
-  ServiceTache.create(infoCreaSouSTache ,(err, result)=>{
+  ServiceSousTache.create(infoCreaSouSTache ,(err, result)=>{
     if(err){
         console.log(result);
         res.status(500).json({ message: err });
@@ -165,9 +163,9 @@ router.post("/soustache", (req, res) => {
 router.patch("/soustache/:id([0-9]*)", (req, res) => {
   const infoSouSTache={
     ...req.body,
-    idTache: req.params.id
+    id: req.params.id
   }
-  ServiceTache.update(infoSouSTache,(err, result)=>{
+  ServiceSousTache.update(infoSouSTache,(err, result)=>{
       if(err){
           console.log(result);
           res.status(500).json({ message: err });
@@ -179,7 +177,7 @@ router.patch("/soustache/:id([0-9]*)", (req, res) => {
 });
 
 router.delete("/soustache/:id([0-9]*)", (req, res) => {
-  ServiceTache.deleteById(req.params.id, (err, result) => {
+  ServiceSousTache.deleteById(req.params.id, (err, result) => {
     if (err) {
       res.status(500).send();
       console.log("erreur 500");

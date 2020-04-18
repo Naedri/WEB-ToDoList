@@ -13,9 +13,18 @@ export async function getLists() {
     let response = await fetch(url)
 
     // 👉 Parser la réponse en JSON
-    let data = await response.json()
+    let listes = await response.json()
     // 👉 Renvoyer les données
-    return data
+    let stages = await getAllStages();
+    // intégration des sous taches
+    for (let i = 0; i < stages.length; ++i) {
+        for (let j = 0; j < listes.length; ++j) {
+            let tache = listes[j].taches.find(tache => tache.id === stages[i].idtache)
+            if (tache)
+                tache.sousTaches.push(stages[i])
+        }
+    }
+    return listes
 }
 
 export async function createList(list) {
@@ -51,7 +60,7 @@ export async function deletelist(list) {
 
 export async function createTask(list, task) {
     let url = getEndpointURL(`/api/tache`)
-    let toSend = {...task, idListe : list.id}
+    let toSend = { ...task, idListe: list.id }
     let response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -102,6 +111,60 @@ export async function editTaskAPI(task) {
     return data
 }
 
+async function getAllStages() {
+    let url = getEndpointURL('/api/soustache')
+    let response = await fetch(url)
+
+    // 👉 Parser la réponse en JSON
+    let stages = await response.json()
+    // 👉 Renvoyer les données
+    return stages
+}
+
+export async function editStageApi(stage) {
+    let url = getEndpointURL(`/api/soustache/${stage.id}`);
+    let toSend = {fait : stage.fait}
+    let response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(toSend)
+    });
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    // 👉 Renvoyer les données
+    return data
+}
+
+export async function createStageApi(stage) {
+    console.log(stage);
+    let url = getEndpointURL(`/api/soustache`)
+    let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(stage)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+    console.log(data);
+    // 👉 Renvoyer les données
+    return data
+}
+
+export async function deleteStageApi(stage) {
+    let url = getEndpointURL(`/api/soustache/${stage.id}`)
+    await fetch(url, {
+        method: 'DELETE',
+    })
+}
+
+
 /* user functions ****************************/
 
 /**
@@ -111,7 +174,7 @@ export async function editTaskAPI(task) {
 export async function isFreeUserApi(email) {
     let url = getEndpointURL('/api/user/free')
     let user = {
-        email : email ,
+        email: email,
     }
     let response = await fetch(url, {
         method: 'POST',
@@ -138,11 +201,11 @@ export async function isFreeUserApi(email) {
  * @param {*} email 
  * @param {*} password 
  */
-export async function createUserApi(email,password) {
+export async function createUserApi(email, password) {
     let url = getEndpointURL('/api/user/signup')
     let user = {
-        email : email ,
-        password : password
+        email: email,
+        password: password
     }
     let response = await fetch(url, {
         method: 'POST',
@@ -168,11 +231,11 @@ export async function createUserApi(email,password) {
  * @param {*} email 
  * @param {*} password 
  */
-export async function authentificateUserApi(email,password) {
+export async function authentificateUserApi(email, password) {
     let url = getEndpointURL('/api/user/login');
     let user = {
-        email : email ,
-        password : password
+        email: email,
+        password: password
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -199,11 +262,11 @@ export async function authentificateUserApi(email,password) {
  * @param {*} email 
  * @param {*} password 
  */
-export async function quitSessionUserApi(email,password) {
+export async function quitSessionUserApi(email, password) {
     let url = getEndpointURL('/api/user/logout');
     let user = {
-        email : email ,
-        password : password
+        email: email,
+        password: password
     };
     let response = await fetch(url, {
         method: 'GET',
@@ -232,7 +295,7 @@ export async function quitSessionUserApi(email,password) {
 export async function forgetPwdUserApi(email) {
     let url = getEndpointURL('/api/user/forgetpassword')
     let user = {
-        email : email
+        email: email
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -261,12 +324,12 @@ export async function forgetPwdUserApi(email) {
  * @param {*} password 
  * @param {*} email2
  */
-export async function updateEmailUserApi(email,password,email2) {
+export async function updateEmailUserApi(email, password, email2) {
     let url = getEndpointURL('/api/user/update/email')
     let user = {
-        email : email ,
-        password : password,
-        email2 : email2
+        email: email,
+        password: password,
+        email2: email2
     };
     let response = await fetch(url, {
         method: 'PATCH',
@@ -297,12 +360,12 @@ export async function updateEmailUserApi(email,password,email2) {
  * @param {*} password 
  * @param {*} password2
  */
-export async function updatePwdUserApi(email,password,password2) {
+export async function updatePwdUserApi(email, password, password2) {
     let url = getEndpointURL('/api/user/update/password')
     let user = {
-        email : email ,
-        password : password,
-        password2 : password2
+        email: email,
+        password: password,
+        password2: password2
     };
     let response = await fetch(url, {
         method: 'PATCH',
