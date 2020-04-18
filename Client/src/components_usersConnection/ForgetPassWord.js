@@ -88,9 +88,13 @@ const ForgetPassWord = (props) => {
                             }
                         </div>
 
-                        <button type="submit" disabled={form.username===""} className="btn btn-primary btn-lg btn-block">
-                            Récupération
-                        </button>
+                        <div className="form-group">
+
+                            <button type="submit" disabled={form.username===""} className="btn btn-primary btn-lg btn-block">
+                                Récupération
+                            </button>
+
+                        </div>
 
                         <div className="form-group">
                             <a href="signup" className="form-text form-text--alt">Mémoire revenue ?<br></br>Connectez-vous !</a>

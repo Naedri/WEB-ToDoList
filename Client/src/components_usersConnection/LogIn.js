@@ -118,9 +118,11 @@ const LogIn = (props) => {
                             }
                         </div>
 
-                        <button type="submit" disabled={form.username==="" || form.password==="" } className="btn btn-primary btn-lg btn-block">
-                            Connnexion
-                        </button>
+                        <div className="form-group">
+                            <button type="submit" disabled={form.username==="" || form.password==="" } className="btn btn-primary btn-lg btn-block">
+                                Connnexion
+                            </button>
+                        </div>
 
                         <div className="form-group">
                             <a href="forgetpassword" className="form-text form-text--alt">J'ai oublié mon mot de passe</a>

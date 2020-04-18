@@ -33,7 +33,7 @@ const App = () => {
       </nav>*/
       }
       <Switch>
-      <Route exact path='/' component={LogIn} />
+      <Route exact path='/' component={SignUp} />
         <Route exact path="/login" component={LogIn} />
         <Route exact path="/signup" component={SignUp} />
         <Route exact path="/forgetpassword" component={ForgetPassWord} />

@@ -84,17 +84,3 @@ body#menu {
 .form-text.text-valide {
    color: #27AE60;
 }
-/*Message margin*/
-.form-text--alt {
-  margin-top: 25px;
-  text-decoration: none;
-  text-align: center;
-}
-
-.form-text--alt#mailRegistration {
-  margin-top: 35px;
-}
-/*link*/
-a.form-text--alt {
-  font-size: 80%;
-}
