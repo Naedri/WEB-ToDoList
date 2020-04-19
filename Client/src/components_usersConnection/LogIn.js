@@ -4,8 +4,8 @@ import '../css/styleUser.css' ;
 const LogIn = (props) => {
 
     const [form, setValues] = useState({
-        username: "",
-        password: "",
+        username: '',
+        password: '',
     });
 
     const [errors, setErrors] = useState({
@@ -66,9 +66,7 @@ const LogIn = (props) => {
     return (
         <div className="container">
             <div className="row"> 
-
                 <div className="auth-wrapper mt-2">
-
                     <form onSubmit={printValues}>
 
                         <div className="form-group">
@@ -79,7 +77,6 @@ const LogIn = (props) => {
                                 type="mail"
                                 className="form-control"
                                 placeholder="mail@provider"
-                                
                                 value={form.username}
                                 id="username"
                                 name="username"
@@ -89,21 +86,19 @@ const LogIn = (props) => {
                                 <small 
                                     id="mailNull"
                                     className='form-text text-error'>
-                                        {errors.username}
+                                    {errors.username}
                                 </small>
                             }
                         </div>
-
+                        
                         <div className="form-group">
                             <label htmlFor="password">
                                 Mot de passe
                             </label>
-
                             <input
                                 type="password"
                                 className="form-control"
                                 placeholder="Password"
-
                                 value={form.password}
                                 id="password"
                                 name="password"
@@ -113,7 +108,7 @@ const LogIn = (props) => {
                                 <small 
                                     id="passwordNull"
                                     className='form-text text-error'>
-                                        {errors.password}
+                                    {errors.password}
                                 </small>
                             }
                         </div>

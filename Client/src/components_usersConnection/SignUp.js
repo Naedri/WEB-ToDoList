@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Ripple } from 'react-spinners-css';
-
-import '../css/styleUser.css' ;
 import { isFreeUserApi, createUserApi } from '../api.js';
+import '../css/styleUser.css' ;
 
 
 /**
@@ -27,11 +26,11 @@ import { isFreeUserApi, createUserApi } from '../api.js';
 const SignUp = (props) => {
 
     const [form, setValues] = useState({
-        email: "",
-        password: "",
-        password2: "",
-        isLoading: "",
-        isCreate: "",
+        email: '',
+        password: '',
+        password2: '',
+        isLoading: '',
+        isCreate: '',
     });
     const [errors, setErrors] = useState({
         email: '',
@@ -121,7 +120,7 @@ const SignUp = (props) => {
                     !value ? "Veuillez renseigner un mot de passe"
                         : value.length < 8 ? 'Il doit contenir au moins 8 caractères'
                             : value.length > 15 ? 'Il doit contenir moins de 16 caractères'
-                                : '';
+                                : '' ;
                 break;
             case 'password2':
                 err =
@@ -140,28 +139,21 @@ const SignUp = (props) => {
             });
             setErrors({
                 ...errors,
-                [name]: err
+                [name]: err,
             });
         }
     };
-/*
-    if (isLoading)
-    return (<p>Loading ...</p>)
-*/
 
     const checkSubmit = () => {
-        return !form.isLoading && (form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2) ;
+        return !form.isLoading && (form.email==='' || form.password==='' || form.password2==='' || form.password!==form.password2) ;
 
     }
 
     return (
         <div className="container">
             <div className="row">
-
                 <div className="auth-wrapper mt-2">
-
                     <form onSubmit={try_signup}>
-
                         <div className="form-group">
                             <label htmlFor="email">
                                 Adresse e-mail
@@ -170,7 +162,6 @@ const SignUp = (props) => {
                                 type="mail"
                                 className="form-control"
                                 placeholder="mail@provider"
-
                                 value={form.email}
                                 id="email"
                                 name="email"
@@ -183,14 +174,11 @@ const SignUp = (props) => {
                                         {errors.email}
                                 </small>
                             }
-
                         </div>
-​
                         <div className="form-group">
                             <label htmlFor="password">
                                 Mot de passe
                             </label>
-​
                             <input
                                 type="password"
                                 className="form-control"
@@ -209,8 +197,6 @@ const SignUp = (props) => {
                                 </small>
                             }
                         </div>
-
-
                         <div className="form-group">
                             <label htmlFor="password2">
                                 Répétez le mot de passe
@@ -227,21 +213,19 @@ const SignUp = (props) => {
                                 onChange={handleChange}
                             />
                             {errors.password2 &&
-                                <small
-                                    id="passwordDifferent"
-                                    className='form-text text-error'>
-                                        {errors.password2}
-                                </small>
+                            <small
+                                id="passwordDifferent"
+                                className='form-text text-error'>
+                                    {errors.password2}
+                            </small>
                             }
                         </div>
-
                         <div className="form-group">
                           <button type="submit"
                                 disabled={checkSubmit()}
                                 className="btn btn-primary btn-lg btn-block">
                                   Inscription
                           </button>
-
                           {form.isLoading!=='' &&
                             <div className="loadingSpinner" >
                                     <Ripple
@@ -250,7 +234,6 @@ const SignUp = (props) => {
                                     />
                             </div>
                           }
-                          
                           {form.isCreate!=='' &&
                               <small
                                   id="isCreate"
@@ -260,15 +243,12 @@ const SignUp = (props) => {
                               </small>
                           }
                         </div>
-
                         <div className="form-group">
                             <a href="login" className="form-text form-text--alt">
                                 Vous avez déjà un compte ?<br></br>Connectez-vous !</a>
                         </div>
-
                     </form>
                 </div>
-
             </div>
         </div>
 
