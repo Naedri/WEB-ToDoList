@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Ripple } from 'react-spinners-css';
 
-import '../css/styleUser.css' ;
+import '../css/styleUser.css';
 import { isFreeUserApi } from '../api.js';
 
 const SignUp = (props) => {
@@ -14,49 +14,50 @@ const SignUp = (props) => {
         isCreate: "",
     });
     const [errors, setErrors] = useState({
-        email: false,
-        password: false,
-        password2: false,
+        email: '',
+        password: '',
+        password2: '',
     });
+    
+
 
     // eslint-disable-next-line
     const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
     const validateForm = (errors) => {
         let valid = Object.values(errors).every(
-            (val) => val.length === 0 
+            (val) => val.length === 0
         );
         return valid;
     }
 
-    const try_signup = async (e) =>  {
+    const try_signup = async (e) => {
         e.preventDefault();
 
-        if (validateForm(errors)){
+        if (validateForm(errors)) {
             try {
                 setValues({
                     ...form,
-                    ['isLoading']: 'Chargement...',
-                    ['isCreate'] : '',
+                    isLoading: 'Chargement...',
+                    isCreate: '',
                 });
-
-                let status = await isFreeUserApi(form.email) ;
-                if (status ==='true'){
+                let status = await isFreeUserApi(form.email);
+                if (status === 'true') {
                     console.log("il faut utiliser createUserApi");
                     setValues({
                         ...form,
-                        ['isCreate'] : 'Un email de confirmation vous a été envoyé',
-                        ['isLoading']: '',
+                        isCreate: 'Un email de confirmation vous a été envoyé',
+                        isLoading: '',
                     });
                 } else {
                     console.log("il faut choisir un autre email");
                     setValues({
                         ...form,
-                        ['isLoading']: '',
+                        isLoading: '',
                     });
                     setErrors({
                         ...errors,
-                        ['email']: 'Cette adresse e-mail est déjà utilisée',
+                        email: 'Cette adresse e-mail est déjà utilisée',
                     });
                 }
             }
@@ -77,7 +78,7 @@ const SignUp = (props) => {
                     !value.trim() ? 'Veuillez renseigner une adresse e-mail'
                         : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
                             : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
-                                : '' ;
+                                : '';
                 break;
             case 'password':
                 err =
@@ -88,29 +89,32 @@ const SignUp = (props) => {
                 break;
             case 'password2':
                 err =
-                    value===form.password ? ''
+                    value === form.password ? ''
                         : 'Les mots de passe ne correspondent pas';
                 break;
             default:
                 break;
         }
-        if (name=='email'||name=='password'||name=='password2'){
+        if (name === 'email' || name === 'password' || name === 'password2') {
             setValues({
                 ...form,
                 [name]: value,
-                ['isCreate'] : '',
-                ['isLoading']: '',
+                isCreate: '',
+                isLoading: '',
             });
             setErrors({
                 ...errors,
-                [name]: err
+                [name]: err,
             });
         }
     };
-/*
-    if (isLoading)
-    return (<p>Loading ...</p>)
-*/
+    /*
+        if (isLoading)
+        return (<p>Loading ...</p>)
+    */
+    const isDisabled = () => {
+        return !form.isLoading && (form.email === "" || form.password === "" || form.password2 === "" || form.password !== form.password2);
+    }
 
     return (
         <div className="container">
@@ -138,17 +142,17 @@ const SignUp = (props) => {
                                 <small
                                     id="mailNull"
                                     className='form-text text-error'>
-                                        {errors.email}
+                                    {errors.email}
                                 </small>
                             }
 
                         </div>
-​
+
                         <div className="form-group">
                             <label htmlFor="password">
                                 Mot de passe
                             </label>
-​
+
                             <input
                                 type="password"
                                 className="form-control"
@@ -163,7 +167,7 @@ const SignUp = (props) => {
                                 <small
                                     id="passwordNull"
                                     className='form-text text-error'>
-                                        {errors.password}
+                                    {errors.password}
                                 </small>
                             }
                         </div>
@@ -173,7 +177,7 @@ const SignUp = (props) => {
                             <label htmlFor="password2">
                                 Répétez le mot de passe
                             </label>
-​
+
                             <input
                                 type="password"
                                 className="form-control"
@@ -188,35 +192,35 @@ const SignUp = (props) => {
                                 <small
                                     id="passwordDifferent"
                                     className='form-text text-error'>
-                                        {errors.password2}
+                                    {errors.password2}
                                 </small>
                             }
                         </div>
 
                         <div className="form-group">
-                          <button type="submit"
-                              disabled={ !form.isLoading && (form.email==="" || form.password==="" || form.password2==="" || form.password!==form.password2) }
-                              className="btn btn-primary btn-lg btn-block">
-                                  Inscription
+                            <button type="submit"
+                                disabled={isDisabled()}
+                                className="btn btn-primary btn-lg btn-block">
+                                Inscription
                           </button>
 
-                          {form.isLoading!=='' &&
-                            <div className="loadingSpinner" >
+                            {form.isLoading !== '' &&
+                                <div className="loadingSpinner" >
                                     <Ripple
-                                      color={'#fd7e14'}
-                                      size={50}
+                                        color={'#fd7e14'}
+                                        size={50}
                                     />
-                            </div>
-                          }
-                          
-                          {form.isCreate!=='' &&
-                              <small
-                                  id="isCreate"
-                                  name="isCreate"
-                                  className='form-text text-valide'>
-                                      {form.isCreate}
-                              </small>
-                          }
+                                </div>
+                            }
+
+                            {form.isCreate !== '' &&
+                                <small
+                                    id="isCreate"
+                                    name="isCreate"
+                                    className='form-text text-valide'>
+                                    {form.isCreate}
+                                </small>
+                            }
                         </div>
 
                         <div className="form-group">
