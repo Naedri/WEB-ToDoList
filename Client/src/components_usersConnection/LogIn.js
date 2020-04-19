@@ -5,12 +5,12 @@ const LogIn = (props) => {
 
     const [form, setValues] = useState({
         username: "",
-        password: ""
+        password: "",
     });
 
     const [errors, setErrors] = useState({
-        username: false,
-        password: false
+        username: '',
+        password: '',
     });
 
     // eslint-disable-next-line 

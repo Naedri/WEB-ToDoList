@@ -10,6 +10,11 @@ module.exports = {
 };
 
 
+/** 
+ * 
+ * @param {*} email 
+ * @param {*} callback will recieve 'true' if user is available
+ */
 function isFree(email , callback) {
     const query = 
     `SELECT COUNT(*) 
@@ -21,22 +26,28 @@ function isFree(email , callback) {
         callback(true, err);
     } else {
         let count = result.rows[0].count;
-        let free = (count === '0') ? 'true' : 'false' ; 
-        callback(undefined, free);
+        let isFree = (count === '0') ? true : false ; 
+        callback(undefined, isFree);
     }
     });
 }
 
-
-function create( {email,pwd} , callback) {
+/**
+ * 
+ * @param {*} param0 
+ * @param {*} callback 
+ */
+function create( {email,password} , callback) {
 const query = 
 `INSERT INTO USERS (email,encrypted_password)
 VALUES ($1, $2);`;
-utils.executeQuery(query, [email,pwd], (err, result) => {
+utils.executeQuery(query, [email,password], (err, result) => {
     if (err) {
-    callback(true, err);
+        callback(true, err);
     } else {
-    callback(undefined);
+        let count = result.rowCount;
+        let isInsert = (count > '0') ? true : false ; 
+        callback(undefined, isInsert);
     }
 });
 }
