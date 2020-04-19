@@ -3,11 +3,10 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import './css/bootstrap.css' ;
 
-import Home from './HomePage';
-
 import LogIn from './components_usersConnection/LogIn';
 import SignUp from './components_usersConnection/SignUp';
 import ForgetPassWord from './components_usersConnection/ForgetPassWord';
+import Home from './HomePage';
 
 const App = () => {
   return (
