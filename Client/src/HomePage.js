@@ -8,8 +8,6 @@ import del from './assets/delete-forever.svg';
 import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
 import NextTasks from "./components/NextTasks";
-
-import './css/styleToDoList.css' ;
  
 
 const todoReducer = (state, action) => {

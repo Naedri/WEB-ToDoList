@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Ripple } from 'react-spinners-css';
 import { isFreeUserApi, createUserApi } from '../api.js';
-import '../css/styleUser.css' ;
+import '../css/styleUser.css';
 
 
 /**
@@ -37,7 +37,7 @@ const SignUp = (props) => {
         password: '',
         password2: '',
     });
-    
+
 
 
     // eslint-disable-next-line
@@ -57,26 +57,26 @@ const SignUp = (props) => {
         });
     }
 
-    const try_signup = async (e) =>  {
+    const try_signup = async (e) => {
         e.preventDefault();
 
         if (validateForm(errors)) {
             try {
                 setValues({
                     ...form,
-                     isLoading  : 'Chargement...',
-                     isCreate   : '',
+                    isLoading: 'Chargement...',
+                    isCreate: '',
                 });
 
-                let statusFree = await isFreeUserApi(form.email) ;
-                if (statusFree){
+                let statusFree = await isFreeUserApi(form.email);
+                if (statusFree) {
                     try {
-                        let statusCreate = await createUserApi(form.email, form.password) ;
-                        if(statusCreate){
+                        let statusCreate = await createUserApi(form.email, form.password);
+                        if (statusCreate) {
                             setValues({
                                 ...form,
-                                isCreate : 'Un email de confirmation vous a été envoyé',
-                                isLoading : '',
+                                isCreate: 'Un email de confirmation vous a été envoyé',
+                                isLoading: '',
                             });
                         } else {
                             console.log("Problème dans la création de l utilisateur");
@@ -122,7 +122,7 @@ const SignUp = (props) => {
                     !value ? "Veuillez renseigner un mot de passe"
                         : value.length < 8 ? 'Il doit contenir au moins 8 caractères'
                             : value.length > 15 ? 'Il doit contenir moins de 16 caractères'
-                                : '' ;
+                                : '';
                 break;
             case 'password2':
                 err =
@@ -132,7 +132,7 @@ const SignUp = (props) => {
             default:
                 break;
         }
-        if (name==='email'||name==='password'||name==='password2'){
+        if (name === 'email' || name === 'password' || name === 'password2') {
             setValues({
                 ...form,
                 [name]: value,
@@ -147,14 +147,14 @@ const SignUp = (props) => {
     };
 
     const checkSubmit = () => {
-        return !form.isLoading && (form.email==='' || form.password==='' || form.password2==='' || form.password!==form.password2) ;
+        return !form.isLoading && (form.email === '' || form.password === '' || form.password2 === '' || form.password !== form.password2);
 
     }
 
     return (
         <div className="container">
-            <div className="row">
-                <div className="auth-wrapper mt-2">
+            <div className="row justify-content-center py-5 my-5">
+                <div className="col-sm col-md-6 col-lg-4">
                     <form onSubmit={try_signup}>
                         <div className="form-group">
                             <label htmlFor="email">
@@ -215,35 +215,35 @@ const SignUp = (props) => {
                                 onChange={handleChange}
                             />
                             {errors.password2 &&
-                            <small
-                                id="passwordDifferent"
-                                className='form-text text-error'>
+                                <small
+                                    id="passwordDifferent"
+                                    className='form-text text-error'>
                                     {errors.password2}
-                            </small>
+                                </small>
                             }
                         </div>
                         <div className="form-group">
-                          <button type="submit"
+                            <button type="submit"
                                 disabled={checkSubmit()}
                                 className="btn btn-primary btn-lg btn-block">
-                                  Inscription
+                                Inscription
                           </button>
-                          {form.isLoading!=='' &&
-                            <div className="loadingSpinner" >
+                            {form.isLoading !== '' &&
+                                <div className="loadingSpinner" >
                                     <Ripple
                                         color={'#fd7e14'}
                                         size={50}
                                     />
-                            </div>
-                          }
-                          {form.isCreate!=='' &&
-                              <small
-                                  id="isCreate"
-                                  name="isCreate"
-                                  className='form-text text-valide'>
-                                      {form.isCreate}
-                              </small>
-                          }
+                                </div>
+                            }
+                            {form.isCreate !== '' &&
+                                <small
+                                    id="isCreate"
+                                    name="isCreate"
+                                    className='form-text text-valide'>
+                                    {form.isCreate}
+                                </small>
+                            }
                         </div>
                         <div className="form-group">
                             <a href="login" className="form-text form-text--alt">
@@ -253,7 +253,6 @@ const SignUp = (props) => {
                 </div>
             </div>
         </div>
-
     );
 }
 

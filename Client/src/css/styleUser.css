@@ -29,10 +29,6 @@ body {
     align-items: center;
   }
 
-.container {
-  margin: 5%;
-}
-
 /*spinner*/
 .loadingSpinner{
   display : flex;
