@@ -1,15 +1,21 @@
 import React, { useState } from "react";
+/*import { Redirect } from 'react-router-dom';*/
+import { Ripple } from 'react-spinners-css';
+import { authenticateUserApi } from '../api.js';
 import '../css/styleUser.css' ;
 
 const LogIn = (props) => {
 
     const [form, setValues] = useState({
-        username: '',
+        email: '',
         password: '',
+        isLoading: '',
+        isConnected: '',
+        identifiers: '',
     });
 
     const [errors, setErrors] = useState({
-        username: '',
+        email: '',
         password: '',
     });
 
@@ -23,21 +29,53 @@ const LogIn = (props) => {
         return valid;
     }
 
-    const printValues = e => {
+  const try_login = async (e) => {
         e.preventDefault();
-        if (validateForm(errors))
-            console.log(form.username, form.password);
-        
+
+        if (validateForm(errors)) {
+            try {
+                setValues({
+                    ...form,
+                    isLoading: 'Chargement...',
+                    isConnected: '',
+                });
+
+                let data = await authenticateUserApi(form.email, form.password);
+                if (data.state){
+                    setValues({
+                        ...form,
+                        isConnected: `Bienvenue user ${data.userId} !`,
+                        isLoading: '',
+                    });
+                    //let url = `/home/${data.userId}`;
+                    //return  <Redirect  to={url} />;
+                    //return  <Redirect  to="/home"/>;
+                    //this.props.history.push('/home');
+                } else {
+                    setValues({
+                        ...form,
+                        identifiers: 'Identifiants incorrects',
+                        isLoading: '',
+                    });
+                }
+            }
+            catch (err) {
+                setErrors(err.message);
+                setValues({
+                    ...form,
+                    identifiers: 'Identifiants incorrects',
+                    isLoading: '',
+                });            }
+        }
     };
 
     const handleChange = e => {
-        const { name, value } = e.target; //e objet prend la cible de l evenement donc l objet sur lequel l evenement s est declecnhé (avec un name definie dans le html et une value définie par l'évènements)
+        const { name, value } = e.target;
         let err = errors;
         switch (name) {
-            case 'username':
+            case 'email':
                 err =
-                    !value.trim()
-                        ? 'Veuillez renseigner une adresse e-mail'
+                    !value.trim() ? 'Veuillez renseigner une adresse e-mail'
                         : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
                             : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
                                 : '' ;
@@ -45,52 +83,58 @@ const LogIn = (props) => {
             case 'password':
                 err =
                     !value ? "Veuillez renseigner un mot de passe"
-                         : value.length < 8 ? 'Il doit contenir au moins 8 caractères'
                             : value.length > 15 ? 'Il doit contenir moins de 16 caractères'
                                 : '';
                 break;
             default:
                 break;
         }
-
-        setValues({
-            ...form,
-            [name]: value //name est soit password, soit username (name) et l un des deux prendra comme valeur (value) err
-        });
-        setErrors({
-            ...errors,
-            [name]: err //name est soit password, soit username (name) et l un des deux prendra comme valeur (value) err
-        });
+        if (name === 'email' || name === 'password') {
+            setValues({
+                ...form,
+                [name]: value,
+                isConnected: '',
+                isLoading: '',
+                identifiers: '',
+            });
+            setErrors({
+                ...errors,
+                [name]: err,
+            });
+        }
     };
+
+    
+    const checkSubmitDisabled = () => {
+        return !form.isLoading && (form.email === '' || form.password === '');
+    }
 
     return (
         <div className="container">
-            <div className="row"> 
-                <div className="auth-wrapper mt-2">
-                    <form onSubmit={printValues}>
-
+            <div className="row justify-content-center py-5 my-5">
+                <div className="col-sm col-md-6 col-lg-4">
+                    <form onSubmit={try_login}>
                         <div className="form-group">
-                            <label htmlFor="username"> 
+                            <label htmlFor="email"> 
                                 Adresse e-mail
                                 </label>
                             <input
                                 type="mail"
                                 className="form-control"
                                 placeholder="mail@provider"
-                                value={form.username}
-                                id="username"
-                                name="username"
+                                value={form.email}
+                                id="email"
+                                name="email"
                                 onChange={handleChange}
                             />
-                            {errors.username &&
+                            {errors.email &&
                                 <small 
                                     id="mailNull"
                                     className='form-text text-error'>
-                                    {errors.username}
+                                    {errors.email}
                                 </small>
                             }
                         </div>
-                        
                         <div className="form-group">
                             <label htmlFor="password">
                                 Mot de passe
@@ -112,25 +156,45 @@ const LogIn = (props) => {
                                 </small>
                             }
                         </div>
-
                         <div className="form-group">
-                            <button type="submit" disabled={form.username==="" || form.password==="" } className="btn btn-primary btn-lg btn-block">
+                            {form.identifiers !== '' &&
+                                <div
+                                    id="identifiers"
+                                    name="identifiers"
+                                    className='form-text text-error'>
+                                    {form.identifiers}
+                                </div>
+                            }
+                            {form.isConnected !== '' &&
+                                <div
+                                    id="isConnected"
+                                    name="isConnected"
+                                    className='form-text text-valide'>
+                                    {form.isConnected}
+                                </div>
+                            }
+                            <button type="submit" 
+                                disabled={checkSubmitDisabled()} 
+                                className="btn btn-primary btn-lg btn-block">
                                 Connnexion
                             </button>
+                            {form.isLoading !== '' &&
+                                <div className="loadingSpinner" >
+                                    <Ripple
+                                        color={'#fd7e14'}
+                                        size={50}
+                                    />
+                                </div>
+                            }
                         </div>
-
                         <div className="form-group">
                             <a href="forgetpassword" className="form-text form-text--alt">J'ai oublié mon mot de passe</a>
                             <a href="signup" className="form-text form-text--alt">Pas encore de compte ? Inscrivez-vous !</a>
                         </div>
-
-
                     </form>
                 </div>
-
             </div>
         </div>
-
     );
 }
 

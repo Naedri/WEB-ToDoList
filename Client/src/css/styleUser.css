@@ -81,6 +81,13 @@ body {
 
 /*Message*/
 
+/*Message margin*/
+.form-text--alt {
+  margin-top: 25px;
+  text-decoration: none;
+  text-align: center;
+}
+
 /*Message Color*/
 .form-text {
   color: #FF7675;
@@ -90,19 +97,25 @@ body {
 }
 .form-text.text-valide {
    color: #27AE60;
-}
-/*Message margin*/
-.form-text--alt {
-  margin-top: 25px;
-  text-decoration: none;
-  text-align: center;
+   margin-top: 30px;
+   text-align: center;
 }
 
-small#isCreate {
-  margin-top: 30px;
-  text-align: center;
-}
 /*link*/
 a.form-text--alt {
   font-size: 80%;
+}
+
+/*specific*/
+div#identifiers{
+  text-align: center;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+div#isConnected{
+  text-align: center;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }

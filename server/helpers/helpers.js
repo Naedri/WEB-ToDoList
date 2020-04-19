@@ -3,7 +3,6 @@ const config = require('../config.js');
 const helpers = {};
 let _serverPort = null;
 
-/*
 // Middleware 
 helpers.limitAccessToAuthentificatedOnly = (req, res, next) => {
   if (req.session && req.session.userId) {
@@ -14,12 +13,13 @@ helpers.limitAccessToAuthentificatedOnly = (req, res, next) => {
 };
 
 // Methodes permettant de set/get le sur lequel le serveur est lancé
-helpers.setServerPort = (port=80) => { _serverPort = port; };
+/*
+helpers.setServerPort = (port=80000) => { _serverPort = port; };
 helpers.getServerPort = () => _serverPort;
-
 helpers.getBaseURI = (req) => {
   return `${req.protocol}://${req.hostname}:${helpers.getServerPort()}`;
 }
+*/
 
 // Méthodes permettant de verifier le token
 helpers.checkToken = (req, res, next) => {
@@ -50,4 +50,3 @@ helpers.checkToken = (req, res, next) => {
 };
 
 module.exports = helpers;
-*/

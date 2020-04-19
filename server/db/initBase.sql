@@ -4,8 +4,8 @@ CREATE TABLE USERS (
   username VARCHAR(25),
   firstname VARCHAR(25),
   lastname VARCHAR(25),
-  email VARCHAR(50),
-  encrypted_password VARCHAR(60),
+  email VARCHAR(50)  CONSTRAINT NN_email NOT NULL,
+  encrypted_password VARCHAR(60) CONSTRAINT NN_password NOT NULL,
   created_at timestamp default current_timestamp
 );
 
@@ -17,6 +17,8 @@ INSERT INTO USERS (username, firstname, lastname, email, encrypted_password)
     VALUES ('Gilbert','Dublanc','Bernard-Arneau','bernard2@wanadoo.fr','blablabla');
 INSERT INTO USERS (email, encrypted_password)
     VALUES ('jean@mail.com','blablabla');
+INSERT INTO USERS (email, encrypted_password)
+    VALUES ('a@mail.com','aqwzsxed');
 
 
 DROP TABLE IF EXISTS LISTE CASCADE;

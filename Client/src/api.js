@@ -227,7 +227,7 @@ export async function createUserApi(email, password) {
  * @param {*} email 
  * @param {*} password 
  */
-export async function authentificateUserApi(email, password) {
+export async function authenticateUserApi(email, password) {
     let url = getEndpointURL('/api/user/login');
     let user = {
         email : email ,
@@ -244,6 +244,13 @@ export async function authentificateUserApi(email, password) {
     // 👉 Parser la réponse en JSON
     let data = await response.json()
 
+    
+    // bad login details
+    if (response.status === 403) {
+        data = false ;
+        return data ;
+    }
+    
     if (response.status >= 300) {
         throw new Error(data.message)
     }
@@ -276,7 +283,7 @@ export async function quitSessionUserApi(email, password) {
     let data = await response.json()
 
     if (response.status >= 300) {
-        throw new Error(data.message)
+        throw new Error(data.message);
     }
 
     // 👉 Renvoyer les données

@@ -4,25 +4,6 @@ import { isFreeUserApi, createUserApi } from '../api.js';
 import '../css/styleUser.css';
 
 
-/**
- * 
- * ATTENTION 
- * 
- * 
- * LES CONSOLES 
- * 
- * LE BOUCLES IF ELSE
- * 
- * N ONT TOUJOURS PAS ETE ENLEVES
- * 
- * 
- * 
- * 
- * 
- *
- */
-
-
 const SignUp = (props) => {
 
     const [form, setValues] = useState({
@@ -37,8 +18,6 @@ const SignUp = (props) => {
         password: '',
         password2: '',
     });
-
-
 
     // eslint-disable-next-line
     const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
@@ -71,17 +50,12 @@ const SignUp = (props) => {
                 let statusFree = await isFreeUserApi(form.email);
                 if (statusFree) {
                     try {
-                        let statusCreate = await createUserApi(form.email, form.password);
-                        if (statusCreate) {
-                            setValues({
-                                ...form,
-                                isCreate: 'Un email de confirmation vous a été envoyé',
-                                isLoading: '',
-                            });
-                        } else {
-                            console.log("Problème dans la création de l utilisateur");
-                            endLoading();
-                        }
+                        await createUserApi(form.email, form.password);
+                        setValues({
+                            ...form,
+                            isCreate: 'Un email de confirmation vous a été envoyé',
+                            isLoading: '',
+                        });
                     }
                     catch (err) {
                         console.log(err);
@@ -89,7 +63,6 @@ const SignUp = (props) => {
                         endLoading();
                     }
                 } else {
-                    console.log("il faut choisir un autre email");
                     setErrors({
                         ...errors,
                         email: 'Cette adresse e-mail est déjà utilisée',
@@ -146,7 +119,7 @@ const SignUp = (props) => {
         }
     };
 
-    const checkSubmit = () => {
+    const checkSubmitDisabled = () => {
         return !form.isLoading && (form.email === '' || form.password === '' || form.password2 === '' || form.password !== form.password2);
 
     }
@@ -224,7 +197,7 @@ const SignUp = (props) => {
                         </div>
                         <div className="form-group">
                             <button type="submit"
-                                disabled={checkSubmit()}
+                                disabled={checkSubmitDisabled()}
                                 className="btn btn-primary btn-lg btn-block">
                                 Inscription
                           </button>

@@ -59,12 +59,9 @@ const ForgetPassWord = (props) => {
 
     return (
         <div className="container">
-            <div className="row"> 
-
-                <div className="auth-wrapper mt-2">
-
+            <div className="row justify-content-center py-5 my-5">
+                <div className="col-sm col-md-6 col-lg-4">
                     <form onSubmit={printValues}>
-
                         <div className="form-group">
                             <label htmlFor="username"> 
                                 Adresse e-mail
@@ -73,7 +70,6 @@ const ForgetPassWord = (props) => {
                                 type="mail"
                                 className="form-control"
                                 placeholder="mail@provider"
-                                
                                 value={form.username}
                                 id="username"
                                 name="username"

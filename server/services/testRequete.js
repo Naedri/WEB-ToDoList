@@ -1,11 +1,21 @@
 const servicesUser = require("./user.js");
 
     const user={
-    email: "jean2@chocomail.com",
-    pwd: "blablabla"
+    email: "a@mail.com",
+    password: "aqwzsxed",
   };
+  
+  servicesUser.authenticate(user,(err, result)=>{
+    if(err){
+      console.log(result);
+  } else {
+      let state = result ? result : ' not ' ;
+      console.log('user '+ state + ' authenticated');
+      console.log(result);
+    }
+  });
 
-
+  /*
   servicesUser.create(user,(err, result)=>{
     if(err){
       console.log(result);
@@ -16,6 +26,7 @@ const servicesUser = require("./user.js");
       console.log(result);
     }
   });
+*/
 
   /*
  servicesUser.isFree(user.email, (err,result) => {
