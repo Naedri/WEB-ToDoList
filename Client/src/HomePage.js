@@ -4,11 +4,10 @@ import Lists from './components/Lists'
 import ListForm from './components/ListForm';
 import TodoListItemMenu from './components/TodoListItemMenu'
 import home from './assets/home.svg';
-import del from './assets/delete-forever.svg';
 import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
 import NextTasks from "./components/NextTasks";
- 
+import Modale from "./components/Modal"
 
 const todoReducer = (state, action) => {
     switch (action.type) {
@@ -68,15 +67,13 @@ let Home = () => {
         let id = state.listId;
         let selectedList = state.toDos.find(list => list.id === id);
         try {
-            if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${selectedList.title}?`)) {
-                setRenderHome(true);
-                setLoading(true);
-                await deletelist(selectedList);
-                let newToDos = state.toDos.filter(todoList => todoList.id !== id);
-                dispatch({ type: 'DELETE', toDos: newToDos, listId: null })
-                setEdit(false);
-                setLoading(false);
-            }
+            setRenderHome(true);
+            setLoading(true);
+            await deletelist(selectedList);
+            let newToDos = state.toDos.filter(todoList => todoList.id !== id);
+            dispatch({ type: 'DELETE', toDos: newToDos, listId: null })
+            setEdit(false);
+            setLoading(false);
         } catch (err) {
             console.log(err);
             setError(err.message);
@@ -109,25 +106,25 @@ let Home = () => {
 
         try {
             //comparaison des nouvelles sous taches et des anciennes
-            for (let i = 0; i < editedTask.sousTaches.length; ++i){
-                try{
+            for (let i = 0; i < editedTask.sousTaches.length; ++i) {
+                try {
                     let toCreate = editedTask.sousTaches[i];
                     let toSend = {
-                        id : toCreate.id,
-                        idtache : selectedTask.id,
-                        titre : toCreate.titre,
-                        fait : toCreate.fait
+                        id: toCreate.id,
+                        idtache: selectedTask.id,
+                        titre: toCreate.titre,
+                        fait: toCreate.fait
                     }
                     if (!selectedTask.sousTaches.find(st => st.id === toCreate.id))
                         await createStageApi(toSend)
-                    else    
+                    else
                         await editStageApi(toSend)
-                }catch(err){
+                } catch (err) {
                     console.log(err);
                 }
             }
             //comparaison des anciennes sous taches et des nouvelles pour voir lesquelles ont été supprimés.
-            for (let i = 0; i < selectedTask.sousTaches.length; ++i){
+            for (let i = 0; i < selectedTask.sousTaches.length; ++i) {
                 let toDelete = selectedTask.sousTaches[i];
                 if (!editedTask.sousTaches.find(st => st.id === toDelete.id))
                     await deleteStageApi(toDelete);
@@ -155,8 +152,8 @@ let Home = () => {
         }
         try {
             //setLoading(true);
-            let response = await createList({titre : list.value});//appel à l'api
-            let newList = {...response, taches : []};
+            let response = await createList({ titre: list.value });//appel à l'api
+            let newList = { ...response, taches: [] };
             dispatch({ type: 'ADD_LIST', toDos: [...state.toDos, newList], listId: newList.id })
             setRenderHome(false);
             renderSettings(false);
@@ -199,9 +196,9 @@ let Home = () => {
         let newTodos = [...state.toDos];
         let chosenList = newTodos.find(list => list.id === id);
         try {
-            let response = await createTask(chosenList, { titre: todoItem.newItemValue, fait : false });
+            let response = await createTask(chosenList, { titre: todoItem.newItemValue, fait: false });
             console.log(response)
-            chosenList.taches.push({...response, sousTaches : []});
+            chosenList.taches.push({ ...response, sousTaches: [] });
             newTodos = newTodos.map(list => list.id === id ? chosenList : list);
             dispatch({ type: 'INIT', toDos: newTodos })
         }
@@ -304,6 +301,8 @@ let Home = () => {
         return (<p>Loading ...</p>)
     if (error)
         return <h2>Something went wrong : {error} </h2>
+
+    //<button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>
     return (
         <div className="container-fluid mt-0 full-h ">
             <div className="row full-h ">
@@ -323,7 +322,7 @@ let Home = () => {
                             {centerHeader()}
                         </div>
                         <div className="col-sm-auto">
-                            {(renderHome || renderingSettings) ? null : hasLists && <button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
+                            {(renderHome || renderingSettings) ? null : hasLists && <Modale liste={selectedList.titre} confirm={deleteList} />}
                         </div>
                     </div>
                     {centerContent()}
