@@ -12,23 +12,13 @@ const App = () => {
   return (
     <Router>
       <div className="App"> 
-        { }
-        <div className="AppUser">
-          { }
           <Switch>
-            <Route exact path='/' component={SignUp} />
-            <Route exact path="/login" component={LogIn} />
-            <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/forgetpassword" component={ForgetPassWord} />
-          </Switch>
-        </div>
-        <div className="AppToDoList">
-          { }
-          <Switch>
+            <Route exact path='/' className="AppUser" component={SignUp} />
+            <Route exact path="/login"  className="AppUser" component={LogIn} />
+            <Route exact path="/signup" className="AppUser" component={SignUp} />
+            <Route exact path="/forgetpassword" className="AppUser" component={ForgetPassWord} />
             <Route exact path="/home" component={Home} />
           </Switch>
-        </div>
-
       </div>
     </Router>
   );
