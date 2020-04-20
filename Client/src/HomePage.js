@@ -8,6 +8,7 @@ import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
 import NextTasks from "./components/NextTasks";
 import Modale from "./components/Modal"
+import { Redirect } from 'react-router-dom';
 
 const todoReducer = (state, action) => {
     switch (action.type) {
@@ -36,6 +37,8 @@ let Home = () => {
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [renderingSettings, renderSettings] = useState(false);
+    const [user, setUserEmail] = useState('');
+    const [redirect, setRedirect] = useState(false);
     const [state, dispatch] = React.useReducer(
         todoReducer,
         {
@@ -47,9 +50,11 @@ let Home = () => {
     useEffect(() => {
         async function fetchLists() {
             try {
+                let email = JSON.parse(localStorage.getItem('user'))
                 setLoading(true);
-                let lists = await getLists();
-                dispatch({ type: 'INIT', toDos: lists })
+                let lists = await getLists(email);
+                dispatch({ type: 'INIT', toDos: lists });
+                setUserEmail(email);
                 setLoading(false);
             }
             catch (err) {
@@ -58,7 +63,7 @@ let Home = () => {
         }
 
         fetchLists()
-    }, []);
+    }, [user]);
 
     /**
      * Supprime la liste selectionnée
@@ -152,7 +157,7 @@ let Home = () => {
         }
         try {
             //setLoading(true);
-            let response = await createList({ titre: list.value });//appel à l'api
+            let response = await createList({ titre: list.value, email : user });//appel à l'api
             let newList = { ...response, taches: [] };
             dispatch({ type: 'ADD_LIST', toDos: [...state.toDos, newList], listId: newList.id })
             setRenderHome(false);
@@ -265,6 +270,10 @@ let Home = () => {
         renderSettings(false);
         setRenderHome(true);
     }
+    const logout = () => {
+        localStorage.removeItem('user');
+        setRedirect(true);
+    }
 
     const isSettings = () => {
         if (onEdit) {
@@ -296,7 +305,8 @@ let Home = () => {
             hasLists && <TodoApp id={selectedList.id} initItems={selectedList.taches} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
         )
     }
-
+    if (redirect)
+        return <Redirect to="/" />;
     if (isLoading)
         return (<p>Loading ...</p>)
     if (error)
@@ -308,11 +318,12 @@ let Home = () => {
             <div className="row full-h ">
                 <div className="col-xl-3 border-right border-top menu full-h">
                     <div className="mt-3">
-                        <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
+                        <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>{user}</strong>
                     </div>
                     <div className="mt-2 mb-2">
                         <img src={settings} onClick={isSettings} className="cursor-pointer" alt="settings logo" /> <strong>Paramètres</strong>
                     </div>
+                    <span className='btn' onClick={logout}>Deconnexion</span>
                     <Lists changeList={changeList} lists={state.toDos} />
                     <ListForm addList={addList} />
                 </div>

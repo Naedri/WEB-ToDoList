@@ -30,20 +30,16 @@ const LogIn = (props) => {
         return valid;
     }
 
-    const startLoading = () => {
-        setValues({
-            ...form,
-            isLoading: 'Chargement...',
-            isConnected: '',
-        });
-    }
-
-    const try_login = async (e) => {
+  const try_login = async (e) => {
         e.preventDefault();
 
         if (validateForm(errors)) {
             try {
-                startLoading();
+                setValues({
+                    ...form,
+                    isLoading: 'Chargement...',
+                    isConnected: '',
+                });
 
                 let data = await authenticateUserApi(form.email, form.password);
                 if (data.state){
@@ -53,12 +49,10 @@ const LogIn = (props) => {
                         isLoading: '',
                     });
                     localStorage.setItem('user', JSON.stringify(data.email));
-                    /*let url = `/home/${data.userId}`;*/
-                    //let url = "/home";
-                    //history.push(url);
-                    setTimeout(() => {
-                        setRedirect(true);
-                        }, 1000);
+                    //let url = `/home/${data.userId}`;
+                    //return  <Redirect  to={url} />;
+                    setRedirect(true);
+                    //this.props.history.push('/home');
                 } else {
                     setValues({
                         ...form,
@@ -114,7 +108,7 @@ const LogIn = (props) => {
 
     
     const checkSubmitDisabled = () => {
-        return (form.isLoading || form.email === '' || form.password === '');
+        return !form.isLoading && (form.email === '' || form.password === '');
     }
     if (redirect)
         return <Redirect  to="/"/>;

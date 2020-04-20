@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Redirect } from 'react-router-dom';
+/*import { Redirect } from 'react-router-dom';*/
 import { Ripple } from 'react-spinners-css';
 import { authenticateUserApi } from '../api.js';
 import '../css/styleUser.css' ;
@@ -19,7 +19,6 @@ const LogIn = (props) => {
         password: '',
     });
 
-    const [redirect, setRedirect] = useState(false);
     // eslint-disable-next-line 
     const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
@@ -30,20 +29,16 @@ const LogIn = (props) => {
         return valid;
     }
 
-    const startLoading = () => {
-        setValues({
-            ...form,
-            isLoading: 'Chargement...',
-            isConnected: '',
-        });
-    }
-
-    const try_login = async (e) => {
+  const try_login = async (e) => {
         e.preventDefault();
 
         if (validateForm(errors)) {
             try {
-                startLoading();
+                setValues({
+                    ...form,
+                    isLoading: 'Chargement...',
+                    isConnected: '',
+                });
 
                 let data = await authenticateUserApi(form.email, form.password);
                 if (data.state){
@@ -52,13 +47,10 @@ const LogIn = (props) => {
                         isConnected: `Bienvenue user ${data.userId} !`,
                         isLoading: '',
                     });
-                    localStorage.setItem('user', JSON.stringify(data.email));
-                    /*let url = `/home/${data.userId}`;*/
-                    //let url = "/home";
-                    //history.push(url);
-                    setTimeout(() => {
-                        setRedirect(true);
-                        }, 1000);
+                    //let url = `/home/${data.userId}`;
+                    //return  <Redirect  to={url} />;
+                    //return  <Redirect  to="/home"/>;
+                    //this.props.history.push('/home');
                 } else {
                     setValues({
                         ...form,
@@ -114,10 +106,8 @@ const LogIn = (props) => {
 
     
     const checkSubmitDisabled = () => {
-        return (form.isLoading || form.email === '' || form.password === '');
+        return !form.isLoading && (form.email === '' || form.password === '');
     }
-    if (redirect)
-        return <Redirect  to="/"/>;
 
     return (
         <div className="container">

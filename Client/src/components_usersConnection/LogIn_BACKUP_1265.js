@@ -1,5 +1,11 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
+import { useHistory } from 'react-router-dom';
+||||||| merged common ancestors
+/*import { Redirect } from 'react-router-dom';*/
+=======
 import { Redirect } from 'react-router-dom';
+>>>>>>> f8c1a247b7e59e801dd7310b0520a688a6b908dd
 import { Ripple } from 'react-spinners-css';
 import { authenticateUserApi } from '../api.js';
 import '../css/styleUser.css' ;
@@ -37,6 +43,9 @@ const LogIn = (props) => {
             isConnected: '',
         });
     }
+    
+
+    let history = useHistory();
 
     const try_login = async (e) => {
         e.preventDefault();
@@ -52,13 +61,26 @@ const LogIn = (props) => {
                         isConnected: `Bienvenue user ${data.userId} !`,
                         isLoading: '',
                     });
-                    localStorage.setItem('user', JSON.stringify(data.email));
+<<<<<<< HEAD
+
                     /*let url = `/home/${data.userId}`;*/
-                    //let url = "/home";
-                    //history.push(url);
+                    let url = "/home";
                     setTimeout(() => {
-                        setRedirect(true);
+                        history.push(url);
                         }, 1000);
+
+||||||| merged common ancestors
+                    //let url = `/home/${data.userId}`;
+                    //return  <Redirect  to={url} />;
+                    //return  <Redirect  to="/home"/>;
+                    //this.props.history.push('/home');
+=======
+                    localStorage.setItem('user', JSON.stringify(data.email));
+                    //let url = `/home/${data.userId}`;
+                    //return  <Redirect  to={url} />;
+                    setRedirect(true);
+                    //this.props.history.push('/home');
+>>>>>>> f8c1a247b7e59e801dd7310b0520a688a6b908dd
                 } else {
                     setValues({
                         ...form,
