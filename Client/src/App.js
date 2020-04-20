@@ -6,18 +6,18 @@ import LogIn from './components_usersConnection/LogIn';
 import SignUp from './components_usersConnection/SignUp';
 import ForgetPassWord from './components_usersConnection/ForgetPassWord';
 import Home from './HomePage';
+import PrivateRoute from './helpers/PrivateRoute'
 
 const App = () => {
   return (
     <Router>
       <div className="App">
         <Switch>
-          <Route exact path="/home" component={Home} />
-            <Route exact path='/' component={SignUp} />
-            <Route exact path="/login" component={LogIn} />
-            <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/forgetpassword" component={ForgetPassWord} />
-          </Switch>
+          <PrivateRoute exact path="/" component={Home} />
+          <Route exact path="/login" component={LogIn} />
+          <Route exact path="/signup" component={SignUp} />
+          <Route exact path="/forgetpassword" component={ForgetPassWord} />
+        </Switch>
       </div>
     </Router>
   );

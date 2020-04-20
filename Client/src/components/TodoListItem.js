@@ -15,7 +15,7 @@ const TodoListItem = (props) => {
     const countTask = () => {
         let total = 0;
         props.item.sousTaches && props.item.sousTaches.forEach(stage => {
-            if(stage.fait)
+            if (stage.fait)
                 ++total;
         });
         return total;
@@ -26,15 +26,15 @@ const TodoListItem = (props) => {
     let listId = props.item.idliste;
     return (
         <li className="list-group-item">
-            <div className ="form-input row">
-            <input type="checkbox" className="col-1 col-sm-1 mt-2" onChange={() => props.markTodoDone(index,listId)} checked={props.item.fait} />
-            <div className="col-9 col-sm-9">
-            <p onClick={() => props.showEditMenu(index,listId)} className={todoClass + " cursor-pointer mb-0"}>{props.item.titre}</p>
-            <small> {countTask()} sur {(props.item.sousTaches && props.item.sousTaches.length) || "0"} &#183; Echéance : {daysLeft(props.item.echeance)} &#183; Note : {props.item.note || ""}</small>
-            </div>
-            <div className="col-1 col-sm-1">
-            <span type="button" onClick={() => props.removeItem(index,listId)} className="btn"><img className="pb-2" src={delItem} alt="remove logo"></img></span>
-            </div>
+            <div className="form-input row">
+                <input type="checkbox" onChange={() => props.markTodoDone(index, listId)} checked={props.item.fait} />
+                <div className="col-9 col-sm-9">
+                    <p onClick={() => props.showEditMenu(index, listId)} className={todoClass + " cursor-pointer mb-0"}>{props.item.titre}</p>
+                    <small> {countTask()} sur {(props.item.sousTaches && props.item.sousTaches.length) || "0"} &#183; Echéance : {daysLeft(props.item.echeance)} &#183; Note : {props.item.note || ""}</small>
+                </div>
+                <div className="col-1 col-sm-1">
+                    <span type="button" onClick={() => props.removeItem(index, listId)} className="btn"><img className="pb-2" src={delItem} alt="remove logo"></img></span>
+                </div>
             </div>
         </li>
     );

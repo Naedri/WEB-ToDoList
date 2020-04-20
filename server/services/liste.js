@@ -77,12 +77,12 @@ module.exports = {
 
   //AJOUTER USERNAME POUR LIER A UN USER
   //INSERT INTO LISTE (USERNAME, TITRE)
-  function create(titre, callback) {
+  function create(titre, email, callback) {
     const query = 
-    `INSERT INTO LISTE (titre) 
-    VALUES ($1)
+    `INSERT INTO LISTE (titre, username) 
+    VALUES ($1, $2)
     RETURNING *`;
-    utils.executeQuery(query, [titre], (err, result) => {
+    utils.executeQuery(query, [titre, email], (err, result) => {
       if (err) {
         callback(true, err);
       } else {

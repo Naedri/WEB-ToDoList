@@ -8,8 +8,8 @@ function getEndpointURL(endpoint) {
 
 /* list and task functions ****************************/
 
-export async function getLists() {
-    let url = getEndpointURL('/api/everything')
+export async function getLists(email) {
+    let url = getEndpointURL(`/api/everything/${email}`)
     let response = await fetch(url)
 
     // 👉 Parser la réponse en JSON
@@ -121,7 +121,7 @@ async function getAllStages() {
 
 export async function editStageApi(stage) {
     let url = getEndpointURL(`/api/soustache/${stage.id}`);
-    let toSend = {fait : stage.fait}
+    let toSend = { fait: stage.fait }
     let response = await fetch(url, {
         method: 'PATCH',
         headers: {
@@ -172,7 +172,7 @@ export async function deleteStageApi(stage) {
 export async function isFreeUserApi(email) {
     let url = getEndpointURL('/api/user/free')
     let user = {
-        email : email
+        email: email
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -188,7 +188,7 @@ export async function isFreeUserApi(email) {
     if (response.status >= 300) {
         throw new Error(data.message)
     }
-    
+
     // 👉 Renvoyer les données
     return data;
 }
@@ -202,8 +202,8 @@ export async function isFreeUserApi(email) {
 export async function createUserApi(email, password) {
     let url = getEndpointURL('/api/user/signup')
     let user = {
-        email : email ,
-        password : password ,
+        email: email,
+        password: password,
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -230,8 +230,8 @@ export async function createUserApi(email, password) {
 export async function authenticateUserApi(email, password) {
     let url = getEndpointURL('/api/user/login');
     let user = {
-        email : email ,
-        password : password ,
+        email: email,
+        password: password,
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -244,13 +244,13 @@ export async function authenticateUserApi(email, password) {
     // 👉 Parser la réponse en JSON
     let data = await response.json()
 
-    
+
     // bad login details
     if (response.status === 403) {
-        data = false ;
-        return data ;
+        data = false;
+        return data;
     }
-    
+
     if (response.status >= 300) {
         throw new Error(data.message)
     }
@@ -268,8 +268,8 @@ export async function authenticateUserApi(email, password) {
 export async function quitSessionUserApi(email, password) {
     let url = getEndpointURL('/api/user/logout');
     let user = {
-        email : email ,
-        password : password,
+        email: email,
+        password: password,
     };
     let response = await fetch(url, {
         method: 'GET',
@@ -298,7 +298,7 @@ export async function quitSessionUserApi(email, password) {
 export async function forgetPwdUserApi(email) {
     let url = getEndpointURL('/api/user/forgetpassword')
     let user = {
-        email : email,
+        email: email,
     };
     let response = await fetch(url, {
         method: 'POST',
@@ -330,9 +330,9 @@ export async function forgetPwdUserApi(email) {
 export async function updateEmailUserApi(email, password, email2) {
     let url = getEndpointURL('/api/user/update/email')
     let user = {
-        email : email ,
-        password : password,
-        email2 : email2 ,
+        email: email,
+        password: password,
+        email2: email2,
     };
     let response = await fetch(url, {
         method: 'PATCH',
@@ -366,9 +366,9 @@ export async function updateEmailUserApi(email, password, email2) {
 export async function updatePwdUserApi(email, password, password2) {
     let url = getEndpointURL('/api/user/update/password')
     let user = {
-        email : email ,
-        password : password,
-        password2 : password2,
+        email: email,
+        password: password,
+        password2: password2,
     };
     let response = await fetch(url, {
         method: 'PATCH',
