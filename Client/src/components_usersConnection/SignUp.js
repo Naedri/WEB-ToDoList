@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import { Ripple } from 'react-spinners-css';
 import { isFreeUserApi, createUserApi } from '../api.js';
 import '../css/styleUser.css';
@@ -34,18 +35,24 @@ const SignUp = (props) => {
             ...form,
             isLoading: '',
         });
-    }
+    };
+
+    const startLoading = () => {
+        setValues({
+            ...form,
+            isLoading: 'Chargement...',
+            isCreate: '',
+        });
+    };
+
+    let history = useHistory();
 
     const try_signup = async (e) => {
         e.preventDefault();
 
         if (validateForm(errors)) {
             try {
-                setValues({
-                    ...form,
-                    isLoading: 'Chargement...',
-                    isCreate: '',
-                });
+                startLoading();
 
                 let statusFree = await isFreeUserApi(form.email);
                 if (statusFree) {
@@ -56,6 +63,11 @@ const SignUp = (props) => {
                             isCreate: 'Un email de confirmation vous a été envoyé',
                             isLoading: '',
                         });
+
+                        let url = "/login";
+                        setTimeout(() => {
+                            history.push(url);
+                            }, 1000);
                     }
                     catch (err) {
                         console.log(err);
@@ -120,7 +132,7 @@ const SignUp = (props) => {
     };
 
     const checkSubmitDisabled = () => {
-        return !form.isLoading && (form.email === '' || form.password === '' || form.password2 === '' || form.password !== form.password2);
+        return (form.isLoading || form.email === '' || form.password === '' || form.password2 === '' || form.password !== form.password2);
 
     }
 

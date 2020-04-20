@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-/*import { Redirect } from 'react-router-dom';*/
+import { useHistory } from 'react-router-dom';
 import { Ripple } from 'react-spinners-css';
 import { authenticateUserApi } from '../api.js';
 import '../css/styleUser.css' ;
@@ -29,16 +29,23 @@ const LogIn = (props) => {
         return valid;
     }
 
-  const try_login = async (e) => {
+    const startLoading = () => {
+        setValues({
+            ...form,
+            isLoading: 'Chargement...',
+            isConnected: '',
+        });
+    }
+    
+
+    let history = useHistory();
+
+    const try_login = async (e) => {
         e.preventDefault();
 
         if (validateForm(errors)) {
             try {
-                setValues({
-                    ...form,
-                    isLoading: 'Chargement...',
-                    isConnected: '',
-                });
+                startLoading();
 
                 let data = await authenticateUserApi(form.email, form.password);
                 if (data.state){
@@ -47,10 +54,13 @@ const LogIn = (props) => {
                         isConnected: `Bienvenue user ${data.userId} !`,
                         isLoading: '',
                     });
-                    //let url = `/home/${data.userId}`;
-                    //return  <Redirect  to={url} />;
-                    //return  <Redirect  to="/home"/>;
-                    //this.props.history.push('/home');
+
+                    /*let url = `/home/${data.userId}`;*/
+                    let url = "/home";
+                    setTimeout(() => {
+                        history.push(url);
+                        }, 1000);
+
                 } else {
                     setValues({
                         ...form,
@@ -106,7 +116,7 @@ const LogIn = (props) => {
 
     
     const checkSubmitDisabled = () => {
-        return !form.isLoading && (form.email === '' || form.password === '');
+        return (form.isLoading || form.email === '' || form.password === '');
     }
 
     return (
