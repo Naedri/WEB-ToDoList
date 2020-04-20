@@ -24,14 +24,14 @@ INSERT INTO USERS (email, encrypted_password)
 DROP TABLE IF EXISTS LISTE CASCADE;
 CREATE TABLE LISTE(
     ID SERIAL PRIMARY KEY,
-    username VARCHAR(25), -- Nom de l'utilisateur à qui appartient la liste de tâches
+    email VARCHAR(25), -- Nom de l'utilisateur à qui appartient la liste de tâches
     titre VARCHAR(60),
     created_at timestamp default current_timestamp
     --je mets le jour de création c'est gratuit
 );
 
-INSERT INTO LISTE (username, titre) VALUES ('toto', 'Plan pour battre PtitChibrax');
-INSERT INTO LISTE (username, titre) VALUES ('Gilbert', 'Terminer le projet');
+INSERT INTO LISTE (email, titre) VALUES ('a@mail.com', 'Plan pour battre PtitChibrax');
+INSERT INTO LISTE (email, titre) VALUES ('jean@mail.com', 'Terminer le projet');
 
 DROP TABLE IF EXISTS TACHE CASCADE;
 CREATE TABLE TACHE(

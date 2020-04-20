@@ -28,7 +28,7 @@ module.exports = {
       FROM tache t1
     )t
       ON l.id = t.idListe
-      WHERE EMAIL=$1
+      WHERE email=$1
   GROUP BY l.id`;;
     utils.executeQuery(query, [email], (err, result) => {
       if (err) {
@@ -79,7 +79,7 @@ module.exports = {
   //INSERT INTO LISTE (USERNAME, TITRE)
   function create(titre, email, callback) {
     const query = 
-    `INSERT INTO LISTE (titre, username) 
+    `INSERT INTO LISTE (titre, email) 
     VALUES ($1, $2)
     RETURNING *`;
     utils.executeQuery(query, [titre, email], (err, result) => {
