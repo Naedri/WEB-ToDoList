@@ -1,4 +1,5 @@
 const servicesUser = require("./user.js");
+const utils = require("../../db/utils"); 
 
     const user={
     email: "a@mail.com",

@@ -6,8 +6,7 @@ const ServiceSousTache = require("../services/soustache.js");
 const ServiceTache = require("../services/tache.js");
 
 // service user
-const ServiceUser = require("../services/user.js");
-const ServiceEmail = require("../services/email.js");
+const ServiceUser = require("../services/users/user.js");
 const jwt = require('jsonwebtoken');
 const config = require("../db/config.js");
 //const helpers = require("../helpers/helpers");
@@ -308,6 +307,40 @@ router.delete("/:userId", (req, res, next) => {
     });
 });
 */
+
+
+
+// state : done
+// does an email is already used
+// return true or error
+// @param: email
+router.post('/user/forgetpassword', (req, res, next) => {
+
+  ServiceUser.isFree(req.body.email, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    } else {
+      let state = result ? ' not ' : ' ';
+      console.log('email' + state + 'found');
+
+      if (!result){
+        ServiceUser.sendEmailPwd(req.body.email, (err2, result2) => {
+          if (err2){
+            res.status(500).json({ message: result2 });
+            return;
+          } else {
+            let state = result2 ? ' not ' : ' ';
+            console.log('email' + state + 'sent');
+            result = result2;
+          }
+        });
+      }
+      //res.json(result);
+      res.json(true); // we do not say wheter or not if email are valide
+    }
+  });
+});
 
 
 
