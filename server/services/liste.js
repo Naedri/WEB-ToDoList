@@ -13,28 +13,12 @@ module.exports = {
 
   
 
-  //RAJOUTER WHERE ... AND l.username=$1
-  //Pour l'avoir pour chaque utilisateur
 
-  /*
-  function getAll(callback) {
-    const query = 
-    `SELECT  l.id as idListe, l.username, l.titre as TitreListe, t.idliste as idlisteTache, t.id as idTache, t.titre as TitreTache, t.echeance as EcheanceTache, t.note as NoteTache, t.fait as FaitTache, st.id as idSousTache, st.titre as TitreSousTache, st.fait as FaitSousTache
-    FROM liste l, tache t, soustache st
-    WHERE l.id=t.id AND t.id=st.id`;
-    utils.executeQuery(query, [], (err, result) => {
-      if (err) {
-        callback(true, err);
-      } else {
-        callback(undefined, result.rows);
-      }
-    });
-  }*/
 
   //Retourne toutes les listes et leurs tâches
-  function getAllComplete(callback) {
+  function getAllComplete(email, callback) {
     const query =
-      `SELECT
+    `SELECT
     l.*,
     CASE WHEN count(t) = 0 THEN ARRAY[]::json[] ELSE array_agg(t.tache) END AS taches
   FROM liste l
@@ -44,8 +28,9 @@ module.exports = {
       FROM tache t1
     )t
       ON l.id = t.idListe
-  GROUP BY l.id`;
-    utils.executeQuery(query, [], (err, result) => {
+      WHERE EMAIL=$1
+  GROUP BY l.id`;;
+    utils.executeQuery(query, [email], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
@@ -70,22 +55,6 @@ module.exports = {
 //RAJOUTER WHERE ... AND l.username=$2
 //pour l'avoir pour chaque utilisateur
 
-/*
-  function getById({listeID,username}, callback) {
-    const query = 
-    `SELECT  l.id, l.username, l.titre, t.id, t.titre, t.echeance, t.note, t.fait, st.id, st.titre, st.fait
-    FROM liste l, tache t, soustache st
-    WHERE l.id=$1 AND l.username=$2`;
-    utils.executeQuery(query, [listeID, username], (err, result) => {
-      if (err) {
-        callback(true, err);
-      } else if (result.rows.length === 0) {
-        callback(true, `Impossible de retrouver le projet ${listeID}`);
-      } else {
-        callback(undefined);
-      }
-    });
-  }*/
 
 
   function getById(listeID, callback) {
@@ -150,13 +119,12 @@ module.exports = {
   }
 
 
-  //pour tester
-
+/*
   const user="1";
   let title="bloblo";
   let blabla;
 
-  /*
+  
   getAll((err, result)=>{
     if(err){
       console.log(result)
