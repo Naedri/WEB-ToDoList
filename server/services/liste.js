@@ -32,7 +32,7 @@ module.exports = {
   }*/
 
   //Retourne toutes les listes et leurs tâches
-  function getAllComplete(callback) {
+  function getAllComplete(email, callback) {
     const query =
       `SELECT
     l.*,
@@ -44,8 +44,9 @@ module.exports = {
       FROM tache t1
     )t
       ON l.id = t.idListe
+      WHERE USERNAME=$1
   GROUP BY l.id`;
-    utils.executeQuery(query, [], (err, result) => {
+    utils.executeQuery(query, [email], (err, result) => {
       if (err) {
         callback(true, err);
       } else {
@@ -108,12 +109,12 @@ module.exports = {
 
   //AJOUTER USERNAME POUR LIER A UN USER
   //INSERT INTO LISTE (USERNAME, TITRE)
-  function create(titre, callback) {
+  function create(titre, email, callback) {
     const query = 
-    `INSERT INTO LISTE (titre) 
-    VALUES ($1)
+    `INSERT INTO LISTE (titre, username) 
+    VALUES ($1, $2)
     RETURNING *`;
-    utils.executeQuery(query, [titre], (err, result) => {
+    utils.executeQuery(query, [titre, email], (err, result) => {
       if (err) {
         callback(true, err);
       } else {

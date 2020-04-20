@@ -21,8 +21,9 @@ const router = express.Router();
 
 //Retourner toutes les listes
 //Retourner toutes les listes et les taches
-router.get("/everything", (req, res) => {
-  ServiceListe.getAllComplete((err, result) => {
+router.get("/everything/:email", (req, res) => {
+  console.log(req.params.email);
+  ServiceListe.getAllComplete(req.params.email,(err, result) => {
     if (err) {
       console.log(result);
       res.status(500).json({ message: err });
@@ -39,7 +40,7 @@ router.get("/everything", (req, res) => {
 //Créer une nouvelle liste à partir d'un titre envoyé par le body
 //On renvoie en Json le l'id de la nouvelle liste
 router.post("/lists", (req, res) => {
-  ServiceListe.create(req.body.titre, (err, result) => {
+  ServiceListe.create(req.body.titre, req.body.email, (err, result) => {
     if (err) {
       console.log(result);
       res.status(500).json({ message: err });

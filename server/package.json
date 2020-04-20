@@ -1,11 +1,12 @@
 {
-  "name": "uballers-test",
+  "name": "backend_monster",
   "version": "1.0.0",
-  "description": "server for db api",
-  "main": "server.js",
+  "description": "",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node app.js",
+    "watch": "nodemon app"
   },
   "author": "reifocs",
   "license": "ISC",
@@ -13,9 +14,9 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
-    "lowdb": "^1.0.0",
-    "pg": "^8.0.2",
-    "shortid": "^2.2.15"
+    "pg": "^8.0.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
 }
