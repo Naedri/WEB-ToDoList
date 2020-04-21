@@ -6,6 +6,11 @@ const utils = require("../../db/utils");
     password: "aqwzsxed",
   };
   
+
+
+
+  
+  /*
   servicesUser.authenticate(user,(err, result)=>{
     if(err){
       console.log(result);
@@ -15,6 +20,7 @@ const utils = require("../../db/utils");
       console.log(result);
     }
   });
+  */
 
   /*
   servicesUser.create(user,(err, result)=>{

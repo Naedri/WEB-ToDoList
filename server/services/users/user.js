@@ -8,8 +8,8 @@ module.exports = {
     authenticate,
     updateEmail,
     updatePwd,
-    // sendEmailPwd,
-    // sendEmailWelcome,
+    sendEmailPwd,
+    sendEmailWelcome,
 };
 
 
@@ -113,8 +113,6 @@ function getDetails(email, callback){
 };
 
 
-/*
-
 function sendEmailPwd(email , callback){
 
     getDetails(email, (err, result) => {
@@ -140,7 +138,7 @@ function sendEmailPwd(email , callback){
 };
 
 
-function sendEmailWelcome(){
+function sendEmailWelcome(email , callback){
     
     getDetails(email, (err, result) => {
         if (err) {
@@ -163,5 +161,3 @@ function sendEmailWelcome(){
         }
     });
 };
-
-*/

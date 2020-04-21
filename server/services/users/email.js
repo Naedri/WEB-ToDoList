@@ -1,4 +1,4 @@
-const utils = require("../../db/utils"); 
+// const utils = require("../../db/utils"); 
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 
@@ -8,14 +8,13 @@ const html_Welcome = fs.readFileSync(__dirname + "/email_Welcome.html", "utf8");
 const html_Pwd = fs.readFileSync(__dirname + "/email_Pwd.html", "utf8");
 
 module.exports = {
-   //sendEmail,
+   sendEmail,
    generateText_Pwd,
    generateText_Welcome,
    generateHtml_Pwd,
    generateHtml_Welcome,
 };
 
-/*
 async function sendEmail({toArray, subject, text, html}, callback) {
     let testAccount = await nodemailer.createTestAccount();
 
@@ -47,7 +46,6 @@ async function sendEmail({toArray, subject, text, html}, callback) {
     callback(false, info);
 
 };
-*/
 
 function generateText_Pwd(email, pwd){
     let text = text_Pwd ;
