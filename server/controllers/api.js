@@ -250,11 +250,10 @@ router.post("/user/login", (req, res, next) => {
       return;
     } else {
       let userFound = result ;
-      
       if (userFound) {
         const token = jwt.sign(
           { 
-            userId: userFound.id,
+            userId: userFound.iduser,
             email: userFound.email,
            },
           config.secret,
@@ -262,7 +261,7 @@ router.post("/user/login", (req, res, next) => {
         );
         res.json({
           state: true,
-          userId: userFound.id,
+          userId: userFound.iduser,
           email: userFound.email,
           token: token,
           message: "Auth successful",
@@ -274,7 +273,6 @@ router.post("/user/login", (req, res, next) => {
           message: "Auth fail",
         });
       }
-
       let status = result ? 'successfull' : 'failed';
       console.log(status + ' authentification');
     }
