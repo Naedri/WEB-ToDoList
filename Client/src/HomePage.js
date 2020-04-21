@@ -8,6 +8,7 @@ import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
 import NextTasks from "./components/NextTasks";
 import Modale from "./components/Modal"
+import LogOut from "./components/LogOut"
 import { Redirect } from 'react-router-dom';
 
 const todoReducer = (state, action) => {
@@ -323,7 +324,7 @@ let Home = () => {
                     <div className="mt-2 mb-2">
                         <img src={settings} onClick={isSettings} className="cursor-pointer" alt="settings logo" /> <strong>Paramètres</strong>
                     </div>
-                    <span className='btn' onClick={logout}>Deconnexion</span>
+                    <LogOut confirm={logout}/>
                     <Lists changeList={changeList} lists={state.toDos} />
                     <ListForm addList={addList} />
                 </div>

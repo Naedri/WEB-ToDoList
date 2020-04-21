@@ -28,7 +28,7 @@ const TodoForm = (props) => {
         <li className="list-group-item ">
             <div className="row">
                 <div className="col-lg-12">
-                    <div className="input-group input-group-lg">
+                    <div className="input-group input-group-sm">
                         <span className="input-group-btn">
                             <span onClick={onSubmit} className="btn "><img src={plus} alt="plus logo"></img></span>
                         </span>
