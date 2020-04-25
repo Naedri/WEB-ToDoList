@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Modal } from 'react-bootstrap';
-
+import disconnect from '../assets/logout.svg'
 export default function LogOut(props) {
     const [show, setShow] = useState(false);
   
@@ -12,10 +12,7 @@ export default function LogOut(props) {
     }
     return (
       <>
-        <Button className="btn btn-danger" onClick={handleShow}>
-            Deconnexion
-        </Button>
-  
+        <img src={disconnect} onClick={handleShow} className="cursor-pointer" alt="home logo" /> <strong>Deconnexion</strong>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Deconnexion</Modal.Title>
