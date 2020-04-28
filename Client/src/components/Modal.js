@@ -23,7 +23,7 @@ export default function Modale(props) {
           <Modal.Header closeButton>
             <Modal.Title>Supprimer la liste</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Woohoo, doucement malheureux ! Cette action est définitive ! Veux tu vraiment supprimer {props.liste} ?</Modal.Body>
+          <Modal.Body>Woooow, doucement malheureux ! Cette action est définitive ! Veux tu vraiment supprimer {props.liste} ?</Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
               En fait non !

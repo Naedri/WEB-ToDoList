@@ -53,6 +53,7 @@ const LogIn = (props) => {
                         isLoading: '',
                     });
                     localStorage.setItem('user', JSON.stringify(data.email));
+                    localStorage.setItem('token', JSON.stringify(data.token));
                     /*let url = `/home/${data.userId}`;*/
                     //let url = "/home";
                     //history.push(url);

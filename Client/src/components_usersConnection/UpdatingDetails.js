@@ -6,9 +6,7 @@ import '../css/styleUser.css';
 
 const UpdatingDetails = (props) => {
 
-    let userCurrentEmail = "naedri@netcourrier.com";                
-    //let userCurrentEmail = "adrien.jallais@gmail.com";                
-    //let userCurrentEmail = JSON.parse(localStorage.getItem('user'))
+    let userCurrentEmail = props.mail;
 
     const [form, setValues] = useState({
         email1: '',
@@ -75,12 +73,13 @@ const UpdatingDetails = (props) => {
         if (validateForm(errors)) {
             try {
                 startLoading('mail');
-
-                let statusFree = await isFreeUserApi(form.email1);
+                let newMail = form.email1;
+                let statusFree = await isFreeUserApi(newMail);
                 if (statusFree) {
                     try {
-                        let statusUpdate = await updateEmailUserApi(userCurrentEmail, form.email2);
+                        let statusUpdate = await updateEmailUserApi(userCurrentEmail, newMail);
                         if(statusUpdate.state==='updated' && statusUpdate.inbox==='sent'){
+                            props.updateMail(newMail);
                             setValues({
                                 ...form,
                                 isUpdateMail: 'Un email de confirmation vous a été envoyé',
@@ -225,8 +224,8 @@ const UpdatingDetails = (props) => {
 
     return (
         <div className="container">
-            <div className="row justify-content-center py-5 my-5">
-                <div className="col-sm col-md-6 col-lg-4">
+            <div className="row">
+                <div className="col-sm col-md-8 col-lg-8">
                     <form onSubmit={try_updating_email}>
                         <div className="form-group">
                             <h2>Adresse e-mail</h2>
