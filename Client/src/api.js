@@ -21,7 +21,9 @@ export async function getLists(email) {
         headers: getHeaders()
     })
     // 👉 Parser la réponse en JSON
-    let listes = await response.json()
+    let listes = await response.json();
+    if (listes.success === false)
+        return false;
     // 👉 Renvoyer les données
     let stages = await getAllStages();
     // intégration des sous taches
@@ -32,6 +34,7 @@ export async function getLists(email) {
                 tache.sousTaches.push(stages[i])
         }
     }
+    console.log(listes)
     return listes
 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Ripple } from 'react-spinners-css';
 import TodoApp from './components/TodoApp';
 import Lists from './components/Lists'
 import ListForm from './components/ListForm';
@@ -7,9 +8,11 @@ import home from './assets/home.svg';
 import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
 import NextTasks from "./components/NextTasks";
-import Modale from "./components/Modal"
-import LogOut from "./components/LogOut"
+import Modale from "./components/Modal";
+import LogOut from "./components/LogOut";
 import { Redirect } from 'react-router-dom';
+import UpdatingDetails from './components_usersConnection/UpdatingDetails';
+
 
 const todoReducer = (state, action) => {
     switch (action.type) {
@@ -38,7 +41,7 @@ let Home = () => {
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [renderingSettings, renderSettings] = useState(false);
-    const [user, setUserEmail] = useState('');
+    const [user, setUserEmail] = useState(JSON.parse(localStorage.getItem('user')));
     const [redirect, setRedirect] = useState(false);
     const [state, dispatch] = React.useReducer(
         todoReducer,
@@ -51,11 +54,13 @@ let Home = () => {
     useEffect(() => {
         async function fetchLists() {
             try {
-                let email = JSON.parse(localStorage.getItem('user'))
                 setLoading(true);
-                let lists = await getLists(email);
-                dispatch({ type: 'INIT', toDos: lists });
-                setUserEmail(email);
+                let lists = await getLists(JSON.parse(localStorage.getItem('user')));
+                if (lists) {
+                    dispatch({ type: 'INIT', toDos: lists });
+                }
+                else
+                    logout();
                 setLoading(false);
             }
             catch (err) {
@@ -64,7 +69,7 @@ let Home = () => {
         }
 
         fetchLists()
-    }, [user]);
+    }, []);
 
     /**
      * Supprime la liste selectionnée
@@ -158,7 +163,7 @@ let Home = () => {
         }
         try {
             //setLoading(true);
-            let response = await createList({ titre: list.value, email : user });//appel à l'api
+            let response = await createList({ titre: list.value, email: user });//appel à l'api
             let newList = { ...response, taches: [] };
             dispatch({ type: 'ADD_LIST', toDos: [...state.toDos, newList], listId: newList.id })
             setRenderHome(false);
@@ -260,6 +265,12 @@ let Home = () => {
         }
     }
 
+
+    const updateMail = (newMail) => {
+        localStorage.setItem('user', JSON.stringify(newMail));
+        setUserEmail(newMail);
+    }
+
     /**
      * Renvoie la page d'accueil des listes
      */
@@ -285,10 +296,6 @@ let Home = () => {
         setRenderHome(false);
         renderSettings(true);
     }
-    let id = state.listId;
-    let selectedList = state.toDos.find(list => list.id === id);
-    let hasLists = state.toDos.length > 0;
-    let borderClass = changeEditBorder ? "col-xl-3 fill mt-3 border-left border-warning" : "col-xl-3 mt-3 fill border-left";
 
     let centerHeader = () => {
         if (renderHome)
@@ -302,21 +309,27 @@ let Home = () => {
         if (renderHome)
             return <NextTasks lists={state.toDos} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
         if (renderingSettings)
-            return null
+            return <UpdatingDetails updateMail={updateMail} mail={user}/>
         return (
             hasLists && <TodoApp id={selectedList.id} initItems={selectedList.taches} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
         )
     }
+
     if (redirect)
         return <Redirect to="/" />;
-    if (isLoading)
-        return (<p>Loading ...</p>)
-    if (error){
-        logout();
+    if (error)
         return <h2>Something went wrong : {error} </h2>
-    }
-
-    //<button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>
+    if (isLoading)
+        return (<div className="loadingSpinner" >
+            <Ripple
+                color={'#fd7e14'}
+                size={100}
+            />
+        </div>);
+    let id = state.listId;
+    let selectedList = state.toDos.find(list => list.id === id);
+    let hasLists = state.toDos.length > 0;
+    let borderClass = changeEditBorder ? "col-xl-3 fill mt-3 border-left border-warning" : "col-xl-3 mt-3 fill border-left";
     return (
         <div className="container-fluid mt-0 full-h ">
             <div className="row full-h ">
@@ -327,7 +340,7 @@ let Home = () => {
                     <div className="mt-2 mb-2">
                         <img src={settings} onClick={isSettings} className="cursor-pointer" alt="settings logo" /> <strong>Paramètres</strong>
                     </div>
-                    <LogOut confirm={logout}/>
+                    <LogOut confirm={logout} />
                     <Lists changeList={changeList} lists={state.toDos} />
                     <ListForm addList={addList} />
                 </div>
