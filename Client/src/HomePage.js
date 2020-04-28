@@ -6,6 +6,7 @@ import TodoListItemMenu from './components/TodoListItemMenu'
 import home from './assets/home.svg';
 import settings from './assets/settings.svg';
 import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
+//import UpdatingDetails from './components_usersConnection/UpdatingDetails';
 import NextTasks from "./components/NextTasks";
 import Modale from "./components/Modal"
 import LogOut from "./components/LogOut"
@@ -293,7 +294,8 @@ let Home = () => {
         if (renderHome)
             return <h1>Prochaines tâches</h1>
         if (renderingSettings)
-            return <h1>Paramètres</h1>
+            return
+                <h1>Paramètres</h1>
         return hasLists && <h1>{selectedList.titre}</h1>
     }
 
