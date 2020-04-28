@@ -273,6 +273,7 @@ let Home = () => {
     }
     const logout = () => {
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         setRedirect(true);
     }
 
@@ -310,8 +311,10 @@ let Home = () => {
         return <Redirect to="/" />;
     if (isLoading)
         return (<p>Loading ...</p>)
-    if (error)
+    if (error){
+        logout();
         return <h2>Something went wrong : {error} </h2>
+    }
 
     //<button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>
     return (

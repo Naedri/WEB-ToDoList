@@ -6,12 +6,20 @@ function getEndpointURL(endpoint) {
     return `${BASE_URL}${endpoint}`
 }
 
+function getHeaders() {
+    let headers = { 'Content-Type': 'application/json' };
+    let token = JSON.parse(localStorage.getItem('token'));
+    if (token)
+        headers.Authorization = `Bearer ${token}`
+    return headers;
+}
 /* list and task functions ****************************/
 
 export async function getLists(email) {
     let url = getEndpointURL(`/api/everything/${email}`)
-    let response = await fetch(url)
-
+    let response = await fetch(url, {
+        headers: getHeaders()
+    })
     // 👉 Parser la réponse en JSON
     let listes = await response.json()
     // 👉 Renvoyer les données
@@ -31,9 +39,7 @@ export async function createList(list) {
     let url = getEndpointURL('/api/lists')
     let response = await fetch(url, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getHeaders(),
         body: JSON.stringify(list)
     })
 
@@ -55,6 +61,9 @@ export async function deletelist(list) {
     let url = getEndpointURL(`/api/lists/${list.id}`)
     await fetch(url, {
         method: 'DELETE',
+        headers:
+            getHeaders()
+
     })
 }
 
@@ -63,9 +72,7 @@ export async function createTask(list, task) {
     let toSend = { ...task, idListe: list.id }
     let response = await fetch(url, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getHeaders(),
         body: JSON.stringify(toSend)
     })
 
@@ -80,12 +87,15 @@ export async function deleteTaskAPI(idTache) {
     let url = getEndpointURL(`/api/tache/${idTache}`)
     await fetch(url, {
         method: 'DELETE',
+        headers: getHeaders()
     })
 }
 
 export async function getList(list) {
     let url = getEndpointURL(`/lists/${list.id}`)
-    let response = await fetch(url)
+    let response = await fetch(url, {
+        headers: getHeaders()
+    })
 
     // 👉 Parser la réponse en JSON
     let data = await response.json()
@@ -98,9 +108,7 @@ export async function editTaskAPI(task) {
     let url = getEndpointURL(`/api/tache/${task.id}`);
     let response = await fetch(url, {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getHeaders(),
         body: JSON.stringify(task)
     });
     // 👉 Parser la réponse en JSON
@@ -111,8 +119,9 @@ export async function editTaskAPI(task) {
 
 async function getAllStages() {
     let url = getEndpointURL('/api/soustache')
-    let response = await fetch(url)
-
+    let response = await fetch(url, {
+        headers: getHeaders(),
+    });
     // 👉 Parser la réponse en JSON
     let stages = await response.json()
     // 👉 Renvoyer les données
@@ -124,9 +133,7 @@ export async function editStageApi(stage) {
     let toSend = { fait: stage.fait }
     let response = await fetch(url, {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getHeaders(),
         body: JSON.stringify(toSend)
     });
 
@@ -142,9 +149,7 @@ export async function createStageApi(stage) {
     let url = getEndpointURL(`/api/soustache`)
     let response = await fetch(url, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getHeaders(),
         body: JSON.stringify(stage)
     })
 
@@ -159,6 +164,7 @@ export async function deleteStageApi(stage) {
     let url = getEndpointURL(`/api/soustache/${stage.id}`)
     await fetch(url, {
         method: 'DELETE',
+        headers: getHeaders()
     })
 }
 

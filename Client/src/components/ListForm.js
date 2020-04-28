@@ -25,7 +25,7 @@ const ListForm = (props) => {
     }
 
     return (
-        <div className="row">
+        <div className="row mb-3">
             <div className="col-sm mt-2">
                 <div className="input-group input-group-sm">
                     <span className="input-group-btn">
