@@ -219,8 +219,12 @@ AS  $F_USERS_MAIL_UPDATE$
 		mailNew = NEW.email ;
 		mailOld = OLD.email ;
 		
+		--audit action
 		INSERT INTO HISTORIQUE_MAIL (H_IdUser, NEW_MAIL, OLD_MAIL) 
 			VALUES ( userId, mailNew, mailOld );
+		--updating list data
+		UPDATE LISTE SET email = mailNew WHERE email = mailOld ;
+
 		RETURN NULL;
 	END;
 $F_USERS_MAIL_UPDATE$ LANGUAGE plpgsql ;
@@ -253,6 +257,17 @@ CREATE OR REPLACE FUNCTION P_USERS_GET_MAIL (userId INTEGER) RETURNS TEXT
 	BEGIN
 		SELECT email INTO mail FROM USERS WHERE IdUser = userId ;
 		RETURN mail ;
+	END ;
+	$$ 	LANGUAGE plpgsql;
+
+/*procedure get id from email*/
+CREATE OR REPLACE FUNCTION P_USERS_GET_ID (emailTarget TEXT) RETURNS INTEGER
+	AS $$
+	DECLARE
+		id 		INTEGER;
+	BEGIN
+		SELECT IdUser INTO id FROM USERS WHERE email = emailTarget ;
+		RETURN id ;
 	END ;
 	$$ 	LANGUAGE plpgsql;
 

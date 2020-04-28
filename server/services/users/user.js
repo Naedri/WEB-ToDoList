@@ -7,7 +7,7 @@ module.exports = {
     create,
     authenticate,
     updateEmail,
-    updatePwd,
+    updatePassword,
     sendEmailPwd,
     sendEmailWelcome,
 };
@@ -71,22 +71,71 @@ function authenticate( {email,password} , callback){
         if (err) {
             callback(true, err);
         } else {
-            const userFound = result.rows[0];
+            let count = result.rowCount;
+            let userFound = (count > '0') ? true : false ;
             if (userFound){
-                delete userFound.encrypted_password;
-                callback(undefined, userFound);
+                //delete userFound.encrypted_password;
+                callback(undefined, result);
             } else {
                 //usefull if not server stop
-                console.log("incorrect password or email");
-                callback(true, userFound);
+                console.log("none user found with the identifiers");
+                callback(true, false);
             }
+
         }
     });
 };
 
-function updateEmail(){} ;
+function updateEmail(email, email2, callback){
+    const query="CALL P_USERS_MAIL_UPDATE( P_USERS_GET_ID($1), $2);";
 
-function updatePwd(){} ;
+    utils.executeQuery(query, [email,email2], (err, result) => {
+        if (err) {
+            callback(true, err);
+        } else {
+            callback(undefined, true);
+        }
+    });
+} ;
+
+// update the password of an user with its email and old password
+function updatePassword(email, password, password2, callback){
+ 
+    const query1 = 
+    `SELECT * 
+    FROM USERS
+    WHERE email=$1 AND encrypted_password=$2`;
+
+    const query2="CALL P_USERS_PWD_UPDATE( P_USERS_GET_ID($1), $2);";
+    
+    let pwdUpdating = {
+        password: '',
+        password2: '',
+    }
+    
+    utils.executeQuery(query1, [email,password], (err, result) => {
+        if (err) {
+            callback(true, err);
+        } else {
+            let count = result.rowCount;
+            let pwdValidity = (count > '0') ? true : false ;
+            pwdUpdating.password = pwdValidity ;
+
+            if (pwdValidity){
+                utils.executeQuery(query2, [email,password2], (err2, result2) => {
+                    if (err) {
+                        callback(true, err2);
+                    } else {
+                        pwdUpdating.password2 =true ;
+                        callback(undefined, pwdUpdating);
+                    }
+                });
+            } else {
+                callback(undefined, pwdUpdating);
+            }
+        }
+    });
+};
 
 // return all details of an user found with its email
 function getDetails(email, callback){
@@ -112,7 +161,7 @@ function getDetails(email, callback){
     });
 };
 
-
+// send an email with the pwd to a given user email
 function sendEmailPwd(email , callback){
 
     getDetails(email, (err, result) => {
@@ -137,7 +186,7 @@ function sendEmailPwd(email , callback){
     });
 };
 
-
+// send an welcoming email with the pwd to a given user email
 function sendEmailWelcome(email , callback){
     
     getDetails(email, (err, result) => {
