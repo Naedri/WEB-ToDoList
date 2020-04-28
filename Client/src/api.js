@@ -256,7 +256,8 @@ export async function authenticateUserApi(email, password) {
     }
 
     // 👉 Renvoyer les données
-    return data
+    console.log("la data est la "+ data);
+    return data;
 }
 
 

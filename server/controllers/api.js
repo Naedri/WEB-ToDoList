@@ -251,18 +251,19 @@ router.post("/user/login", (req, res, next) => {
     } else {
       let userFound = result ;
       if (userFound) {
+        console.log(userFound.rows[0]);
         const token = jwt.sign(
           { 
-            userId: userFound.iduser,
-            email: userFound.email,
+            userId: userFound.rows[0].iduser,
+            email: userFound.rows[0].email,
            },
           config.secret,
           { expiresIn: '2h' }
         );
         res.json({
           state: true,
-          userId: userFound.iduser,
-          email: userFound.email,
+          userId: userFound.rows[0].iduser,
+          email: userFound.rows[0].email,
           token: token,
           message: "Auth successful",
         });

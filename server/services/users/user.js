@@ -72,8 +72,16 @@ function authenticate( {email,password} , callback){
             callback(true, err);
         } else {
             let count = result.rowCount;
-            let isInsert = (count > '0') ? true : false ; 
-            callback(undefined, isInsert);
+            let userFound = (count > '0') ? true : false ;
+            if (userFound){
+                //delete userFound.encrypted_password;
+                callback(undefined, result);
+            } else {
+                //usefull if not server stop
+                console.log("none user found with the identifiers");
+                callback(true, false);
+            }
+
         }
     });
 };
