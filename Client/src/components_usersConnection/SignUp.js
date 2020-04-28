@@ -99,7 +99,7 @@ const SignUp = (props) => {
                 err =
                     !value.trim() ? 'Veuillez renseigner une adresse e-mail'
                         : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
-                            : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
+                            : value.length > 25 ? 'Elle doit contenir moins de 25 caractères'
                                 : '';
                 break;
             case 'password':

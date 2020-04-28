@@ -6,7 +6,8 @@ import '../css/styleUser.css';
 
 const UpdatingDetails = (props) => {
 
-    let userCurrentEmail = 'a@mail.com';                
+    let userCurrentEmail = "naedri@netcourrier.com";                
+    //let userCurrentEmail = "adrien.jallais@gmail.com";                
     //let userCurrentEmail = JSON.parse(localStorage.getItem('user'))
 
     const [form, setValues] = useState({
@@ -79,7 +80,7 @@ const UpdatingDetails = (props) => {
                 if (statusFree) {
                     try {
                         let statusUpdate = await updateEmailUserApi(userCurrentEmail, form.email2);
-                        if(statusUpdate.email1Found==='found'){
+                        if(statusUpdate.state==='updated' && statusUpdate.inbox==='sent'){
                             setValues({
                                 ...form,
                                 isUpdateMail: 'Un email de confirmation vous a été envoyé',
@@ -90,7 +91,7 @@ const UpdatingDetails = (props) => {
                         } else {
                             setErrors({
                                 ...errors,
-                                email1: "Problème d'envoie de l'email d'origine !",
+                                email1: "Un problème est survenu !",
                             });
                             endLoading();
                         }
@@ -161,13 +162,13 @@ const UpdatingDetails = (props) => {
                 err =
                     !value.trim() ? 'Veuillez renseigner une adresse e-mail'
                         : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
-                            : value.length > 48 ? 'Elle doit contenir moins de 50 caractères'
+                            : value.length > 25 ? 'Elle doit contenir moins de 25 caractères'
                                 : value === userCurrentEmail ? 'La nouvelle adresse doit être nouvelle'
                                     : '';
                 break;
             case 'email2':
                     err =
-                        value !== form.email1 ? ''
+                        value === form.email1 ? ''
                             : 'Les adresse mail ne correspondent pas';
                 break;
             case 'password':

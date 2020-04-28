@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# email login
+/server/services/users/.env
+
 # testing
 /coverage
 

@@ -323,7 +323,7 @@ export async function forgetPwdUserApi(email) {
  * update of the email of a user
  * autentificate with its email and its encrypted password (the current one )
  * user should contain ass well another email (the new)
- * @param {*} email 
+ * @param {*} email1 
  * @param {*} email2
  */
 export async function updateEmailUserApi(email1, email2) {
@@ -338,15 +338,14 @@ export async function updateEmailUserApi(email1, email2) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(user)
-    })
+    });
 
     // 👉 Parser la réponse en JSON
-    let data = await response.json()
+    let data = await response.json();
 
     if (response.status >= 300) {
         throw new Error(data.message)
     }
-
     // 👉 Renvoyer les données
     return data
 }

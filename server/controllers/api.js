@@ -232,6 +232,22 @@ router.post('/user/signup', (req, res, next) => {
     } else {
       let state = result ? ' ' : ' not ';
       console.log('user' + state + 'created');
+
+      if (result){
+        ServiceUser.sendEmailWelcome(req.body.email, (err2, result2) => {
+          if (err2){
+            res.status(501).json({ message: result2 });
+            return;
+          } else {
+            console.log("NO ERROR FROM API.JS");
+            console.log(result2);
+            let state = result2 ? ' ' : ' not ';
+            console.log('email' + state + 'sent');
+            //result = result2;
+          }
+        });
+      }
+
       res.json(result);
     }
   });
@@ -316,6 +332,7 @@ router.delete("/:userId", (req, res, next) => {
 // @param: email
 router.post('/user/forgetpassword', (req, res, next) => {
 
+  //does it exist 
   ServiceUser.isFree(req.body.email, (err, result) => {
     if (err) {
       res.status(500).json({ message: result });
@@ -325,12 +342,15 @@ router.post('/user/forgetpassword', (req, res, next) => {
       console.log('email' + state + 'found');
 
       if (!result){
+        //sending email
         ServiceUser.sendEmailPwd(req.body.email, (err2, result2) => {
           if (err2){
-            res.status(500).json({ message: result2 });
+            res.status(501).json({ message: result2 });
             return;
           } else {
-            let state = result2 ? ' not ' : ' ';
+            console.log("NO ERROR FROM API.JS");
+            console.log(result2);//keep it to diplay email details
+            let state = result2 ? ' ' : ' not ';
             console.log('email' + state + 'sent');
             result = result2;
           }
@@ -342,64 +362,57 @@ router.post('/user/forgetpassword', (req, res, next) => {
   });
 });
 
+
 // state : done
 // updating an email
 // return email1 email2 and final state
 // @param: email and new email
-router.patch('/user/update/email', (req, res, next) => {
-  let email1Found ;
-  let email2Found ;
+router.patch('/user/update/email', (req, res) => {
   let state ;
+  let inbox ;
   let userEmail = {
-    email1Found: '',
-    email2Found: '',
     state: '',
+    inbox: '',
   };
-  //does old email exist ?
-  ServiceUser.isFree(req.body.email1, (err, result) => {
-    if (err) {
+  const user = {
+    email1: req.body.email1,
+    email2: req.body.email2,
+  };
+  
+  //updating
+  ServiceUser.updateEmail(user, (err, result)=>{
+    if(err){
       res.status(500).json({ message: result });
       return;
     } else {
-      email1Found = result ? 'not ' : '';
-      email1Found = email1Found.concat('found');
-      console.log('email ' + email1Found);
-      userEmail.email1Found = email1Found;
+      state = result ? '' : 'not ';
+      state = state.concat('updated');
+      console.log('if email1 found email2 ' + state);
+      userEmail.state = state;
 
-      if (!result){
-        //does new email exist ?
-        ServiceUser.isFree(req.body.email2, (err1, result1) => {
-          if (err1) {
-            res.status(500).json({ message: result1 });
+      if (state === 'updated'){
+        //sending email
+        ServiceUser.sendEmailWelcome(user.email2, (err2, result2) => {
+          if (err2){
+            res.status(501).json({ message: result2 });
             return;
           } else {
-            email2Found = result1 ? 'not ' : '';
-            email2Found = email2Found.concat('found');
-            console.log('email2 ' + email2Found);
-            userEmail.email2Found = email2Found;
+            inbox = result2 ? '' : 'not ';
+            inbox = inbox.concat('sent');
+            console.log('if email1 found email2 ' + inbox);
+            userEmail.inbox = inbox;
 
-            if(result1){
-              //updating email
-              ServiceUser.updateEmail(req.body.email1, req.body.email2, (err2, result2) => {
-                if (err2){
-                  res.status(500).json({ message: result2 });
-                  return;
-                } else {
-                  state = result2 ? '' : 'not ';
-                  state = state.concat('updated');
-                  console.log('if found email ' + state);
-                  userEmail.state = state;
-
-                  console.log(userEmail);
-                  res.json(userEmail);
-                }
-              });
-            } else {res.json(userEmail);}
+            console.log("NO ERROR FROM API.JS");
+            console.log(result2);
+            res.json(userEmail);
           }
         });
-      } else {res.json(userEmail);}
+      }
     }
   });
+
+  //sending email
+
 });
 
 // state : done
@@ -423,7 +436,6 @@ router.patch('/user/update/password', (req, res, next) => {
       passwordValidity = result.password ? '' : 'not ';
       passwordValidity = passwordValidity.concat('valide');
       
-      console.log("boloxx", result);
       passwordUpdating = result.password2 ? '' : 'not ';
       passwordUpdating = passwordUpdating.concat('updated');
       console.log('password2 ' + passwordUpdating);

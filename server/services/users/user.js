@@ -10,6 +10,7 @@ module.exports = {
     updatePassword,
     sendEmailPwd,
     sendEmailWelcome,
+    getDetails,
 };
 
 
@@ -86,17 +87,18 @@ function authenticate( {email,password} , callback){
     });
 };
 
-function updateEmail(email, email2, callback){
+// update the email of an user with its oldemail
+function updateEmail(emailsUser, callback){
     const query="CALL P_USERS_MAIL_UPDATE( P_USERS_GET_ID($1), $2);";
-
-    utils.executeQuery(query, [email,email2], (err, result) => {
+    
+    utils.executeQuery(query, [emailsUser.email1,emailsUser.email2], (err, result) => {
         if (err) {
             callback(true, err);
         } else {
-            callback(undefined, true);
+            callback(undefined, result);
         }
     });
-} ;
+};
 
 // update the password of an user with its email and old password
 function updatePassword(email, password, password2, callback){
@@ -169,16 +171,30 @@ function sendEmailPwd(email , callback){
             callback(true, err);
         } else {
             const user = result ;
-            const email = user.email;
-            const pwd = user.pwd;
-            const text = ServiceEmail.generateText_Pwd(email,pwd);
-            const html = ServiceEmail.generateHtml_Pwd(email,pwd);
-        
-            ServiceEmail.sendEmail( {email, subject, text, html}, (err, result) => {
-                if (err) {
-                    callback(true, err);
+            console.log(user);
+
+            const subject = "Reminder of your details of ToDoList App";
+            const mail = user.email;
+            const pwd = user.encrypted_password;
+            const text = ServiceEmail.generateText_Pwd(mail,pwd);
+            const html = ServiceEmail.generateHtml_Pwd(mail,pwd);
+
+            const emailDetails = {
+                to: mail,
+                subject: subject,
+                text: text,
+                html: html,
+            };
+            
+            ServiceEmail.sendEmail( emailDetails, (err2, result2) => {
+                if (err2) {
+                    console.log("ERROR sendMail from user.js");
+                    console.log(err2);
+                    callback(true, err2);
                 } else {
-                    const info = result;
+                    console.log("NO ERROR sendMail from user.js");
+                    console.log(result2);
+                    const info = result2;
                     callback(undefined, info);
                 }
             });
@@ -186,24 +202,39 @@ function sendEmailPwd(email , callback){
     });
 };
 
-// send an welcoming email with the pwd to a given user email
+
+// send an email with the pwd to a given user email
 function sendEmailWelcome(email , callback){
-    
+
     getDetails(email, (err, result) => {
         if (err) {
             callback(true, err);
         } else {
             const user = result ;
-            const email = user.email;
-            const pwd = user.pwd;
-            const text = ServiceEmail.generateText_Welcome(email,pwd);
-            const html = ServiceEmail.generateHtml_Welcome(email,pwd);
-        
-            ServiceEmail.sendEmail( {email, subject, text, html}, (err, result) => {
-                if (err) {
-                    callback(true, err);
+            console.log(user);
+
+            const subject = "Welcome on Board of ToDoList App";
+            const mail = user.email;
+            const pwd = user.encrypted_password;
+            const text = ServiceEmail.generateText_Welcome(mail,pwd);
+            const html = ServiceEmail.generateHtml_Welcome(mail,pwd);
+
+            const emailDetails = {
+                to: mail,
+                subject: subject,
+                text: text,
+                html: html,
+            };
+            
+            ServiceEmail.sendEmail( emailDetails, (err2, result2) => {
+                if (err2) {
+                    console.log("ERROR sendMail from user.js");
+                    console.log(err);
+                    callback(true, err2);
                 } else {
-                    const info = result;
+                    console.log("NO ERROR sendMail from user.js");
+                    console.log(err);
+                    const info = result2;
                     callback(undefined, info);
                 }
             });

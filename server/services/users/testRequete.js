@@ -1,15 +1,57 @@
-const servicesUser = require("./user.js");
+const serviceUser = require("./user.js");
+const ServiceEmail = require("./email");
 
 const user={
-  email: "a@mail.com",
-  email2:"jacobin@gmail.com",
+  email1: "adrien.jallais@gmail.com",
+  email2:"naedri@netcourrier.com",
   password: "aqwzsxed",
   password2:"azertyui"
 };
 
+/*
+const email2 = user.email;
+const subject = "Welcome on Board of ToDoList App";
+const pwd = user.encrypted_password;
+const text = ServiceEmail.generateText_Welcome(email2,pwd);
+const html = ServiceEmail.generateHtml_Welcome(email2,pwd);
+
+ServiceEmail.sendEmail( { email2, subject, text, html}, callback => {
+  if (err1) {
+      callback(true, err1);
+  } else {
+      const info = result1;
+      callback(undefined, info);
+  }
+});
+*/
+/*
+serviceUser.getDetails(user.email, (err, result) => {
+  if(err){
+    console.log(result);
+} else {
+    console.log(result);
+  }
+});
+*/
+
 
 /*
-servicesUser.updatePassword(user.email, user.password, user.password2, (err, result) => {
+INSERT INTO USERS (email, encrypted_password)
+    VALUES ('adrien@protonmail.com','aqwzsxed');
+*/
+
+/*
+serviceUser.sendEmailWelcome(user.email, (err, result) => {
+  if(err){
+    console.log(result);
+} else {
+    console.log(result);
+  }
+});
+*/
+
+/*
+serviceUser.updatePassword(user.email, user.password, user.password2, (err, result) => {
   if(err){
     console.log(result);
 } else {
@@ -22,10 +64,12 @@ servicesUser.updatePassword(user.email, user.password, user.password2, (err, res
 
 
 /*
-servicesUser.updateEmail(user.email, user.email2, (err, result)=>{
+serviceUser.updateEmail(user, (err, result)=>{
   if(err){
+    console.log("ERROR");
     console.log(result);
 } else {
+    console.log("NO error");
     let state = result ? ' ' : ' not ' ;
     console.log('user'+ state + 'update');
     console.log(result);
@@ -34,7 +78,7 @@ servicesUser.updateEmail(user.email, user.email2, (err, result)=>{
 */
   
   /*
-  servicesUser.authenticate(user,(err, result)=>{
+  serviceUser.authenticate(user,(err, result)=>{
     if(err){
       console.log(result);
   } else {
@@ -46,7 +90,7 @@ servicesUser.updateEmail(user.email, user.email2, (err, result)=>{
   */
 
   /*
-  servicesUser.create(user,(err, result)=>{
+  serviceUser.create(user,(err, result)=>{
     if(err){
       console.log(result);
   } else {
@@ -59,7 +103,7 @@ servicesUser.updateEmail(user.email, user.email2, (err, result)=>{
 */
 
   /*
- servicesUser.isFree(user.email, (err,result) => {
+ serviceUser.isFree(user.email, (err,result) => {
     if(err){
         console.log(result);
     } else {
