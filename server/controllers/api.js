@@ -341,8 +341,98 @@ router.post('/user/forgetpassword', (req, res, next) => {
   });
 });
 
+// state : done
+// updating an email
+// return email1 email2 and final state
+// @param: email and new email
+router.patch('/user/update/email', (req, res, next) => {
+  let email1Found ;
+  let email2Found ;
+  let state ;
+  let userEmail = {
+    email1Found: '',
+    email2Found: '',
+    state: '',
+  };
+  //does old email exist ?
+  ServiceUser.isFree(req.body.email1, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    } else {
+      email1Found = result ? 'not ' : '';
+      email1Found = email1Found.concat('found');
+      console.log('email ' + email1Found);
+      userEmail.email1Found = email1Found;
 
+      if (!result){
+        //does new email exist ?
+        ServiceUser.isFree(req.body.email2, (err1, result1) => {
+          if (err1) {
+            res.status(500).json({ message: result1 });
+            return;
+          } else {
+            email2Found = result1 ? 'not ' : '';
+            email2Found = email2Found.concat('found');
+            console.log('email2 ' + email2Found);
+            userEmail.email2Found = email2Found;
 
+            if(result1){
+              //updating email
+              ServiceUser.updateEmail(req.body.email1, req.body.email2, (err2, result2) => {
+                if (err2){
+                  res.status(500).json({ message: result2 });
+                  return;
+                } else {
+                  state = result2 ? '' : 'not ';
+                  state = state.concat('updated');
+                  console.log('if found email ' + state);
+                  userEmail.state = state;
+
+                  console.log(userEmail);
+                  res.json(userEmail);
+                }
+              });
+            } else {res.json(userEmail);}
+          }
+        });
+      } else {res.json(userEmail);}
+    }
+  });
+});
+
+// state : done
+// updating an email
+// return email email2 and final state
+// @param: email, old pwd and new pwd
+router.patch('/user/update/password', (req, res, next) => {
+  let passwordValidity ;
+  let passwordUpdating ;
+  let user = {
+    password: '',
+    password2: '',
+  };
+
+  //updating
+  ServiceUser.updatePassword(req.body.email, req.body.password, req.body.password2, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    } else {
+      passwordValidity = result.password ? '' : 'not ';
+      passwordValidity = passwordValidity.concat('valide');
+      
+      console.log("boloxx", result);
+      passwordUpdating = result.password2 ? '' : 'not ';
+      passwordUpdating = passwordUpdating.concat('updated');
+      console.log('password2 ' + passwordUpdating);
+      
+      user.password = passwordValidity;
+      user.password2 = passwordUpdating;
+      res.json(user);
+    }
+  });
+});
 
 
 

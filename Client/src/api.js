@@ -324,14 +324,12 @@ export async function forgetPwdUserApi(email) {
  * autentificate with its email and its encrypted password (the current one )
  * user should contain ass well another email (the new)
  * @param {*} email 
- * @param {*} password 
  * @param {*} email2
  */
-export async function updateEmailUserApi(email, password, email2) {
-    let url = getEndpointURL('/api/user/update/email')
+export async function updateEmailUserApi(email1, email2) {
+    let url = getEndpointURL('/api/user/update/email');
     let user = {
-        email: email,
-        password: password,
+        email1: email1,
         email2: email2,
     };
     let response = await fetch(url, {

@@ -5,6 +5,7 @@ import './css/bootstrap.css';
 import LogIn from './components_usersConnection/LogIn';
 import SignUp from './components_usersConnection/SignUp';
 import ForgetPassWord from './components_usersConnection/ForgetPassWord';
+import UpdatingDetails from './components_usersConnection/UpdatingDetails';
 import Home from './HomePage';
 import PrivateRoute from './helpers/PrivateRoute'
 
@@ -17,6 +18,7 @@ const App = () => {
           <Route exact path="/login" component={LogIn} />
           <Route exact path="/signup" component={SignUp} />
           <Route exact path="/forgetpassword" component={ForgetPassWord} />
+          <Route exact path="/updatingdetails" component={UpdatingDetails} />
         </Switch>
       </div>
     </Router>

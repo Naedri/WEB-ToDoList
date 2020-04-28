@@ -1,14 +1,37 @@
 const servicesUser = require("./user.js");
-const utils = require("../../db/utils"); 
 
-    const user={
-    email: "a@mail.com",
-    password: "aqwzsxed",
-  };
-  
+const user={
+  email: "a@mail.com",
+  email2:"jacobin@gmail.com",
+  password: "aqwzsxed",
+  password2:"azertyui"
+};
 
 
+/*
+servicesUser.updatePassword(user.email, user.password, user.password2, (err, result) => {
+  if(err){
+    console.log(result);
+} else {
+    let state = result ? ' ' : ' not ' ;
+    console.log('user'+ state + 'update');
+    console.log(result);
+  }
+});
+*/
 
+
+/*
+servicesUser.updateEmail(user.email, user.email2, (err, result)=>{
+  if(err){
+    console.log(result);
+} else {
+    let state = result ? ' ' : ' not ' ;
+    console.log('user'+ state + 'update');
+    console.log(result);
+  }
+});
+*/
   
   /*
   servicesUser.authenticate(user,(err, result)=>{
