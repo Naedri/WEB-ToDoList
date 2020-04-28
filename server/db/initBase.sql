@@ -29,8 +29,8 @@ CREATE TABLE LISTE(
     --je mets le jour de création c'est gratuit
 );
 
-INSERT INTO LISTE (email, titre) VALUES ('a@mail.com', 'Plan pour battre PtitChibrax');
-INSERT INTO LISTE (email, titre) VALUES ('jean@mail.com', 'Terminer le projet');
+INSERT INTO LISTE (email, titre) VALUES ('toto@yopmail.com', 'Plan pour battre PtitChibrax');
+INSERT INTO LISTE (email, titre) VALUES ('ba@yopmail.com', 'Terminer le projet');
 
 DROP TABLE IF EXISTS TACHE CASCADE;
 CREATE TABLE TACHE(
