@@ -10,12 +10,16 @@ let html_Welcome = fs.readFileSync(__dirname + "/email_Welcome.html", "utf8");
 let html_Pwd = fs.readFileSync(__dirname + "/email_Pwd.html", "utf8");
 
 
-//step1 : choose one lines between 121 to 124 ones your email service by comment modification
+//step1 : choose one lines between 124 to 127 ones your email service by comment modification
 //step1.1 : if you have choosen gmail, you will have to accept lesssercure apps at https://myaccount.google.com/lesssecureapps
 //step2 : create a new file in this folder with the following name : .env
-/* step3 : indicate in the .env file your gmail login details, with for example :
+/* step3 : indicate in the .env file your mail login details, with for example :
     EMAIL_gmail = smith@gmail.com
     PASSWORD_gmail = 1234
+    EMAIL_ethereal = smith@ethereal.email
+    PASSWORD_ethereal = 1234
+    EMAIL_mailtrap = 4321
+    PASSWORD_mailtrap = 1234
 */
 
 module.exports = {
@@ -118,9 +122,9 @@ function getFromMailOptions(fromMail){
 function sendEmail(emaillDetails, callback){
 
     //which email service do you choose
-    const choice = "gmail";
+    //const choice = "gmail";
     //const choice = "mailtrap";
-    //const choice = "ethereal";
+    const choice = "ethereal";
 
   // create reusable transporter object using the default SMTP transport
     const transporterOptions = getLogDetails(choice);
