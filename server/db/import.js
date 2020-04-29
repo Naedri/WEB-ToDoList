@@ -1,6 +1,5 @@
 const utils = require("./utils");
 const fs = require("fs");
-const { Pool } = require("pg");
 
 // Import du fichier avec les commandes SQL
 const dbFilePath = `${__dirname}/initBase.sql`;

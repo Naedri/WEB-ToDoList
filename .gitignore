@@ -2,6 +2,7 @@
 
 # logdetails
 /server/services/users/.env
+/server/db/.env
 
 # dependencies
 /node_modules

@@ -1,10 +1,20 @@
+//config.js
+require('dotenv').config({path: __dirname + '/.env'}); // fait reference aux log du service database en pgsql
+
+const USER = process.env.USER;
+const HOST = process.env.HOST;
+const DATABASE = process.env.DATABASE;
+const PASSWORD = process.env.PASSWORD;
+const PORT = Number(process.env.PORT);
+const SECRET = process.env.SECRET;
+
 module.exports = {
 	database: {
-		user: "cokkdcso",
-		host: "kandula.db.elephantsql.com",
-		database: "cokkdcso",
-		password: "ZzPmSn9Lo0k8S6y8s7Eov0t7CtiNP9OS",
-		port: 5432,
+		user: USER,
+		host: HOST,
+		database: DATABASE,
+		password: PASSWORD,
+		port: PORT,
 	},
-	secret: "thecakeisalie",
+	secret: SECRET,
 };
