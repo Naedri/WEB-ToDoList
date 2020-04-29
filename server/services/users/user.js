@@ -1,6 +1,6 @@
 const utils = require("../../db/utils"); 
 const ServiceEmail = require("./email");
-/*const bcrypt = require('bcrypt');*/
+const bcrypt = require('bcrypt');
 
 module.exports = {
     isFree,
@@ -13,6 +13,8 @@ module.exports = {
     getDetails,
 };
 
+//bcrypt salt rounds
+const SALT_ROUNDS = 10; 
 
 /** 
  * return a boolean if the email is available
@@ -42,47 +44,74 @@ function isFree(email , callback) {
  * @param {*} callback 
  */
 function create( {email,password} , callback) {
-    const query = 
-        `INSERT INTO USERS (email,encrypted_password)
-        VALUES ($1, $2);`;
-
-    utils.executeQuery(query, [email,password], (err, result) => {
+    
+    // On encode le password
+    bcrypt.hash(password, SALT_ROUNDS, (err, encryptedPasswordHash) => {
         if (err) {
             callback(true, err);
         } else {
-            let count = result.rowCount;
-            let isInsert = (count > '0') ? true : false ; 
-            callback(undefined, isInsert);
+
+            const hash = encryptedPasswordHash;
+
+            const query = 
+            `INSERT INTO USERS (email,encrypted_password)
+            VALUES ($1, $2);`;
+    
+            utils.executeQuery(query, [email,hash], (err, result) => {
+                if (err) {
+                    callback(true, err);
+                } else {
+                    let count = result.rowCount;
+                    let isInsert = (count > '0') ? true : false ; 
+                    callback(undefined, isInsert);
+                }
+            });
+
         }
     });
 }
 
 /**
  * 
- * @param {*} param0 
+ * @param {*} email 
+ * @param {*} password 
  * @param {*} callback 
  */
 function authenticate( {email,password} , callback){
+    
     const query = 
         `SELECT * 
         FROM USERS
-        WHERE email=$1 AND encrypted_password=$2`;
+        WHERE email=$1`;
         
-    utils.executeQuery(query, [email,password], (err, result) => {
+    utils.executeQuery(query, [email], (err, result) => {
         if (err) {
             callback(true, err);
         } else {
-            let count = result.rowCount;
-            let userFound = (count > '0') ? true : false ;
+            const userFound = result.rows[0];
             if (userFound){
-                //delete userFound.encrypted_password;
-                callback(undefined, result);
+
+                bcrypt.compare(password, userFound.encrypted_password, (err2, result2)=>{
+                    if (err2){
+                        callback(true, err2);
+                    } else {
+                        if (result2){
+                            console.log("user FOUND with the identifiers");
+                            // On retire le password de l'objet user que l'on va retourner afin de pas risquer de l'exposer
+                            delete userFound.encrypted_password;
+                            callback(undefined, userFound);
+                        } else {
+                            console.log("NONE user found with the identifiers");
+                            callback(true, false);
+                        }
+                    }
+                });
+
+
             } else {
-                //usefull if not server stop
-                console.log("none user found with the identifiers");
+                console.log("NONE user found with the identifiers");
                 callback(true, false);
             }
-
         }
     });
 };
@@ -102,37 +131,51 @@ function updateEmail(emailsUser, callback){
 
 // update the password of an user with its email and old password
 function updatePassword(email, password, password2, callback){
- 
-    const query1 = 
-    `SELECT * 
-    FROM USERS
-    WHERE email=$1 AND encrypted_password=$2`;
-
-    const query2="CALL P_USERS_PWD_UPDATE( P_USERS_GET_ID($1), $2);";
     
+    const user= {
+        iduser: '',
+        email: email,
+        password: password,
+        password2: password2,
+    };
+
     let pwdUpdating = {
         password: '',
         password2: '',
     }
-    
-    utils.executeQuery(query1, [email,password], (err, result) => {
+
+    const query="CALL P_USERS_PWD_UPDATE($1, $2);";
+
+    authenticate(user, (err, result) => {
+
         if (err) {
             callback(true, err);
         } else {
-            let count = result.rowCount;
-            let pwdValidity = (count > '0') ? true : false ;
-            pwdUpdating.password = pwdValidity ;
+            let userFound = result;
+            if(userFound){
+                pwdUpdating.password = true ;
+                user.iduser=result.iduser;
 
-            if (pwdValidity){
-                utils.executeQuery(query2, [email,password2], (err2, result2) => {
+                 // On encode le nouveau password
+                bcrypt.hash(user.password2, SALT_ROUNDS, (err, encryptedPasswordHash) => {
                     if (err) {
-                        callback(true, err2);
+                        callback(true, err);
                     } else {
-                        pwdUpdating.password2 =true ;
-                        callback(undefined, pwdUpdating);
+
+                        const hash = encryptedPasswordHash;
+
+                        utils.executeQuery(query, [user.iduser,hash], (err2, result2) => {
+                            if (err) {
+                                callback(true, err2);
+                            } else {
+                                pwdUpdating.password2 =true ;
+                                callback(undefined, pwdUpdating);
+                            }
+                        });
                     }
                 });
             } else {
+                pwdUpdating.password = false ;
                 callback(undefined, pwdUpdating);
             }
         }
