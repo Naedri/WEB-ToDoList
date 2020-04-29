@@ -8,7 +8,7 @@ import { forgetPwdUserApi } from '../api.js';
 const ForgetPassWord = (props) => {
 
     const [form, setValues] = useState({
-        email: "",
+        email: '',
         isSent: '',
         isLoading: '',
     });
@@ -26,13 +26,6 @@ const ForgetPassWord = (props) => {
         );
         return valid;
     }
-
-    const endLoading = () => {
-        setValues({
-            ...form,
-            isLoading: '',
-        });
-    };
 
     const startLoading = () => {
         setValues({
@@ -53,7 +46,7 @@ const ForgetPassWord = (props) => {
                 await forgetPwdUserApi(form.email);
                 setValues({
                     ...form,
-                    isSent: "Si cette adresse correspond à un compte, un email vous a été envoyé !",
+                    isSent: 'sent',
                     isLoading: '',
                 });
 
@@ -63,8 +56,13 @@ const ForgetPassWord = (props) => {
                     }, 1000);
             }
             catch (err) {
-                setErrors(err.message);
-                endLoading();
+                //setErrors(err.message);
+                console.log(err.message);
+                setValues({
+                    ...form,
+                    isSent: 'not sent',
+                    isLoading: '',
+                });
             }
         }
     };
@@ -88,7 +86,7 @@ const ForgetPassWord = (props) => {
         setValues({
             ...form,
             [name]: value,
-            isSent: "",
+            isSent: '',
         });
         setErrors({
             ...errors,
@@ -97,7 +95,7 @@ const ForgetPassWord = (props) => {
     };
 
     const checkSubmitDisabled = () => {
-        return (form.isLoading || form.email === '');
+        return ( (!validateForm(errors)) || form.isLoading || form.email === '' || form.isSent !== '');
     }
 
     return (
@@ -138,12 +136,20 @@ const ForgetPassWord = (props) => {
                                     />
                                 </div>
                             }
-                            {form.isSent !== '' &&
+                            {form.isSent === 'sent' &&
                                 <small
                                     id="isSent"
                                     name="isSent"
                                     className='form-text text-valide'>
-                                    {form.isSent}
+                                    Si cette adresse correspond à un compte, un email vous a été envoyé !
+                                </small>
+                            }
+                            {form.isSent === 'not sent' &&
+                                <small
+                                    id="isSent"
+                                    name="isSent"
+                                    className='form-text text-error'>
+                                    Une erreur est survenue !
                                 </small>
                             }
                         </div>

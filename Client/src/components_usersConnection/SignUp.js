@@ -60,7 +60,7 @@ const SignUp = (props) => {
                         await createUserApi(form.email, form.password);
                         setValues({
                             ...form,
-                            isCreate: 'Un email de confirmation vous a été envoyé',
+                            isCreate: 'created',
                             isLoading: '',
                         });
 
@@ -70,8 +70,12 @@ const SignUp = (props) => {
                             }, 1000);
                     }
                     catch (err) {
+                        //setErrors(err.message);
                         console.log(err);
-                        setErrors(err.message);
+                        setErrors({
+                            ...errors,
+                            isCreate: 'not created',
+                        });
                         endLoading();
                     }
                 } else {
@@ -83,8 +87,12 @@ const SignUp = (props) => {
                 }
             }
             catch (err) {
+                //setErrors(err.message);
                 console.log(err);
-                setErrors(err.message);
+                setErrors({
+                    ...errors,
+                    isCreate: 'not created',
+                });
                 endLoading();
             }
         }
@@ -132,8 +140,7 @@ const SignUp = (props) => {
     };
 
     const checkSubmitDisabled = () => {
-        return (form.isLoading || form.email === '' || form.password === '' || form.password2 === '' || form.password !== form.password2);
-
+        return ((!validateForm(errors)) || form.isLoading || form.email === '' || form.password === '' || form.password2 === '' || form.password !== form.password2 || form.isCreate !== '');
     }
 
     return (
@@ -221,12 +228,20 @@ const SignUp = (props) => {
                                     />
                                 </div>
                             }
-                            {form.isCreate !== '' &&
+                            {form.isCreate === 'created' &&
                                 <small
                                     id="isCreate"
                                     name="isCreate"
                                     className='form-text text-valide'>
-                                    {form.isCreate}
+                                    Un email de confirmation vous a été envoyé !
+                                </small>
+                            }
+                            {form.isCreate === 'not created' &&
+                                <small
+                                    id="isCreate"
+                                    name="isCreate"
+                                    className='form-text text-error'>
+                                    Une erreur est survenue !                                    
                                 </small>
                             }
                         </div>

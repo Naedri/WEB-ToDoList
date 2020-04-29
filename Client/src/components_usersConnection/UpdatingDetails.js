@@ -73,6 +73,7 @@ const UpdatingDetails = (props) => {
         if (validateForm(errors)) {
             try {
                 startLoading('mail');
+
                 let newMail = form.email1;
                 let statusFree = await isFreeUserApi(newMail);
                 if (statusFree) {
@@ -82,22 +83,31 @@ const UpdatingDetails = (props) => {
                             props.updateMail(newMail);
                             setValues({
                                 ...form,
-                                isUpdateMail: 'Un email de confirmation vous a été envoyé',
+                                isUpdateMail: 'updated',
                                 isLoadingMail: '',
                                 email1: '',
                                 email2: '',
                             });
                         } else {
-                            setErrors({
-                                ...errors,
-                                email1: "Un problème est survenu !",
+                            setValues({
+                                ...form,
+                                isUpdateMail: 'not updated',
+                                isLoadingMail: '',
+                                email1: '',
+                                email2: '',
                             });
-                            endLoading();
                         }
                     }
                     catch (err) {
+                        //setErrors(err.message);
                         console.log(err);
-                        setErrors(err.message);
+                        setValues({
+                            ...form,
+                            isUpdateMail: 'not updated',
+                            isLoadingMail: '',
+                            email1: '',
+                            email2: '',
+                        });
                         endLoading();
                     }
                 } else {
@@ -108,8 +118,15 @@ const UpdatingDetails = (props) => {
                     endLoading();
                 }
             } catch (err) {
+                //setErrors(err.message);
                 console.log(err);
-                setErrors(err.message);
+                setValues({
+                    ...form,
+                    isUpdateMail: 'not updated',
+                    isLoadingMail: '',
+                    email1: '',
+                    email2: '',
+                });
                 endLoading();
             }
         }
@@ -118,25 +135,29 @@ const UpdatingDetails = (props) => {
     const try_updating_password = async (e) => {
         e.preventDefault();
         if (validateForm(errors)) {
-            startLoading('pwd');
             try {
+                startLoading('pwd');
+
                 let statusUpdate = await updatePwdUserApi(userCurrentEmail, form.password, form.password2 );
                 if (statusUpdate.password==='valide') {
                     if(statusUpdate.password2==='updated') {
                         setValues({
                             ...form,
-                            isUpdatePwd: 'Votre mot de passe a été mis à jour',
+                            isUpdatePwd: 'updated',
                             isLoadingPwd: '',
                             password:'',
                             password1:'',
                             password2:'',
                         });
                     } else {
-                        setErrors({
-                            ...errors,
-                            password1: "Problème de mise à jour du mot de passe !",
+                        setValues({
+                            ...form,
+                            isUpdatePwd: 'not updated',
+                            isLoadingPwd: '',
+                            password:'',
+                            password1:'',
+                            password2:'',
                         });
-                        endLoading();
                     }
                 } else {
                     setErrors({
@@ -146,9 +167,16 @@ const UpdatingDetails = (props) => {
                     endLoading();   
                 }
             } catch (err) {
+                //setErrors(err.message);
                 console.log(err);
-                setErrors(err.message);
-                endLoading();
+                setValues({
+                    ...form,
+                    isUpdatePwd: 'not updated',
+                    isLoadingPwd: '',
+                    password:'',
+                    password1:'',
+                    password2:'',
+                });
             }
         }
     };
@@ -211,10 +239,10 @@ const UpdatingDetails = (props) => {
         let disabled = true;
         switch (name){
             case 'mail' :
-                disabled = (form.isLoadingMail || form.email1 === '' || form.email2 === '' || form.email1 !== form.email2);
+                disabled = ( (!validateForm(errors)) || form.isLoadingMail || form.email1 === '' || form.email2 === '' || form.email1 !== form.email2 || form.isUpdateMail !=='');
                 break;
             case 'pwd' :
-                disabled = (form.isLoadingPwd || form.password === '' || form.password1 === '' || form.password2 === '' || form.password1 !== form.password2);
+                disabled = ( (!validateForm(errors)) || form.isLoadingPwd || form.password === '' || form.password1 === '' || form.password2 === '' || form.password1 !== form.password2 || form.isUpdatePwd !=='');
                 break;
             default :
                 break;
@@ -281,12 +309,20 @@ const UpdatingDetails = (props) => {
                                     />
                                 </div>
                             }
-                            {form.isUpdateMail !== '' &&
+                            {form.isUpdateMail === 'updated' &&
                                 <small
                                     id="isUpdateMail"
                                     name="isUpdateMail"
                                     className='form-text text-valide'>
-                                    {form.isUpdateMail}
+                                    Un email de confirmation vous a été envoyé !
+                                </small>
+                            }
+                            {form.isUpdateMail === 'not updated' &&
+                                <small
+                                    id="isUpdateMail"
+                                    name="isUpdateMail"
+                                    className='form-text text-error'>
+                                    Une erreur est survenue !
                                 </small>
                             }
                         </div>
@@ -366,14 +402,23 @@ const UpdatingDetails = (props) => {
                                     />
                                 </div>
                             }
-                            {form.isUpdatePwd !== '' &&
+                            {form.isUpdatePwd === 'updated' &&
                                 <small
                                     id="isUpdatePwd"
                                     name="isUpdatePwd"
                                     className='form-text text-valide'>
-                                    {form.isUpdatePwd}
+                                    Votre mot de passe a été mis à jour
                                 </small>
                             }
+                            {form.isUpdatePwd === 'not updated' &&
+                                <small
+                                    id="isUpdatePwd"
+                                    name="isUpdatePwd"
+                                    className='form-text text-error'>
+                                    Une erreur est survenue !
+                                </small>
+                            }
+
                         </div>
                     </form>
                 </div>

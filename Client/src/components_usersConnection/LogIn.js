@@ -69,12 +69,14 @@ const LogIn = (props) => {
                 }
             }
             catch (err) {
-                setErrors(err.message);
+                //setErrors(err.message);
+                console.log(err);
                 setValues({
                     ...form,
                     identifiers: 'Identifiants incorrects',
                     isLoading: '',
-                });            }
+                });
+            }
         }
     };
 
@@ -115,7 +117,7 @@ const LogIn = (props) => {
 
     
     const checkSubmitDisabled = () => {
-        return (form.isLoading || form.email === '' || form.password === '');
+        return ((!validateForm(errors)) || form.isLoading || form.email === '' || form.password === '' || form.isConnected !== '' || form.identifiers !== '');
     }
     if (redirect)
         return <Redirect  to="/"/>;
