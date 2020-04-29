@@ -272,7 +272,7 @@ const UpdatingDetails = (props) => {
                 <div className="col-sm col-md-8 col-lg-8">
                     <form onSubmit={try_updating_email}>
                         <div className="form-group">
-                            <h2>Adresse e-mail</h2>
+                            <h3>Adresse e-mail</h3>
                             <label htmlFor="email1">
                                 Nouvelle adresse e-mail
                                 </label>
@@ -345,7 +345,7 @@ const UpdatingDetails = (props) => {
                     </form>
                     <form onSubmit={try_updating_password}>
                         <div className="form-group">
-                            <h2>Mot de passe</h2>
+                            <h3>Mot de passe</h3>
                             <label htmlFor="password">
                                 Mot de passe actuel
                             </label>

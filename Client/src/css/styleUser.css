@@ -79,6 +79,12 @@ body {
   box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 1.0);
 }
 
+/*title header*/
+
+h3{
+  margin-top: 25px;
+}
+
 /*Message*/
 
 /*Message margin*/
