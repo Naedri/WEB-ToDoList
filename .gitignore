@@ -4,6 +4,9 @@
 /server/services/users/.env
 /server/db/.env
 
+# test
+/server/services/users/testRequete.js
+
 # dependencies
 /node_modules
 /server/node_modules
