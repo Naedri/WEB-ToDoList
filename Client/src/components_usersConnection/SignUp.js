@@ -109,6 +109,10 @@ const SignUp = (props) => {
                         : !validEmailRegex.test(value) ? 'L adresse e-mail n est pas valide'
                             : value.length > 25 ? 'Elle doit contenir moins de 25 caractères'
                                 : '';
+                setErrors({
+                    ...errors,
+                    [name]: err,
+                });
                 break;
             case 'password':
                 err =
@@ -117,14 +121,44 @@ const SignUp = (props) => {
                             : value.length > 15 ? 'Il doit contenir moins de 16 caractères'
                                 : '';
                 if (form.password2!==''){
-                    err = value !== form.password2 ? 'Les mots de passe ne correspondent pas'
-                        : '';
+                    if (err===''){
+                        err = 
+                            value!==form.password2 ?  'Les mots de passe ne correspondent pas'
+                                : '';
+                        setErrors({
+                            ...errors,
+                            password: '',
+                            password2: err,
+                        });
+                    } else {
+                        if (value !== form.password2){
+                            setErrors({
+                                ...errors,
+                                [name]: err,
+                            });
+                        } else {
+                            setErrors({
+                                ...errors,
+                                password: err,
+                                password2: '',
+                            });
+                        }
+                    }
+                } else {
+                    setErrors({
+                        ...errors,
+                        [name]: err,
+                    });
                 }
                 break;
             case 'password2':
                 err =
                     value === form.password ? ''
                         : 'Les mots de passe ne correspondent pas';
+                setErrors({
+                    ...errors,
+                    [name]: err,
+                });
                 break;
             default:
                 break;
@@ -135,10 +169,6 @@ const SignUp = (props) => {
                 [name]: value,
                 isCreate: '',
                 isLoading: '',
-            });
-            setErrors({
-                ...errors,
-                [name]: err,
             });
         }
     };

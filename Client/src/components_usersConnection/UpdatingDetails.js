@@ -201,19 +201,57 @@ const UpdatingDetails = (props) => {
                                 : value === userCurrentEmail ? 'La nouvelle adresse doit être nouvelle'
                                     : '';
                 if (form.email2!==''){
-                    err = value !== form.email2 ? 'Les adresse mail ne correspondent pas'
-                        : '';
+                    if (err===''){
+                        err = 
+                            value!==form.email2 ?  'Les adresses e-mail ne correspondent pas'
+                                : '';
+                        setErrors({
+                            ...errors,
+                            email1: '',
+                            email2: err,
+                        });
+                    } else {
+                        if (value !== form.email2){
+                            setErrors({
+                                ...errors,
+                                [name]: err,
+                            });
+                        } else {
+                            setErrors({
+                                ...errors,
+                                email: err,
+                                email1: '',
+                            });
+                        }
+                    }
+                } else {
+                    setErrors({
+                        ...errors,
+                        [name]: err,
+                    });
                 }
                 break;
             case 'email2':
-                    err =
-                        value === form.email1 ? ''
-                            : 'Les adresse mail ne correspondent pas';
+                err =
+                    value === form.email1 ? ''
+                        : 'Les adresse e-mail ne correspondent pas';
+                setErrors({
+                    ...errors,
+                    [name]: err,
+                });
                 break;
             case 'password':
-                    err =
-                        !value ? "Veuillez renseigner votre mot de passe"
-                                    : '';
+                err =
+                    !value ? "Veuillez renseigner votre mot de passe"
+                                : '';
+                let err2 = 
+                    value === form.password1 ? 'Le nouveau mot de passe doit être nouveau'
+                        : '';
+                setErrors({
+                    ...errors,
+                    password: err,
+                    password1:err2,
+                });
                 break;
             case 'password1':
                 err =
@@ -223,14 +261,44 @@ const UpdatingDetails = (props) => {
                                 : value === form.password ? 'Le nouveau mot de passe doit être nouveau'
                                     : '';
                 if (form.password2!==''){
-                    err = value !== form.password2 ? 'Les mots de passe ne correspondent pas'
-                        : '';
+                    if (err===''){
+                        err = 
+                            value!==form.password2 ?  'Les mots de passe ne correspondent pas'
+                                : '';
+                        setErrors({
+                            ...errors,
+                            password1: '',
+                            password2: err,
+                        });
+                    } else {
+                        if (value !== form.password2){
+                            setErrors({
+                                ...errors,
+                                [name]: err,
+                            });
+                        } else {
+                            setErrors({
+                                ...errors,
+                                password1: err,
+                                password2: '',
+                            });
+                        }
+                    }
+                } else {
+                    setErrors({
+                        ...errors,
+                        [name]: err,
+                    });
                 }
                 break;
             case 'password2':
                 err =
                     value === form.password1 ? ''
                         : 'Les mots de passe ne correspondent pas';
+                setErrors({
+                    ...errors,
+                    [name]: err,
+                });
                 break;
             default:
                 break;
@@ -243,10 +311,6 @@ const UpdatingDetails = (props) => {
                 isUpdatePwd: '',
                 isLoadingMail: '',
                 isLoadingPwd: '',
-            });
-            setErrors({
-                ...errors,
-                [name]: err,
             });
         }
     };
