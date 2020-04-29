@@ -116,6 +116,10 @@ const SignUp = (props) => {
                         : value.length < 8 ? 'Il doit contenir au moins 8 caractères'
                             : value.length > 15 ? 'Il doit contenir moins de 16 caractères'
                                 : '';
+                if (form.password2!==''){
+                    err = value !== form.password2 ? 'Les mots de passe ne correspondent pas'
+                        : '';
+                }
                 break;
             case 'password2':
                 err =

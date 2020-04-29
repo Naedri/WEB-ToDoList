@@ -31,11 +31,19 @@ const UpdatingDetails = (props) => {
     // eslint-disable-next-line
     const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
+    /*
     const validateForm = (errors) => {
         let valid = Object.values(errors).every(
             (val) => val.length === 0
         );
         return valid;
+    }
+    */
+    const validateForm_mail= (errors) => {
+        return errors.email1 === '' && errors.email2==='';
+    }
+    const validateForm_pwd = (errors) => {
+        return errors.password === '' && errors.password1==='' && errors.password2==='';
     }
 
     const endLoading = () => {
@@ -70,7 +78,7 @@ const UpdatingDetails = (props) => {
     const try_updating_email = async (e) => {
         e.preventDefault();
 
-        if (validateForm(errors)) {
+        if (validateForm_mail(errors)) {
             try {
                 startLoading('mail');
 
@@ -134,7 +142,7 @@ const UpdatingDetails = (props) => {
 
     const try_updating_password = async (e) => {
         e.preventDefault();
-        if (validateForm(errors)) {
+        if (validateForm_pwd(errors)) {
             try {
                 startLoading('pwd');
 
@@ -192,6 +200,10 @@ const UpdatingDetails = (props) => {
                             : value.length > 25 ? 'Elle doit contenir moins de 25 caractères'
                                 : value === userCurrentEmail ? 'La nouvelle adresse doit être nouvelle'
                                     : '';
+                if (form.email2!==''){
+                    err = value !== form.email2 ? 'Les adresse mail ne correspondent pas'
+                        : '';
+                }
                 break;
             case 'email2':
                     err =
@@ -210,6 +222,10 @@ const UpdatingDetails = (props) => {
                             : value.length > 15 ? 'Il doit contenir moins de 16 caractères'
                                 : value === form.password ? 'Le nouveau mot de passe doit être nouveau'
                                     : '';
+                if (form.password2!==''){
+                    err = value !== form.password2 ? 'Les mots de passe ne correspondent pas'
+                        : '';
+                }
                 break;
             case 'password2':
                 err =
@@ -239,10 +255,10 @@ const UpdatingDetails = (props) => {
         let disabled = true;
         switch (name){
             case 'mail' :
-                disabled = ( (!validateForm(errors)) || form.isLoadingMail || form.email1 === '' || form.email2 === '' || form.email1 !== form.email2 || form.isUpdateMail !=='');
+                disabled = ( (!validateForm_mail(errors)) || form.isLoadingMail || form.email1 === '' || form.email2 === '' || form.email1 !== form.email2 || form.isUpdateMail !=='');
                 break;
             case 'pwd' :
-                disabled = ( (!validateForm(errors)) || form.isLoadingPwd || form.password === '' || form.password1 === '' || form.password2 === '' || form.password1 !== form.password2 || form.isUpdatePwd !=='');
+                disabled = ( (!validateForm_pwd(errors)) || form.isLoadingPwd || form.password === '' || form.password1 === '' || form.password2 === '' || form.password1 !== form.password2 || form.isUpdatePwd !=='');
                 break;
             default :
                 break;
