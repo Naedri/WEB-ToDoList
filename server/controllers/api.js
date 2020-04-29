@@ -366,7 +366,7 @@ router.post('/user/forgetpassword', (req, res, next) => {
 // updating an email
 // return email1 email2 and final state
 // @param: email and new email
-router.patch('/user/update/email', (req, res) => {
+router.patch('/user/update/email', helpers.checkToken, (req, res) => {
   let state ;
   let inbox ;
   let userEmail = {
@@ -418,7 +418,7 @@ router.patch('/user/update/email', (req, res) => {
 // updating an email
 // return email email2 and final state
 // @param: email, old pwd and new pwd
-router.patch('/user/update/password', (req, res, next) => {
+router.patch('/user/update/password', helpers.checkToken, (req, res, next) => {
   let passwordValidity ;
   let passwordUpdating ;
   let user = {
