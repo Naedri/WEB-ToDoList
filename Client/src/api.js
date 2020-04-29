@@ -343,9 +343,7 @@ export async function updateEmailUserApi(email1, email2) {
     };
     let response = await fetch(url, {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getHeaders(),
         body: JSON.stringify(user)
     });
 
@@ -378,9 +376,7 @@ export async function updatePwdUserApi(email, password, password2) {
     };
     let response = await fetch(url, {
         method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
+        headers: getHeaders(),
         body: JSON.stringify(user)
     })
 
