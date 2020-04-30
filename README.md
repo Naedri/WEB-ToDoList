@@ -162,6 +162,7 @@ Les commandes vous permettrons d'utiliser notre application.
 ### Prérequis
 
 Il faut avoir :
+
     + souscris à au moins un des services de mail suivant : 
         + [gmail](https://mail.google.com/)
         + [ethereal](https://ethereal.email/)
