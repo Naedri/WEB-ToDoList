@@ -18,7 +18,7 @@ JALLAIS Adrien : adrien.jallais@protonmail.com
 
 L'objectif de ce projet est d'évaluer notre capacité à développer une **application web complète** en utilisant les technologies et concepts de développement web client et serveur vus en cours.
 
-Nous travaillons pour une entreprise fictive qui décide de créer une application web de gestion de **To do list**. L'application permet à une personne de créer un compte, puis de créer et gérer des listes de tâches à effectuer. L'application a été développée en tant qu'application **client riche** communiquant avec une **API** et s'adapte à la taille du support client (**design responsive**).
+Nous travaillons pour une entreprise fictive qui décide de créer une application web de gestion de **To do list**. L'application permet à une personne de créer un compte, puis de créer et gérer des listes de tâches à effectuer. L'application a été développée en tant qu'application **client riche** communiquant avec une **API** et s'adapte à la taille du support client (**responsive design**).
 
 Les pictogramme nous ont été fournis par Cyrille Perois.
 
