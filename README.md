@@ -163,12 +163,12 @@ Les commandes vous permettrons d'utiliser notre application.
 
 Il faut avoir :
 
-    + souscris à au moins un des services de mail suivant : 
-        + [gmail](https://mail.google.com/)
-        + [ethereal](https://ethereal.email/)
-        + [mailtrap](https://mailtrap.io/)
-    + soucris à un service de base de données en pgplSQL, comme :
-        + [ElephantSQL](https://customer.elephantsql.com/login)
++ souscris à au moins un des services de mail suivant : 
+    + [gmail](https://mail.google.com/)
+    + [ethereal](https://ethereal.email/)
+    + [mailtrap](https://mailtrap.io/)
++ soucris à un service de base de données en pgplSQL, comme :
+    + [ElephantSQL](https://customer.elephantsql.com/login)
 
 ### Téléchargement du dépôt
 
@@ -190,22 +190,22 @@ Ensuite, il faut définir ajouter les détails de login dans des fichiers :
 
 1. `ToDoList\server\services\users\.env`
    
-   + contenant les mots de passes et l'identifiant de votre service d'email
-   + comme ci-dessous avec le service gmail :
-     + `PASSWORD_gmail=tonmdp`
-     + `EMAIL_gmail=tonadresse@gmail.com`
-   + modifier commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
-     + si vous avez choisi gmail, vous devez accepter d'utiliser des applications moins sécurisées à ce [lien](https://myaccount.google.com/lesssecureapps)
+ + contenant les mots de passes et l'identifiant de votre service d'email
+ + comme ci-dessous avec le service gmail :
+   + `PASSWORD_gmail=tonmdp`
+   + `EMAIL_gmail=tonadresse@gmail.com`
+ + modifier commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
+   + si vous avez choisi gmail, vous devez accepter d'utiliser des applications moins sécurisées à ce [lien](https://myaccount.google.com/lesssecureapps)
 
 2. `ToDoList\server\services\db\.env`
    
-   + contenant les indicatons de la base de données ElephantSQL suivantes : 
-     + `USER=xxx`
-     + `HOST=yyyyyyy.db.elephantsql.com`
-     + `DATABASE=xxx`
-     + `PASSWORD = dddddd`
-     + `PORT=5432`
-     + `SECRET=ssssss`
+ + contenant les indicatons de la base de données ElephantSQL suivantes : 
+   + `USER=xxx`
+   + `HOST=yyyyyyy.db.elephantsql.com`
+   + `DATABASE=xxx`
+   + `PASSWORD = dddddd`
+   + `PORT=5432`
+   + `SECRET=ssssss`
 
 ### Lancement du serveur
 
