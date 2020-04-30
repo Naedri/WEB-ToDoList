@@ -138,8 +138,9 @@ Maquette :
 Notre environnement de développement s'est fait avec **nodeJS**.
 
 + côté **backend** :
+  + pour faciliter la maintenance et les évolutions, elle a été développée avec une architecture **MVC**
   + afin de prévoir le déploiement sur mobile, elle a été développée sous forme d'une **API**
-  + la gestion de la base de données se fait avec le langage **pgplSQL**
+  + la gestion de la base de données se fait avec le langage **plpgSQL**
   + les mots de passes stockés sont hachés avec **bcrypt** 
   + le control d'accès de certaines routes est réalisé avec **jsonwebtoken**
   + l'envoie d'email peut se faire avec différent services : gmail, ethereal, mailtrap 
@@ -163,11 +164,11 @@ Les commandes vous permettrons d'utiliser notre application.
 
 Il faut avoir :
 
-+ souscris à au moins un des services de mail suivant : 
++ souscrit à au moins un des services de mail suivant : 
     + [gmail](https://mail.google.com/)
     + [ethereal](https://ethereal.email/)
     + [mailtrap](https://mailtrap.io/)
-+ soucris à un service de base de données en pgplSQL, comme :
++ soucrit à un service de base de données en plpgSQL, comme :
     + [ElephantSQL](https://customer.elephantsql.com/login)
 
 ### Téléchargement du dépôt
@@ -184,7 +185,7 @@ git pull tdl master
 
 Après la fin du téléchargement, vous pouvez fermer le terminal.
 
-### Indication des détails de connexions pour les services
+### Indication des détails de connexion pour les services
 
 Ensuite, il faut définir ajouter les détails de login dans des fichiers :
 
@@ -194,7 +195,7 @@ Ensuite, il faut définir ajouter les détails de login dans des fichiers :
  + comme ci-dessous avec le service gmail :
    + `PASSWORD_gmail=tonmdp`
    + `EMAIL_gmail=tonadresse@gmail.com`
- + modifier commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
+ + modifier les commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
    + si vous avez choisi gmail, vous devez accepter d'utiliser des applications moins sécurisées à ce [lien](https://myaccount.google.com/lesssecureapps)
 
 2. `ToDoList\server\services\db\.env`
@@ -216,7 +217,7 @@ cd ToDoList/server/
 npm install
 ```
 
-Terminal 2 pour initiser la base de donnée
+Terminal 2 pour initier la base de données
 
 ```
 cd ToDoList/server/db/
@@ -232,7 +233,7 @@ node app.js
 
 ### Lancement du client
 
-Terminal 1 pour installer les dépendance
+Terminal 1 pour installer les dépendances
 
 ```
 cd ToDoList/Client/
