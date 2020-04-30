@@ -34,7 +34,6 @@ Maquette :
 
 ![Signup](./RessourcesGraphiques/signup-1.png)
 ![Signup](./RessourcesGraphiques/signup-2.png)
-![Signup](./RessourcesGraphiques/signup-3.png)
 
 #### Connexion
 
@@ -46,6 +45,7 @@ Maquette :
 
 ![Login](./RessourcesGraphiques/login-1.png)
 ![Login](./RessourcesGraphiques/login-2.png)
+![Login](./RessourcesGraphiques/login-3.png)
 
 #### Page d'accueil
 

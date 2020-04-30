@@ -2,12 +2,19 @@ const utils = require("../../db/utils");
 const ServiceEmail = require("./email");
 const bcrypt = require('bcrypt');
 
+
+//service reset password
+const uuidv1 = require('uuid/v1'); //lien unique
+const { createResetRequest } = require("./reset");
+
+
 module.exports = {
     isFree,
     create,
     authenticate,
     updateEmail,
     updatePassword,
+    resetPassword,
     sendEmailPwd,
     sendEmailWelcome,
     getDetails,
@@ -182,6 +189,40 @@ function updatePassword(email, password, password2, callback){
     });
 };
 
+//reset the password
+function resetPassword(email, password2, callback) {
+
+    const user= {
+        email: email,
+        password2: password2,
+    };
+
+    let pwdUpdating = {
+        password2: '',
+    }
+
+    const query="CALL P_USERS_PWD_UPDATE( P_USERS_GET_ID($1), $2);";
+
+    // On encode le nouveau password
+    bcrypt.hash(user.password2, SALT_ROUNDS, (err, encryptedPasswordHash) => {
+        if (err) {
+            callback(true, err);
+        } else {
+            const hash = encryptedPasswordHash;
+            //on update le pwd
+            utils.executeQuery(query, [user.email,hash], (err2, result2) => {
+                if (err2) {
+                    callback(true, err2);
+                } else {
+                    pwdUpdating.password2 = result2 ? true : false;
+                    callback(undefined, pwdUpdating);
+                }
+            });
+        }
+    });
+};
+
+
 // return all details of an user found with its email
 function getDetails(email, callback){
     const query = 
@@ -214,13 +255,22 @@ function sendEmailPwd(email , callback){
             callback(true, err);
         } else {
             const user = result ;
-            console.log(user);
+            
+            //creating uuid
+            const id = uuidv1();
+            const request = {
+                id: id,
+                email: user.email,
+            };
+            //alowing the link with the id to reset pwd
+            createResetRequest(request);
 
-            const subject = "Reminder of your details of ToDoList App";
+            //generating email
+            const subject = "Reset your password of ToDoList App";
             const mail = user.email;
-            const pwd = user.encrypted_password;
-            const text = ServiceEmail.generateText_Pwd(mail,pwd);
-            const html = ServiceEmail.generateHtml_Pwd(mail,pwd);
+            const pwdLink = `http://localhost:3000/reset/password/${request.id}`;
+            const text = ServiceEmail.generateText_Pwd(pwdLink);
+            const html = ServiceEmail.generateHtml_Pwd(pwdLink);
 
             const emailDetails = {
                 to: mail,
@@ -258,9 +308,8 @@ function sendEmailWelcome(email , callback){
 
             const subject = "Welcome on Board of ToDoList App";
             const mail = user.email;
-            const pwd = user.encrypted_password;
-            const text = ServiceEmail.generateText_Welcome(mail,pwd);
-            const html = ServiceEmail.generateHtml_Welcome(mail,pwd);
+            const text = ServiceEmail.generateText_Welcome(mail);
+            const html = ServiceEmail.generateHtml_Welcome(mail);
 
             const emailDetails = {
                 to: mail,

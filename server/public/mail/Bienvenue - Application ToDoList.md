@@ -2,10 +2,9 @@
 
 # Bienvenue - Application ToDoList
 
-Veuillez utiliser les identifiants suivants afin de vous connecter :
+Vous utiliser actuellement l'email suivant pour vous connecter :
 
 + *Email : **email** *
-+ *Password : **pwd** *
 
 Si vous ne reconnaissez pas le compte VaN veuillez contacter un des auteurs visibles au lien suivant :
 

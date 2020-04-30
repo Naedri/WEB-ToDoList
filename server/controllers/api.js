@@ -323,45 +323,6 @@ router.delete("/:userId", (req, res, next) => {
 });
 */
 
-
-
-// state : done
-// does an email is already used
-// return true or error
-// @param: email
-router.post('/user/forgetpassword', (req, res, next) => {
-
-  //does it exist 
-  ServiceUser.isFree(req.body.email, (err, result) => {
-    if (err) {
-      res.status(500).json({ message: result });
-      return;
-    } else {
-      let state = result ? ' not ' : ' ';
-      console.log('email' + state + 'found');
-
-      if (!result){
-        //sending email
-        ServiceUser.sendEmailPwd(req.body.email, (err2, result2) => {
-          if (err2){
-            res.status(501).json({ message: result2 });
-            return;
-          } else {
-            console.log("NO ERROR FROM API.JS");
-            console.log(result2);//keep it to diplay email details
-            let state = result2 ? ' ' : ' not ';
-            console.log('email' + state + 'sent');
-            result = result2;
-          }
-        });
-      }
-      //res.json(result);
-      res.json(true); // we do not say wheter or not if email are valide
-    }
-  });
-});
-
-
 // state : done
 // updating an email
 // return email1 email2 and final state
@@ -446,6 +407,69 @@ router.patch('/user/update/password', helpers.checkToken, (req, res, next) => {
   });
 });
 
+
+/* EMAIL RESET */
+
+
+// state : done
+// does an email is already used
+// return true or error
+// @param: email
+router.post('/user/forgetpassword', (req, res, next) => {
+
+  //does it exist 
+  ServiceUser.isFree(req.body.email, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    } else {
+      let state = result ? ' not ' : ' ';
+      console.log('email' + state + 'found');
+
+      if (!result){
+        //sending email
+        ServiceUser.sendEmailPwd(req.body.email, (err2, result2) => {
+          if (err2){
+            res.status(501).json({ message: result2 });
+            return;
+          } else {
+            console.log("NO ERROR FROM API.JS");
+            console.log(result2);//keep it to diplay email details
+            let state = result2 ? ' ' : ' not ';
+            console.log('email' + state + 'sent');
+            result = result2;
+          }
+        });
+      }
+      //res.json(result);
+      res.json(true); // we do not say wheter or not if email are valide
+    }
+  });
+});
+
+//router able to reset the password without the old pwd
+router.patch("/user/reset/password", (req, res) => {
+  const idRequest = req.body.id ;
+  const thisRequest = getResetRequest(idRequest);
+  
+  if (thisRequest) {
+
+    //updating
+    ServiceUser.resetPassword(req.body.email, req.body.password2, (err, result) => {
+      if (err) {
+        res.status(500).json({ message: result });
+        return;
+      } else {
+        passwordUpdating = result.password2 ? '' : 'not ';
+        passwordUpdating = passwordUpdating.concat('updated');
+        console.log('password2 ' + passwordUpdating);
+        
+        user.password2 = passwordUpdating;
+        res.json(user);
+      }
+    });
+  }
+});
 
 
 module.exports = router;
