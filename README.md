@@ -198,7 +198,7 @@ Ensuite, il faut définir ajouter les détails de login dans des fichiers :
  + modifier les commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
    + si vous avez choisi gmail, vous devez accepter d'utiliser des applications moins sécurisées à ce [lien](https://myaccount.google.com/lesssecureapps)
 
-2. `ToDoList\server\services\db\.env`
+2. `ToDoList\server\db\.env`
    
  + contenant les indicatons de la base de données ElephantSQL suivantes : 
    + `USER=xxx`
