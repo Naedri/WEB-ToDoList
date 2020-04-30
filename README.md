@@ -32,7 +32,9 @@ L'utilisateur peut créer un nouveau compte sur l'application. Pour cela, il dev
 
 Maquette :
 
-![Desktop](./RessourcesGraphiques/signup-1.png")
+![Signup](./RessourcesGraphiques/signup-1.png)
+![Signup](./RessourcesGraphiques/signup-2.png)
+![Signup](./RessourcesGraphiques/signup-3.png)
 
 #### Connexion
 
@@ -42,7 +44,8 @@ Sur cette page, l'utilisateur peut saisir son adresse e-mail et son mot de passe
 
 Maquette :
 
-![Desktop](./RessourcesGraphiques/login-1.png")
+![Login](./RessourcesGraphiques/login-1.png)
+![Login](./RessourcesGraphiques/login-2.png)
 
 #### Page d'accueil
 
@@ -50,7 +53,8 @@ Une fois authentifié, l'utilisateur arrive automatiquement sur la page d'accuei
 
 Maquette :
 
-![Desktop](./RessourcesGraphiques/home-1.png")
+![Home](./RessourcesGraphiques/home-1.png)
+![Home](./RessourcesGraphiques/home-2.png)
 
 #### Page d'édition d'une liste
 
@@ -75,7 +79,9 @@ Pour supprimer la liste, l'utilisateur doit cliquer sur le bouton "Supprimer" si
 
 Maquette :
 
-![Desktop](./RessourcesGraphiques/edition-1.png")
+![Home](./RessourcesGraphiques/home-3.png)
+![Home](./RessourcesGraphiques/home-4.png)
+![Home](./RessourcesGraphiques/home-5.png)
 
 #### Page paramètres
 
@@ -91,7 +97,10 @@ Un audit sur ces changements est réalisé par des *triggers* en pgplsql, afin d
 
 Maquette :
 
-![Desktop](./RessourcesGraphiques/parametre-1.png")
+![Paramètres](./RessourcesGraphiques/parametre-1.png)
+![Paramètres](./RessourcesGraphiques/parametre-2.png)
+![Paramètres](./RessourcesGraphiques/parametre-3.png)
+![Paramètres](./RessourcesGraphiques/parametre-4.png)
 
 #### Menu
 
@@ -112,7 +121,8 @@ Lorsque l'utilisateur est sur le formulaire de connexion mais a oublié son mot 
 
 Maquette :
 
-![Desktop](./RessourcesGraphiques/forgetpwd-1.png")
+![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-1.png)
+![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-2.png)
 
 #### Etapes d'une tâche
 
@@ -120,7 +130,8 @@ L'utilisateur peut définir une liste d'étapes pour chaque tâche. Une étape e
 
 Maquette :
 
-![Desktop](./RessourcesGraphiques/etape-1.png")
+![Home](./RessourcesGraphiques/home-4.png)
+![Home](./RessourcesGraphiques/home-5.png)
 
 ## Technologies, architecture utilisée
 
