@@ -2,13 +2,13 @@
 //"use strict";
 const nodemailer = require("nodemailer"); //envoie des mail par le service mail
 const fs = require('fs'); //lecture des templates
+const path = require('path'); //take from parent folder files not in .js
 require('dotenv').config({path: __dirname + '/.env'}); // fait reference aux log du service mail
 
-let text_Welcome = fs.readFileSync(__dirname + "/email_Welcome.txt", "utf8");
-let text_Pwd = fs.readFileSync(__dirname + "/email_Pwd.txt", "utf8");
-let html_Welcome = fs.readFileSync(__dirname + "/email_Welcome.html", "utf8");
-let html_Pwd = fs.readFileSync(__dirname + "/email_Pwd.html", "utf8");
-
+let text_Welcome = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Welcome.txt', 'utf8');
+let text_Pwd = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Pwd.txt', 'utf8');
+let html_Welcome = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Welcome.html', 'utf8');
+let html_Pwd = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Pwd.html', 'utf8');
 
 //step1 : choose one lines between 124 to 127 ones your email service by comment modification
 //step1.1 : if you have choosen gmail, you will have to accept lesssercure apps at https://myaccount.google.com/lesssecureapps
