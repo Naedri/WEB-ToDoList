@@ -68,9 +68,9 @@ Pour définir une tâche comme terminée, l'utilisateur peut la cocher en cliqua
 
 Pour éditer une tâche, l'utilisateur doit cliquer dessus. Un volet s'ouvre alors pour lui permettre de renseigner les différentes caractéristiques d'une tâche :
 
-+ Nom (ce qu'il a saisit lors de la création de la tâche)
++ Nom (ce qu'il a saisi lors de la création de la tâche)
 + Liste d'étapes (voir fonctionnalités secondaires)
-+ Date d'échéance : une date à laquelle l'utilisateur estime que cette tâche doit avoir été effectuée
++ Date d'échéance : une date à laquelle l'utilisateur estime que cette tâche doit être effectuée
 + Note : un champ de texte libre dans lequel l'utilisateur peut saisir des informations quelconques à propos de la tâche
 
 Pour supprimer une tâche, l'utilisateur doit cliquer sur le picto "poubelle" situé sur la ligne d'une tâche. La suppression est immédiate, sans confirmation.
