@@ -389,4 +389,35 @@ export async function updatePwdUserApi(email, password, password2) {
 
     // 👉 Renvoyer les données
     return data
-}
+};
+
+
+
+/**
+ * reset of the password of a user
+ * @param {*} password2
+ */
+export async function resetPwdUserApi(password2) {
+    let url = getEndpointURL('/api/user/reset/password')
+    let user = {
+        email: email,
+        password2: password2,
+    };
+    let response = await fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+
+    // 👉 Parser la réponse en JSON
+    let data = await response.json()
+
+    if (response.status >= 300) {
+        throw new Error(data.message)
+    }
+
+    // 👉 Renvoyer les données
+    return data
+};
