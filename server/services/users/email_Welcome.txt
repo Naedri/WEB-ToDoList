@@ -1,0 +1,18 @@
+Compte VaN
+
+Bienvenue - Application ToDoList
+
+L'équipe VaN vous remercie d'avoir choisi son application.
+Veuillez utiliser l'identifiant suivant afin de vous connecter :
+
+-   Email : #email#
+
+Si vous n'avez pas souscris à notre application VaN veuillez contacter un des auteurs visibles au lien suivant :
+
+https://github.com/Naedri/WEB-ToDoList
+
+Veuillez ne pas répondre à ce mail.
+
+Merci,
+
+L’équipe des comptes VaN.

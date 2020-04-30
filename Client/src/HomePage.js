@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { Ripple } from 'react-spinners-css';
 import TodoApp from './components/TodoApp';
 import Lists from './components/Lists'
 import ListForm from './components/ListForm';
 import TodoListItemMenu from './components/TodoListItemMenu'
 import home from './assets/home.svg';
-import del from './assets/delete-forever.svg';
-//import settings from './assets/settings.svg';
-import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI } from './api.js';
+import settings from './assets/settings.svg';
+import { getLists, createList, deletelist, createTask, editTaskAPI, deleteTaskAPI, editStageApi, createStageApi, deleteStageApi } from './api.js';
 import NextTasks from "./components/NextTasks";
+import Modale from "./components/Modal";
+import LogOut from "./components/LogOut";
+import { Redirect } from 'react-router-dom';
+import UpdatingDetails from './components_usersConnection/UpdatingDetails';
+
 
 const todoReducer = (state, action) => {
     switch (action.type) {
@@ -34,6 +39,10 @@ let Home = () => {
     const [changeEditBorder, setWarning] = useState(false);
     const [renderHome, setRenderHome] = useState(true);
     const [isLoading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const [renderingSettings, renderSettings] = useState(false);
+    const [user, setUserEmail] = useState(JSON.parse(localStorage.getItem('user')));
+    const [redirect, setRedirect] = useState(false);
     const [state, dispatch] = React.useReducer(
         todoReducer,
         {
@@ -44,10 +53,19 @@ let Home = () => {
 
     useEffect(() => {
         async function fetchLists() {
-            setLoading(true);
-            let lists = await getLists();
-            dispatch({ type: 'INIT', toDos: lists })
-            setLoading(false);
+            try {
+                setLoading(true);
+                let lists = await getLists(JSON.parse(localStorage.getItem('user')));
+                if (lists) {
+                    dispatch({ type: 'INIT', toDos: lists });
+                }
+                else
+                    logout();
+                setLoading(false);
+            }
+            catch (err) {
+                setError(err.message);
+            }
         }
 
         fetchLists()
@@ -60,17 +78,16 @@ let Home = () => {
         let id = state.listId;
         let selectedList = state.toDos.find(list => list.id === id);
         try {
-            if (window.confirm(`Attention cette action est irreversible, êtes vous sur de vouloir supprimer la liste ${selectedList.title}?`)) {
-                setRenderHome(true);
-                setLoading(true);
-                await deletelist(selectedList);
-                let newToDos = state.toDos.filter(todoList => todoList.id !== id);
-                dispatch({ type: 'DELETE', toDos: newToDos, listId: null })
-                setEdit(false);
-                setLoading(false);
-            }
+            setRenderHome(true);
+            setLoading(true);
+            await deletelist(selectedList);
+            let newToDos = state.toDos.filter(todoList => todoList.id !== id);
+            dispatch({ type: 'DELETE', toDos: newToDos, listId: null })
+            setEdit(false);
+            setLoading(false);
         } catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -86,6 +103,7 @@ let Home = () => {
         dispatch({ type: 'CHANGE_LIST', listId: id })
         setEdit(false);
         setRenderHome(false);
+        renderSettings(false);
     }
 
     /**
@@ -95,15 +113,42 @@ let Home = () => {
     const editTask = async (editedTask, id) => {
         let newTodos = [...state.toDos]; //copier l'array
         let selectedList = newTodos.find(list => list.id === id);
+        console.log(`id est ${id}`)
+
         try {
-            await (editTaskAPI(selectedList, editedTask));
-            selectedList.tasks = selectedList.tasks.map(task => task.index === editedTask.index ? editedTask : task)
+            //comparaison des nouvelles sous taches et des anciennes
+            for (let i = 0; i < editedTask.sousTaches.length; ++i) {
+                try {
+                    let toCreate = editedTask.sousTaches[i];
+                    let toSend = {
+                        id: toCreate.id,
+                        idtache: selectedTask.id,
+                        titre: toCreate.titre,
+                        fait: toCreate.fait
+                    }
+                    if (!selectedTask.sousTaches.find(st => st.id === toCreate.id))
+                        await createStageApi(toSend)
+                    else
+                        await editStageApi(toSend)
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            //comparaison des anciennes sous taches et des nouvelles pour voir lesquelles ont été supprimés.
+            for (let i = 0; i < selectedTask.sousTaches.length; ++i) {
+                let toDelete = selectedTask.sousTaches[i];
+                if (!editedTask.sousTaches.find(st => st.id === toDelete.id))
+                    await deleteStageApi(toDelete);
+            }
+            await (editTaskAPI(editedTask));
+            selectedList.taches = selectedList.taches.map(task => task.id === editedTask.id ? editedTask : task)
             newTodos = newTodos.map(list => list.id === selectedList.id ? selectedList : list);
             dispatch({ type: 'EDIT_TASK', toDos: newTodos })
             setEdit(false);
         }
         catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -118,13 +163,15 @@ let Home = () => {
         }
         try {
             //setLoading(true);
-            let response = await createList(list);//appel à l'api
-            let newList = response.newList;
+            let response = await createList({ titre: list.value, email: user });//appel à l'api
+            let newList = { ...response, taches: [] };
             dispatch({ type: 'ADD_LIST', toDos: [...state.toDos, newList], listId: newList.id })
             setRenderHome(false);
+            renderSettings(false);
             //setLoading(false);
         } catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -133,12 +180,12 @@ let Home = () => {
      * @param {*} index identifiant de la tâche
      * @param listIndex identifiant de la liste
      */
-    const openEditMenu = (index, listIndex) => {
+    const openEditMenu = (taskId, listIndex) => {
         if (onEdit) {
             setWarning(true);
             return;
         }
-        setSelectedTask(state.toDos.find(list => list.id === listIndex).tasks.find(task => task.index === index));
+        setSelectedTask(state.toDos.find(list => list.id === listIndex).taches.find(task => task.id === taskId));
         dispatch({ type: 'OPEN_EDIT_MENU', listId: listIndex });
         setEdit(true);
         setWarning(false);
@@ -160,13 +207,15 @@ let Home = () => {
         let newTodos = [...state.toDos];
         let chosenList = newTodos.find(list => list.id === id);
         try {
-            let response = await createTask(chosenList, { title: todoItem.newItemValue });
-            chosenList.tasks.push(response);
+            let response = await createTask(chosenList, { titre: todoItem.newItemValue, fait: false });
+            console.log(response)
+            chosenList.taches.push({ ...response, sousTaches: [] });
             newTodos = newTodos.map(list => list.id === id ? chosenList : list);
             dispatch({ type: 'INIT', toDos: newTodos })
         }
         catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -183,14 +232,15 @@ let Home = () => {
         let newTodos = [...state.toDos];
         let selectedList = newTodos.find(list => list.id === id);
         try {
-            await deleteTaskAPI(selectedList, { index: itemIndex });
-            let updatedTasks = selectedList.tasks.filter(task => task.index !== itemIndex);
-            selectedList.tasks = updatedTasks;
+            await deleteTaskAPI(itemIndex);
+            let updatedTasks = selectedList.taches.filter(task => task.id !== itemIndex);
+            selectedList.taches = updatedTasks;
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
             dispatch({ type: 'REMOVE_TASK', toDos: newTodos })
         }
         catch (err) {
             console.log(err);
+            setError(err.message);
         }
     }
 
@@ -202,15 +252,23 @@ let Home = () => {
     const markTodoDone = async (itemIndex, id) => {
         let newTodos = [...state.toDos];
         let selectedList = newTodos.find(list => list.id === id);
-        let selectedTask = selectedList.tasks.find(task => task.index === itemIndex);
-        selectedTask.done = !selectedTask.done;
+        let selectedTask = selectedList.taches.find(task => task.id === itemIndex);
+        selectedTask.fait = !selectedTask.fait;
         try {
-            editTaskAPI(selectedList, selectedTask);
+            console.log(selectedTask)
+            await editTaskAPI(selectedTask);
             newTodos = newTodos.map(list => list.id === id ? selectedList : list);
             dispatch({ type: 'MTD', toDos: newTodos })
         } catch (err) {
             console.log(err);
+            setError(err.message);
         }
+    }
+
+
+    const updateMail = (newMail) => {
+        localStorage.setItem('user', JSON.stringify(newMail));
+        setUserEmail(newMail);
     }
 
     /**
@@ -221,40 +279,84 @@ let Home = () => {
             setWarning(true);
             return;
         }
+        renderSettings(false);
         setRenderHome(true);
     }
+    const logout = () => {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setRedirect(true);
+    }
 
+    const isSettings = () => {
+        if (onEdit) {
+            setWarning(true);
+            return;
+        }
+        setRenderHome(false);
+        renderSettings(true);
+    }
+
+    let centerHeader = () => {
+        if (renderHome)
+            return <h1>Prochaines tâches</h1>
+        if (renderingSettings)
+            return <h1>Paramètres</h1>
+        return hasLists && <h1>{selectedList.titre}</h1>
+    }
+
+    let centerContent = () => {
+        if (renderHome)
+            return <NextTasks lists={state.toDos} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
+        if (renderingSettings)
+            return <UpdatingDetails updateMail={updateMail} mail={user}/>
+        return (
+            hasLists && <TodoApp id={selectedList.id} initItems={selectedList.taches} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
+        )
+    }
+
+    if (redirect)
+        return <Redirect to="/" />;
+    if (error)
+        return <h2>Something went wrong : {error} </h2>
+    if (isLoading)
+        return (<div className="loadingSpinner" >
+            <Ripple
+                color={'#fd7e14'}
+                size={100}
+            />
+        </div>);
     let id = state.listId;
     let selectedList = state.toDos.find(list => list.id === id);
     let hasLists = state.toDos.length > 0;
-    let borderClass = changeEditBorder ? "col-sm-3 fill border-left border-warning" : "col-sm-3 fill border-left";
-
-    if (isLoading)
-        return (<p>Loading ...</p>)
+    let borderClass = changeEditBorder ? "col-xl-3 fill mt-3 border-left border-warning" : "col-xl-3 mt-3 fill border-left";
     return (
-        <div className="main-wrapper container-fluid">
-            <div className="row">
-                <div className="col-sm-3 border-right menu">
-                    <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>toto@gmail.com</strong>
+        <div className="container-fluid mt-0 full-h ">
+            <div className="row full-h ">
+                <div className="col-xl-3 border-right border-top menu full-h">
+                    <div className="mt-3">
+                        <img src={home} onClick={isHome} className="cursor-pointer" alt="home logo" /> <strong>{user}</strong>
+                    </div>
+                    <div className="mt-2 mb-2">
+                        <img src={settings} onClick={isSettings} className="cursor-pointer" alt="settings logo" /> <strong>Paramètres</strong>
+                    </div>
+                    <LogOut confirm={logout} />
                     <Lists changeList={changeList} lists={state.toDos} />
                     <ListForm addList={addList} />
-                    <div className="mt-auto">
-                    </div>
                 </div>
-                <div className={onEdit ? "col-sm-5" : "col-sm-7"}>
+                <div className={onEdit ? "col-xl-5 full-h  mt-3" : "col-xl-7 full-h  mt-3"}>
                     <div className="row">
                         <div className="col-sm">
-                            {renderHome ? <h1>Prochaines tâches</h1> : hasLists && <h1>{selectedList.title}</h1>}
+                            {centerHeader()}
                         </div>
                         <div className="col-sm-auto">
-                            {renderHome ? null : hasLists && <button type="button" onClick={deleteList} className="btn btn-danger pull-right mr-2"><img src={del} alt="delete logo"></img>&nbsp;Supprimer la liste</button>}
+                            {(renderHome || renderingSettings) ? null : hasLists && <Modale liste={selectedList.titre} confirm={deleteList} />}
                         </div>
                     </div>
-                    {renderHome ? <NextTasks lists={state.toDos} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />
-                        : hasLists && <TodoApp id={selectedList.id} initItems={selectedList.tasks} title={selectedList.title} removeItem={removeItem} markTodoDone={markTodoDone} addItem={addItem} showEditMenu={openEditMenu} />}
+                    {centerContent()}
                 </div>
                 {onEdit && <div className={borderClass} >
-                    <TodoListItemMenu listId={id} task={selectedTask} infoMessage={changeEditBorder ? "true" : null} onSubmit={editTask} onCancelEdit={onCancelEdit} />
+                    <TodoListItemMenu task={selectedTask} infoMessage={changeEditBorder ? "true" : null} onSubmit={editTask} onCancelEdit={onCancelEdit} />
                 </div>
                 }
             </div>

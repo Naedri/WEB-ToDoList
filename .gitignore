@@ -1,5 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# logdetails
+/server/services/users/.env
+/server/db/.env
+
+# test
+/server/services/users/testRequete.js
+
 # dependencies
 /node_modules
 /server/node_modules
