@@ -451,11 +451,22 @@ router.post('/user/forgetpassword', (req, res, next) => {
 router.patch("/user/reset/password", (req, res) => {
   const idRequest = req.body.id ;
   const thisRequest = getResetRequest(idRequest);
+  let request = {
+    email: '',
+    password2: '',
+  };
+  let user = {
+    password2: '',
+  };
+  let passwordUpdating ;
+
   
   if (thisRequest) {
-
+    //getting email and new password (password2)
+    request.email =  getUser(thisRequest.email);;
+    request.password2 = req.body.password2;
     //updating
-    ServiceUser.resetPassword(req.body.email, req.body.password2, (err, result) => {
+    ServiceUser.resetPassword(user.email, user.password2, (err, result) => {
       if (err) {
         res.status(500).json({ message: result });
         return;
