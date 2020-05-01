@@ -34,7 +34,6 @@ Maquette :
 
 ![Signup](./RessourcesGraphiques/signup-1.png)
 ![Signup](./RessourcesGraphiques/signup-2.png)
-![Signup](./RessourcesGraphiques/signup-3.png)
 
 #### Connexion
 
@@ -42,16 +41,17 @@ Une fois inscrit, l'utilisateur peut se connecter sur son compte. Le formulaire 
 
 Sur cette page, l'utilisateur peut saisir son adresse e-mail et son mot de passe pour se connecter à l'application. Un lien lui permet d'accéder à une page "mot de passe oublié" (voir fonctionnalités secondaires), et un autre lui permet d'accéder à la page d'inscription.
 
-Maquette :
+Maquettes :
 
 ![Login](./RessourcesGraphiques/login-1.png)
 ![Login](./RessourcesGraphiques/login-2.png)
+![Login](./RessourcesGraphiques/login-3.png)
 
 #### Page d'accueil
 
 Une fois authentifié, l'utilisateur arrive automatiquement sur la page d'accueil. Sur cette page sont listées toutes les tâches (peu importe à quelle liste elles sont rattachées) qui ont une date d'échéance définie (plus de détails dans la description ci-dessous), par ordre croissant de date. Chaque tâche peut être définie comme terminée (en la cochant) ou éditée (en cliquant dessus) directement à partir de cette page.
 
-Maquette :
+Maquettes :
 
 ![Home](./RessourcesGraphiques/home-1.png)
 ![Home](./RessourcesGraphiques/home-2.png)
@@ -77,7 +77,7 @@ Pour supprimer une tâche, l'utilisateur doit cliquer sur le picto "poubelle" si
 
 Pour supprimer la liste, l'utilisateur doit cliquer sur le bouton "Supprimer" situé à côté du nom de la liste. Une modale de confirmation doit s'afficher, et l'utilisateur peut alors cliquer sur "confirmer" ou "annuler". La confirmation supprime la liste et renvoie l'utilisateur sur la page d'accueil. L'annulation ferme simplement la modale.
 
-Maquette :
+Maquettes :
 
 ![Home](./RessourcesGraphiques/home-3.png)
 ![Home](./RessourcesGraphiques/home-4.png)
@@ -95,7 +95,7 @@ Lorsqu'une information a été modifiée avec succès, un message indiquera que 
 
 Un audit sur ces changements est réalisé par des *triggers* en pgplsql, afin de permettre retrouver une ancienne adresse mail si besoin.
 
-Maquette :
+Maquettes :
 
 ![Paramètres](./RessourcesGraphiques/parametre-1.png)
 ![Paramètres](./RessourcesGraphiques/parametre-2.png)
@@ -119,7 +119,7 @@ Lorsque l'utilisateur est sur le formulaire de connexion mais a oublié son mot 
 
 *L'email est en cours de construction.*
 
-Maquette :
+Maquettes :
 
 ![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-1.png)
 ![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-2.png)
@@ -128,7 +128,7 @@ Maquette :
 
 L'utilisateur peut définir une liste d'étapes pour chaque tâche. Une étape est en quelques sortes une sous-tâche. L'utilisateur peut ajouter le nombre d'étapes qu'il veut pour chaque tâche, les cocher, les supprimer (sans confirmation).
 
-Maquette :
+Maquettes :
 
 ![Home](./RessourcesGraphiques/home-4.png)
 ![Home](./RessourcesGraphiques/home-5.png)
@@ -152,7 +152,7 @@ Notre environnement de développement s'est fait avec **nodeJS**.
 
 ## Détails sur les branches
 
-+ La branche **master** n'a pas les mots de passes en hashés, ansi les utilisateurs peuvent recevoir par mail si l'on oublié, leur mot de passe pour se connecter.
++ La branche **master** n'a pas les mots de passes en hash, ansi les utilisateurs peuvent recevoir par mail si l'on oublié, leur mot de passe pour se connecter.
 + La branche **iop** hash les mots de passe, ansi les utilisateurs n'ont pas connaissance d'un mot de passe qui leur permet de se connecter lorsqu'ils en font la demande après un oubli.
 + La branche **vbn** est une branche en développement afin de mettre en place un email contenant un lien permettant de mettre à jour son mot de passe.
 
