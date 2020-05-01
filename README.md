@@ -255,7 +255,7 @@ cd ToDoList/Client/
 npm install
 ```
 
-Terminal 3 pour lancer le client
+Terminal 2 pour lancer le client
 
 ```
 cd ToDoList/Client/
