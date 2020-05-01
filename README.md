@@ -32,8 +32,10 @@ L'utilisateur peut créer un nouveau compte sur l'application. Pour cela, il dev
 
 Maquette :
 
-![Signup](./RessourcesGraphiques/signup-1.png)
-![Signup](./RessourcesGraphiques/signup-2.png)
+<p>
+<img alt="Signup" src="./RessourcesGraphiques/signup-1.png" width="600"> <br> </br>
+<img alt="Signup" src="./RessourcesGraphiques/signup-2.png" width="600"> <br> </br>
+</p>
 
 #### Connexion
 
@@ -43,9 +45,11 @@ Sur cette page, l'utilisateur peut saisir son adresse e-mail et son mot de passe
 
 Maquettes :
 
-![Login](./RessourcesGraphiques/login-1.png)
-![Login](./RessourcesGraphiques/login-2.png)
-![Login](./RessourcesGraphiques/login-3.png)
+<p>
+<img alt="Login" src="./RessourcesGraphiques/login-1.png" width="600"> <br> </br>
+<img alt="Login" src="./RessourcesGraphiques/login-2.png" width="600"> <br> </br>
+<img alt="Login" src="./RessourcesGraphiques/login-3.png" width="600"> <br> </br>
+</p>
 
 #### Page d'accueil
 
@@ -53,8 +57,10 @@ Une fois authentifié, l'utilisateur arrive automatiquement sur la page d'accuei
 
 Maquettes :
 
-![Home](./RessourcesGraphiques/home-1.png)
-![Home](./RessourcesGraphiques/home-2.png)
+<p>
+<img alt="Home" src="./RessourcesGraphiques/home-1.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-2.png" width="600"> <br> </br>
+</p>
 
 #### Page d'édition d'une liste
 
@@ -79,9 +85,11 @@ Pour supprimer la liste, l'utilisateur doit cliquer sur le bouton "Supprimer" si
 
 Maquettes :
 
-![Home](./RessourcesGraphiques/home-3.png)
-![Home](./RessourcesGraphiques/home-4.png)
-![Home](./RessourcesGraphiques/home-5.png)
+<p>
+<img alt="Home" src="./RessourcesGraphiques/home-3.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-4.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-5.png" width="600"> <br> </br>
+</p>
 
 #### Page paramètres
 
@@ -97,10 +105,12 @@ Un audit sur ces changements est réalisé par des *triggers* en pgplsql, afin d
 
 Maquettes :
 
-![Paramètres](./RessourcesGraphiques/parametre-1.png)
-![Paramètres](./RessourcesGraphiques/parametre-2.png)
-![Paramètres](./RessourcesGraphiques/parametre-3.png)
-![Paramètres](./RessourcesGraphiques/parametre-4.png)
+<p>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-1.png" width="600"> <br> </br>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-2.png" width="600"> <br> </br>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-3.png" width="600"> <br> </br>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-4.png" width="600"> <br> </br>
+</p>
 
 #### Menu
 
@@ -121,8 +131,11 @@ Lorsque l'utilisateur est sur le formulaire de connexion mais a oublié son mot 
 
 Maquettes :
 
-![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-1.png)
-![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-2.png)
+<p>
+<img alt="Oubli de mot de passe" src="./RessourcesGraphiques/forgetpassword-1.png" width="600"> <br> </br>
+<img alt="Oubli de mot de passe" src="./RessourcesGraphiques/forgetpassword-2.png" width="600"> <br> </br>
+</p>
+
 
 #### Etapes d'une tâche
 
@@ -130,12 +143,14 @@ L'utilisateur peut définir une liste d'étapes pour chaque tâche. Une étape e
 
 Maquettes :
 
-![Home](./RessourcesGraphiques/home-4.png)
-![Home](./RessourcesGraphiques/home-5.png)
+<p>
+<img alt="Home" src="./RessourcesGraphiques/home-4.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-5.png" width="600"> <br> </br>
+</p>
 
 ## Technologies, architecture utilisée
 
-Notre environnement de développement s'est fait avec **nodeJS**.
+Notre développement s'est réalisé dans l'environnement de **nodeJS**.
 
 + côté **backend** :
   + pour faciliter la maintenance et les évolutions, elle a été développée avec une architecture **MVC**
@@ -148,7 +163,7 @@ Notre environnement de développement s'est fait avec **nodeJS**.
   + la technologie de **React** a été utilisée 
   + les classes css de **Bootstrap** ont été utlisées
 + des deux côtés :
-  + le framework **express** a été utilisée pour la gestion de route
+  + le framework **express** a été utilisée pour la gestion de routes
 
 ## Détails sur les branches
 
@@ -187,7 +202,7 @@ Après la fin du téléchargement, vous pouvez fermer le terminal.
 
 ### Indication des détails de connexion pour les services
 
-Ensuite, il faut définir ajouter les détails de login dans des fichiers :
+Ensuite, il faut ajouter les détails de login dans des fichiers :
 
 1. `ToDoList\server\services\users\.env`
    
@@ -204,13 +219,13 @@ Ensuite, il faut définir ajouter les détails de login dans des fichiers :
    + `USER=xxx`
    + `HOST=yyyyyyy.db.elephantsql.com`
    + `DATABASE=xxx`
-   + `PASSWORD = dddddd`
+   + `PASSWORD=dddddd`
    + `PORT=5432`
    + `SECRET=ssssss`
 
 ### Lancement du serveur
 
-Terminal 1 pour installer les dépendance
+Terminal 1 pour installer les dépendances
 
 ```
 cd ToDoList/server/
