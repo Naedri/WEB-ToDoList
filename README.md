@@ -158,22 +158,22 @@ Notre développement s'est réalisé dans l'environnement de **nodeJS**.
   + la gestion de la base de données se fait avec le langage **plpgSQL**
   + les mots de passes stockés sont hachés avec **bcrypt** 
   + le control d'accès de certaines routes est réalisé avec **jsonwebtoken**
-  + l'envoie d'email peut se faire avec différent services : gmail, ethereal, mailtrap 
+  + l'envoie d'email soutenu par le package **nodemailer** peut se faire avec différent services : gmail, ethereal, mailtrap
 + côté **frontend** :
   + la technologie de **React** a été utilisée 
   + les classes css de **Bootstrap** ont été utlisées
 + des deux côtés :
-  + le framework **express** a été utilisée pour la gestion de routes
+  + le framework **express** a été utilisé pour la gestion de routes
 
 ## Détails sur les branches
 
-+ La branche **master** n'a pas les mots de passes en hash, ansi les utilisateurs peuvent recevoir par mail si l'on oublié, leur mot de passe pour se connecter.
-+ La branche **iop** hash les mots de passe, ansi les utilisateurs n'ont pas connaissance d'un mot de passe qui leur permet de se connecter lorsqu'ils en font la demande après un oubli.
++ La branche **master** n'a pas les mots de passes en hash, ansi pour se connecter les utilisateurs peuvent recevoir par mail leur mot passe s'ils l'ont oublié.
++ La branche **iop** présente des mots de passe en hash, ansi les utilisateurs n'ont pas connaissance d'un mot de passe qui leur permet de se connecter lorsqu'ils en font la demande après un oubli.
 + La branche **vbn** est une branche en développement afin de mettre en place un email contenant un lien permettant de mettre à jour son mot de passe.
 
 ## Utilisation de l'application
 
-Les commandes vous permettrons d'utiliser notre application.
+Les indications suivantes vous permettront d'utiliser notre application.
 
 ### Prérequis
 
