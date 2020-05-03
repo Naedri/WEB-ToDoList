@@ -30,11 +30,17 @@ Les pictogrammes nous ont été fournis par Cyrille Perois.
 
 L'utilisateur peut créer un nouveau compte sur l'application. Pour cela, il devra fournir son adresse e-mail ainsi qu'un mot de passe. Le mot de passe de l'utilisateur est stocké en base de données de manière sécurisée. Les éventuelles erreurs (champ vide, e-mail déjà utilisé...) sont affichées à l'utilisateur. Une fois l'utilisateur inscrit, un message de succès lui est affiché, et un e-mail de confirmation contenant son email lui est envoyé.
 
-Maquette :
+Maquettes :
 
 <p>
 <img alt="Signup" src="./RessourcesGraphiques/signup-1.png" width="600"> <br> </br>
 <img alt="Signup" src="./RessourcesGraphiques/signup-2.png" width="600"> <br> </br>
+</p>
+
+Mail de bienvenue envoyé : 
+
+<p>
+<img alt="Signup" src="./RessourcesGraphiques/signup-3.png" width="600"> <br> </br>
 </p>
 
 #### Connexion
@@ -49,6 +55,30 @@ Maquettes :
 <img alt="Login" src="./RessourcesGraphiques/login-1.png" width="600"> <br> </br>
 <img alt="Login" src="./RessourcesGraphiques/login-2.png" width="600"> <br> </br>
 <img alt="Login" src="./RessourcesGraphiques/login-3.png" width="600"> <br> </br>
+</p>
+
+
+#### Fonctionnalité "mot de passe oublié"
+
+Lorsque l'utilisateur est sur le formulaire de connexion mais a oublié son mot de passe, il peut cliquer sur un lien "j'ai oublié mon mot de passe". Il arrive alors sur une page qui lui demande son adresse e-mail. Une fois son adresse e-mail saisie, un e-mail lui est envoyé avec un lien lui permettant d'accéder à une page sur laquelle il pourra définir un nouveau mot de passe. 
+Le lien auquel l'utilisateur peut modifier son email n'est utilisable qu'une seule fois.
+
+Maquette de la page de demande de mot de passe :
+
+<p>
+<img alt="Oubli de mot de passe" src="./RessourcesGraphiques/forgetpassword-2.png" width="600"> <br> </br>
+</p>
+
+Mail de réinitialisation du mot de passe envoyé : 
+
+<p>
+<img alt="Réinitialiser son mot de passe" src="./RessourcesGraphiques/resetpassword-1.png" width="600"> <br> </br>
+</p>
+
+Maquette de la page de réinitialisation du mot de passe :
+
+<p>
+<img alt="Réinitialiser son mot de passe" src="./RessourcesGraphiques/resetpassword-2.png" width="600"> <br> </br>
 </p>
 
 #### Page d'accueil
@@ -83,6 +113,8 @@ Pour supprimer une tâche, l'utilisateur doit cliquer sur le picto "poubelle" si
 
 Pour supprimer la liste, l'utilisateur doit cliquer sur le bouton "Supprimer" situé à côté du nom de la liste. Une modale de confirmation doit s'afficher, et l'utilisateur peut alors cliquer sur "confirmer" ou "annuler". La confirmation supprime la liste et renvoie l'utilisateur sur la page d'accueil. L'annulation ferme simplement la modale.
 
+L'utilisateur peut définir une liste d'étapes pour chaque tâche. Une étape est en quelques sortes une sous-tâche. L'utilisateur peut ajouter le nombre d'étapes qu'il veut pour chaque tâche, les cocher, les supprimer (sans confirmation).
+
 Maquettes :
 
 <p>
@@ -106,10 +138,8 @@ Un audit sur ces changements est réalisé par des *triggers* en pgplsql, afin d
 Maquettes :
 
 <p>
-<img alt="Paramètres" src="./RessourcesGraphiques/parametre-1.png" width="600"> <br> </br>
 <img alt="Paramètres" src="./RessourcesGraphiques/parametre-2.png" width="600"> <br> </br>
 <img alt="Paramètres" src="./RessourcesGraphiques/parametre-3.png" width="600"> <br> </br>
-<img alt="Paramètres" src="./RessourcesGraphiques/parametre-4.png" width="600"> <br> </br>
 </p>
 
 #### Menu
@@ -121,34 +151,7 @@ Sur chaque page, un menu est affiché (dans un volet à gauche de la page en des
 + Un lien "paramètres" qui renvoie vers la page paramètres
 + Un lien "déconnexion" qui déconnecte l'utilisateur et le renvoie sur le formulaire de connexion
 
-### Fonctionnalités *secondaires*
-
-#### Page "mot de passe oublié"
-
-Lorsque l'utilisateur est sur le formulaire de connexion mais a oublié son mot de passe, il peut cliquer sur un lien "j'ai oublié mon mot de passe". Il arrive alors sur une page qui lui demande son adresse e-mail. Une fois son adresse e-mail saisie, un e-mail lui est envoyé avec un lien lui permettant d'accéder à une page sur laquelle il pourra définir un nouveau mot de passe.
-
-*L'email est en cours de construction.*
-
-Maquettes :
-
-<p>
-<img alt="Oubli de mot de passe" src="./RessourcesGraphiques/forgetpassword-1.png" width="600"> <br> </br>
-<img alt="Oubli de mot de passe" src="./RessourcesGraphiques/forgetpassword-2.png" width="600"> <br> </br>
-</p>
-
-
-#### Etapes d'une tâche
-
-L'utilisateur peut définir une liste d'étapes pour chaque tâche. Une étape est en quelques sortes une sous-tâche. L'utilisateur peut ajouter le nombre d'étapes qu'il veut pour chaque tâche, les cocher, les supprimer (sans confirmation).
-
-Maquettes :
-
-<p>
-<img alt="Home" src="./RessourcesGraphiques/home-4.png" width="600"> <br> </br>
-<img alt="Home" src="./RessourcesGraphiques/home-5.png" width="600"> <br> </br>
-</p>
-
-## Technologies, architecture utilisée
+## Technologies et architecture utilisées
 
 Notre développement s'est réalisé dans l'environnement de **nodeJS**.
 
@@ -159,17 +162,13 @@ Notre développement s'est réalisé dans l'environnement de **nodeJS**.
   + les mots de passes stockés sont hachés avec **bcrypt** 
   + le control d'accès de certaines routes est réalisé avec **jsonwebtoken**
   + l'envoie d'email soutenu par le package **nodemailer** peut se faire avec différent services : gmail, ethereal, mailtrap
+    + le lien unique **uuid** de réinitialisation du mot de passe est généré par des valeurs aléatoire (*v4*)  
 + côté **frontend** :
   + la technologie de **React** a été utilisée 
   + les classes css de **Bootstrap** ont été utlisées
 + des deux côtés :
+  + l'application a été développée en tant qu'application **client riche** communiquant avec une **API**
   + le framework **express** a été utilisé pour la gestion de routes
-
-## Détails sur les branches
-
-+ La branche **master** n'a pas les mots de passes en hash, ansi pour se connecter les utilisateurs peuvent recevoir par mail leur mot passe s'ils l'ont oublié.
-+ La branche **iop** présente des mots de passe en hash, ansi les utilisateurs n'ont pas connaissance d'un mot de passe qui leur permet de se connecter lorsqu'ils en font la demande après un oubli.
-+ La branche **vbn** est une branche en développement afin de mettre en place un email contenant un lien permettant de mettre à jour son mot de passe.
 
 ## Utilisation de l'application
 
@@ -180,11 +179,11 @@ Les indications suivantes vous permettront d'utiliser notre application.
 Il faut avoir :
 
 + souscrit à au moins un des services de mail suivant : 
-    + [gmail](https://mail.google.com/)
-    + [ethereal](https://ethereal.email/)
-    + [mailtrap](https://mailtrap.io/)
+  + [gmail](https://mail.google.com/)
+  + [ethereal](https://ethereal.email/)
+  + [mailtrap](https://mailtrap.io/)
 + soucrit à un service de base de données en plpgSQL, comme :
-    + [ElephantSQL](https://customer.elephantsql.com/login)
+  + [ElephantSQL](https://customer.elephantsql.com/login)
 
 ### Téléchargement du dépôt
 
@@ -206,16 +205,16 @@ Ensuite, il faut ajouter les détails de login dans des fichiers :
 
 1. `ToDoList\server\services\users\.env`
    
- + contenant les mots de passes et l'identifiant de votre service d'email
- + comme ci-dessous avec le service gmail :
+   + contenant les mots de passes et l'identifiant de votre service d'email
+   + comme ci-dessous avec le service gmail :
    + `PASSWORD_gmail=tonmdp`
    + `EMAIL_gmail=tonadresse@gmail.com`
- + modifier les commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
+   + modifier les commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
    + si vous avez choisi gmail, vous devez accepter d'utiliser des applications moins sécurisées à ce [lien](https://myaccount.google.com/lesssecureapps)
 
 2. `ToDoList\server\db\.env`
    
- + contenant les indicatons de la base de données ElephantSQL suivantes : 
+   + contenant les indicatons de la base de données ElephantSQL suivantes : 
    + `USER=xxx`
    + `HOST=yyyyyyy.db.elephantsql.com`
    + `DATABASE=xxx`
