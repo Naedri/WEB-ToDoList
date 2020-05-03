@@ -2,9 +2,7 @@ const utils = require("../../db/utils");
 const ServiceEmail = require("./email");
 const bcrypt = require('bcrypt');
 
-
 //service reset password
-const { v4: uuidv4 } = require('uuid'); //lien unique
 const { createResetRequest } = require("./reset");
 
 
@@ -257,38 +255,37 @@ function sendEmailPwd(email , callback){
             const user = result ;
             
             //creating uuid
-            const id = uuidv4();
-            const request = {
-                id: id,
-                email: user.email,
-            };
             //alowing the link with the id to reset pwd
-            createResetRequest(request);
-
-            //generating email
-            const subject = "Reset your password of ToDoList App";
-            const mail = user.email;
-            const pwdLink = `http://localhost:3000/reset/password/${request.id}`;
-            const text = ServiceEmail.generateText_Pwd(pwdLink);
-            const html = ServiceEmail.generateHtml_Pwd(pwdLink);
-
-            const emailDetails = {
-                to: mail,
-                subject: subject,
-                text: text,
-                html: html,
-            };
-            
-            ServiceEmail.sendEmail( emailDetails, (err2, result2) => {
+            createResetRequest(user.email, (err2, result2) => {
                 if (err2) {
-                    console.log("ERROR sendMail from user.js");
-                    console.log(err2);
-                    callback(true, err2);
+                    callback(true, err);
                 } else {
-                    console.log("NO ERROR sendMail from user.js");
-                    console.log(result2);
-                    const info = result2;
-                    callback(undefined, info);
+                    //generating email
+                    const subject = "Reset your password of ToDoList App";
+                    const mail = user.email;
+                    const pwdLink = `http://localhost:3000/reset/password/${result2.request_uuid}`;
+                    const text = ServiceEmail.generateText_Pwd(pwdLink);
+                    const html = ServiceEmail.generateHtml_Pwd(pwdLink);
+
+                    const emailDetails = {
+                        to: mail,
+                        subject: subject,
+                        text: text,
+                        html: html,
+                    };
+                    
+                    ServiceEmail.sendEmail( emailDetails, (err3, result3) => {
+                        if (err3) {
+                            console.log("ERROR sendMail from user.js");
+                            console.log(err3);
+                            callback(true, err3);
+                        } else {
+                            console.log("NO ERROR sendMail from user.js");
+                            console.log(result3);
+                            const info = result3;
+                            callback(undefined, info);
+                        }
+                    });
                 }
             });
         }

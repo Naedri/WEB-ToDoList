@@ -280,3 +280,46 @@ CALL P_USERS_MAIL_UPDATE( 1 , 'lapincnfd@mail.com');
 SELECT * FROM HISTORIQUE_MAIL ;
 SELECT * FROM USERS ;
 
+
+
+/*reseting password*/
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+DROP TABLE IF EXISTS request ;
+CREATE TABLE request (
+	ID SERIAL NOT NULL PRIMARY KEY,
+	iduser INTEGER CONSTRAINT NN_re_iduser NOT NULL,
+	request_uuid uuid DEFAULT uuid_generate_v4 (), 
+	created_at timestamp default current_timestamp
+);
+ALTER TABLE request ADD CONSTRAINT U_re_email UNIQUE (iduser) ;
+
+/*procedure inserting new uuid for a given user id*/
+CREATE OR REPLACE PROCEDURE P_New_Request (id_User INTEGER)
+	LANGUAGE plpgsql
+	AS $P_New_Request$
+	DECLARE
+		id_User_already	INTEGER;
+	BEGIN
+		SELECT iduser INTO id_User_already FROM REQUEST WHERE iduser = id_User ;
+		IF  id_User = id_User_already THEN
+			DELETE FROM request WHERE iduser = id_User ;
+			INSERT INTO REQUEST (iduser) VALUES (id_User) ;
+		ELSE 
+			INSERT INTO REQUEST (iduser) VALUES (id_User) ;
+		END IF;
+	END ;
+	$P_New_Request$ ;
+
+	
+/*procedure inserting new uuid for a given email*/
+CREATE OR REPLACE PROCEDURE P_New_Request_email (email_target VARCHAR(50))
+	LANGUAGE plpgsql
+	AS $P_New_Request_email$
+	DECLARE
+		id_User_target INTEGER;
+	BEGIN
+		SELECT IdUser INTO id_User_target FROM USERS WHERE email = email_target ;
+		CALL P_New_Request(id_User_target);
+	END ;
+	$P_New_Request_email$ ;

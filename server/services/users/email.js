@@ -115,7 +115,7 @@ function getFromMailOptions(fromMail){
 
 
 // async..await is not allowed in global scope, must use a wrapper
-function sendEmail(emaillDetails, callback){
+async function sendEmail(emaillDetails, callback){
 
     //which email service do you choose
     //const choice = "gmail";
@@ -124,7 +124,7 @@ function sendEmail(emaillDetails, callback){
 
   // create reusable transporter object using the default SMTP transport
     const transporterOptions = getLogDetails(choice);
-    const transporter = nodemailer.createTransport(transporterOptions, (err, result) => {
+    const transporter = await nodemailer.createTransport(transporterOptions, (err, result) => {
         if (err) {
             console.log("ERROR transporter");
             console.log(err);
@@ -146,7 +146,7 @@ function sendEmail(emaillDetails, callback){
         text: details.text, // plain text body
         html: details.html, // html body
     };
-    transporter.sendMail(mailOptions, (err, result) => {
+    await transporter.sendMail(mailOptions, (err, result) => {
         if (err) {
             console.log("ERROR sendMail");
             console.log(err);

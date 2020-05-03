@@ -451,36 +451,43 @@ router.post('/user/forgetpassword', (req, res, next) => {
 //router able to reset the password without the old pwd
 router.patch("/user/reset/password", (req, res) => {
   const idRequest = req.body.id ;
-  const thisRequest = ServiceReset.getResetRequest(idRequest);
-  let request = {
-    email: '',
-    password2: '',
-  };
-  let user = {
-    password2: '',
-  };
-  let passwordUpdating ;
 
-  
-  if (thisRequest) {
-    //getting email and new password (password2)
-    request.email =  thisRequest.email;
-    request.password2 = req.body.password2;
-    //updating
-    ServiceUser.resetPassword(request.email, request.password2, (err, result) => {
-      if (err) {
-        res.status(500).json({ message: result });
-        return;
-      } else {
-        passwordUpdating = result.password2 ? '' : 'not ';
-        passwordUpdating = passwordUpdating.concat('updated');
-        console.log('password2 ' + passwordUpdating);
-        
-        user.password2 = passwordUpdating;
-        res.json(user);
+  ServiceReset.getResetRequest(idRequest, (err, result) => {
+    if (err) {
+      res.status(510).json({ message: result });
+      return;
+    } else {
+      const thisRequest = result;
+      let request = {
+        email: '',
+        password2: '',
+      };
+      let user = {
+        password2: '',
+      };
+      let passwordUpdating ;
+
+      if (thisRequest) {
+        //getting email and new password (password2)
+        request.email =  thisRequest.email;
+        request.password2 = req.body.password2;
+        //updating
+        ServiceUser.resetPassword(request.email, request.password2, (err, result) => {
+          if (err) {
+            res.status(500).json({ message: result });
+            return;
+          } else {
+            passwordUpdating = result.password2 ? '' : 'not ';
+            passwordUpdating = passwordUpdating.concat('updated');
+            console.log('password2 ' + passwordUpdating);
+            
+            user.password2 = passwordUpdating;
+            res.json(user);
+          }
+        });
       }
-    });
-  }
+    }
+  });
 });
 
 
