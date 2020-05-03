@@ -10,7 +10,7 @@ let text_Pwd = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/ema
 let html_Welcome = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Welcome.html', 'utf8');
 let html_Pwd = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Pwd.html', 'utf8');
 
-//step1 : choose one lines between 124 to 127 ones your email service by comment modification
+//step1 : choose one lines between 120 to 123 ones your email service by comment modification
 //step1.1 : if you have choosen gmail, you will have to accept lesssercure apps at https://myaccount.google.com/lesssecureapps
 //step2 : create a new file in this folder with the following name : .env
 /* step3 : indicate in the .env file your mail login details, with for example :

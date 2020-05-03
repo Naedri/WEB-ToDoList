@@ -209,7 +209,7 @@ Ensuite, il faut ajouter les détails de login dans des fichiers :
    + comme ci-dessous avec le service gmail :
    + `PASSWORD_gmail=tonmdp`
    + `EMAIL_gmail=tonadresse@gmail.com`
-   + modifier les commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
+   + modifier les commentaires aux lignes 120 à 123 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
    + si vous avez choisi gmail, vous devez accepter d'utiliser des applications moins sécurisées à ce [lien](https://myaccount.google.com/lesssecureapps)
 
 2. `ToDoList\server\db\.env`

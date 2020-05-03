@@ -5,7 +5,7 @@ import '../css/styleUser.css' ;
 import { forgetPwdUserApi } from '../api.js';
 
 
-const ForgetPassWord = (props) => {
+const ForgetPassword = (props) => {
 
     const [form, setValues] = useState({
         email: '',
@@ -164,4 +164,4 @@ const ForgetPassWord = (props) => {
     );
 }
 
-export default ForgetPassWord;
+export default ForgetPassword;
