@@ -18,9 +18,9 @@ JALLAIS Adrien : adrien.jallais@protonmail.com
 
 L'objectif de ce projet est d'évaluer notre capacité à développer une **application web complète** en utilisant les technologies et concepts de développement web client et serveur vus en cours.
 
-Nous travaillons pour une entreprise fictive qui décide de créer une application web de gestion de **To do list**. L'application permet à une personne de créer un compte, puis de créer et gérer des listes de tâches à effectuer. L'application a été développée en tant qu'application **client riche** communiquant avec une **API** et s'adapte à la taille du support client (**design responsive**).
+Nous travaillons pour une entreprise fictive qui décide de créer une application web de gestion de **To do list**. L'application permet à une personne de créer un compte, puis de créer et gérer des listes de tâches à effectuer. L'application a été développée en tant qu'application **client riche** communiquant avec une **API** et s'adapte à la taille du support client (**responsive design**).
 
-Les pictogramme nous ont été fournis par Cyrille Perois.
+Les pictogrammes nous ont été fournis par Cyrille Perois.
 
 ## Résultat
 
@@ -32,8 +32,10 @@ L'utilisateur peut créer un nouveau compte sur l'application. Pour cela, il dev
 
 Maquette :
 
-![Signup](./RessourcesGraphiques/signup-1.png)
-![Signup](./RessourcesGraphiques/signup-2.png)
+<p>
+<img alt="Signup" src="./RessourcesGraphiques/signup-1.png" width="600"> <br> </br>
+<img alt="Signup" src="./RessourcesGraphiques/signup-2.png" width="600"> <br> </br>
+</p>
 
 #### Connexion
 
@@ -41,20 +43,24 @@ Une fois inscrit, l'utilisateur peut se connecter sur son compte. Le formulaire 
 
 Sur cette page, l'utilisateur peut saisir son adresse e-mail et son mot de passe pour se connecter à l'application. Un lien lui permet d'accéder à une page "mot de passe oublié" (voir fonctionnalités secondaires), et un autre lui permet d'accéder à la page d'inscription.
 
-Maquette :
+Maquettes :
 
-![Login](./RessourcesGraphiques/login-1.png)
-![Login](./RessourcesGraphiques/login-2.png)
-![Login](./RessourcesGraphiques/login-3.png)
+<p>
+<img alt="Login" src="./RessourcesGraphiques/login-1.png" width="600"> <br> </br>
+<img alt="Login" src="./RessourcesGraphiques/login-2.png" width="600"> <br> </br>
+<img alt="Login" src="./RessourcesGraphiques/login-3.png" width="600"> <br> </br>
+</p>
 
 #### Page d'accueil
 
 Une fois authentifié, l'utilisateur arrive automatiquement sur la page d'accueil. Sur cette page sont listées toutes les tâches (peu importe à quelle liste elles sont rattachées) qui ont une date d'échéance définie (plus de détails dans la description ci-dessous), par ordre croissant de date. Chaque tâche peut être définie comme terminée (en la cochant) ou éditée (en cliquant dessus) directement à partir de cette page.
 
-Maquette :
+Maquettes :
 
-![Home](./RessourcesGraphiques/home-1.png)
-![Home](./RessourcesGraphiques/home-2.png)
+<p>
+<img alt="Home" src="./RessourcesGraphiques/home-1.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-2.png" width="600"> <br> </br>
+</p>
 
 #### Page d'édition d'une liste
 
@@ -68,20 +74,22 @@ Pour définir une tâche comme terminée, l'utilisateur peut la cocher en cliqua
 
 Pour éditer une tâche, l'utilisateur doit cliquer dessus. Un volet s'ouvre alors pour lui permettre de renseigner les différentes caractéristiques d'une tâche :
 
-+ Nom (ce qu'il a saisit lors de la création de la tâche)
++ Nom (ce qu'il a saisi lors de la création de la tâche)
 + Liste d'étapes (voir fonctionnalités secondaires)
-+ Date d'échéance : une date à laquelle l'utilisateur estime que cette tâche doit avoir été effectuée
++ Date d'échéance : une date à laquelle l'utilisateur estime que cette tâche doit être effectuée
 + Note : un champ de texte libre dans lequel l'utilisateur peut saisir des informations quelconques à propos de la tâche
 
 Pour supprimer une tâche, l'utilisateur doit cliquer sur le picto "poubelle" situé sur la ligne d'une tâche. La suppression est immédiate, sans confirmation.
 
 Pour supprimer la liste, l'utilisateur doit cliquer sur le bouton "Supprimer" situé à côté du nom de la liste. Une modale de confirmation doit s'afficher, et l'utilisateur peut alors cliquer sur "confirmer" ou "annuler". La confirmation supprime la liste et renvoie l'utilisateur sur la page d'accueil. L'annulation ferme simplement la modale.
 
-Maquette :
+Maquettes :
 
-![Home](./RessourcesGraphiques/home-3.png)
-![Home](./RessourcesGraphiques/home-4.png)
-![Home](./RessourcesGraphiques/home-5.png)
+<p>
+<img alt="Home" src="./RessourcesGraphiques/home-3.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-4.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-5.png" width="600"> <br> </br>
+</p>
 
 #### Page paramètres
 
@@ -95,12 +103,14 @@ Lorsqu'une information a été modifiée avec succès, un message indiquera que 
 
 Un audit sur ces changements est réalisé par des *triggers* en pgplsql, afin de permettre retrouver une ancienne adresse mail si besoin.
 
-Maquette :
+Maquettes :
 
-![Paramètres](./RessourcesGraphiques/parametre-1.png)
-![Paramètres](./RessourcesGraphiques/parametre-2.png)
-![Paramètres](./RessourcesGraphiques/parametre-3.png)
-![Paramètres](./RessourcesGraphiques/parametre-4.png)
+<p>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-1.png" width="600"> <br> </br>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-2.png" width="600"> <br> </br>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-3.png" width="600"> <br> </br>
+<img alt="Paramètres" src="./RessourcesGraphiques/parametre-4.png" width="600"> <br> </br>
+</p>
 
 #### Menu
 
@@ -119,55 +129,61 @@ Lorsque l'utilisateur est sur le formulaire de connexion mais a oublié son mot 
 
 *L'email est en cours de construction.*
 
-Maquette :
+Maquettes :
 
-![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-1.png)
-![Oubli de mot de passe](./RessourcesGraphiques/forgetpassword-2.png)
+<p>
+<img alt="Oubli de mot de passe" src="./RessourcesGraphiques/forgetpassword-1.png" width="600"> <br> </br>
+<img alt="Oubli de mot de passe" src="./RessourcesGraphiques/forgetpassword-2.png" width="600"> <br> </br>
+</p>
+
 
 #### Etapes d'une tâche
 
 L'utilisateur peut définir une liste d'étapes pour chaque tâche. Une étape est en quelques sortes une sous-tâche. L'utilisateur peut ajouter le nombre d'étapes qu'il veut pour chaque tâche, les cocher, les supprimer (sans confirmation).
 
-Maquette :
+Maquettes :
 
-![Home](./RessourcesGraphiques/home-4.png)
-![Home](./RessourcesGraphiques/home-5.png)
+<p>
+<img alt="Home" src="./RessourcesGraphiques/home-4.png" width="600"> <br> </br>
+<img alt="Home" src="./RessourcesGraphiques/home-5.png" width="600"> <br> </br>
+</p>
 
 ## Technologies, architecture utilisée
 
-Notre environnement de développement s'est fait avec **nodeJS**.
+Notre développement s'est réalisé dans l'environnement de **nodeJS**.
 
 + côté **backend** :
+  + pour faciliter la maintenance et les évolutions, elle a été développée avec une architecture **MVC**
   + afin de prévoir le déploiement sur mobile, elle a été développée sous forme d'une **API**
-  + la gestion de la base de données se fait avec le langage **pgplSQL**
+  + la gestion de la base de données se fait avec le langage **plpgSQL**
   + les mots de passes stockés sont hachés avec **bcrypt** 
   + le control d'accès de certaines routes est réalisé avec **jsonwebtoken**
-  + l'envoie d'email peut se faire avec différent services : gmail, ethereal, mailtrap 
+  + l'envoie d'email soutenu par le package **nodemailer** peut se faire avec différent services : gmail, ethereal, mailtrap
 + côté **frontend** :
   + la technologie de **React** a été utilisée 
   + les classes css de **Bootstrap** ont été utlisées
 + des deux côtés :
-  + le framework **express** a été utilisée pour la gestion de route
+  + le framework **express** a été utilisé pour la gestion de routes
 
 ## Détails sur les branches
 
-+ La branche **master** n'a pas les mots de passes en hashés, ansi les utilisateurs peuvent recevoir par mail si l'on oublié, leur mot de passe pour se connecter.
-+ La branche **iop** hash les mots de passe, ansi les utilisateurs n'ont pas connaissance d'un mot de passe qui leur permet de se connecter lorsqu'ils en font la demande après un oubli.
++ La branche **master** n'a pas les mots de passes en hash, ansi pour se connecter les utilisateurs peuvent recevoir par mail leur mot passe s'ils l'ont oublié.
++ La branche **iop** présente des mots de passe en hash, ansi les utilisateurs n'ont pas connaissance d'un mot de passe qui leur permet de se connecter lorsqu'ils en font la demande après un oubli.
 + La branche **vbn** est une branche en développement afin de mettre en place un email contenant un lien permettant de mettre à jour son mot de passe.
 
 ## Utilisation de l'application
 
-Les commandes vous permettrons d'utiliser notre application.
+Les indications suivantes vous permettront d'utiliser notre application.
 
 ### Prérequis
 
 Il faut avoir :
 
-+ souscris à au moins un des services de mail suivant : 
++ souscrit à au moins un des services de mail suivant : 
     + [gmail](https://mail.google.com/)
     + [ethereal](https://ethereal.email/)
     + [mailtrap](https://mailtrap.io/)
-+ soucris à un service de base de données en pgplSQL, comme :
++ soucrit à un service de base de données en plpgSQL, comme :
     + [ElephantSQL](https://customer.elephantsql.com/login)
 
 ### Téléchargement du dépôt
@@ -184,9 +200,9 @@ git pull tdl master
 
 Après la fin du téléchargement, vous pouvez fermer le terminal.
 
-### Indication des détails de connexions pour les services
+### Indication des détails de connexion pour les services
 
-Ensuite, il faut définir ajouter les détails de login dans des fichiers :
+Ensuite, il faut ajouter les détails de login dans des fichiers :
 
 1. `ToDoList\server\services\users\.env`
    
@@ -194,29 +210,29 @@ Ensuite, il faut définir ajouter les détails de login dans des fichiers :
  + comme ci-dessous avec le service gmail :
    + `PASSWORD_gmail=tonmdp`
    + `EMAIL_gmail=tonadresse@gmail.com`
- + modifier commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
+ + modifier les commentaires aux lignes 124 à 127 du fichier `ToDoList\server\services\users\email.js` en fonction de votre service mail
    + si vous avez choisi gmail, vous devez accepter d'utiliser des applications moins sécurisées à ce [lien](https://myaccount.google.com/lesssecureapps)
 
-2. `ToDoList\server\services\db\.env`
+2. `ToDoList\server\db\.env`
    
  + contenant les indicatons de la base de données ElephantSQL suivantes : 
    + `USER=xxx`
    + `HOST=yyyyyyy.db.elephantsql.com`
    + `DATABASE=xxx`
-   + `PASSWORD = dddddd`
+   + `PASSWORD=dddddd`
    + `PORT=5432`
    + `SECRET=ssssss`
 
 ### Lancement du serveur
 
-Terminal 1 pour installer les dépendance
+Terminal 1 pour installer les dépendances
 
 ```
 cd ToDoList/server/
 npm install
 ```
 
-Terminal 2 pour initiser la base de donnée
+Terminal 2 pour initier la base de données
 
 ```
 cd ToDoList/server/db/
@@ -232,14 +248,14 @@ node app.js
 
 ### Lancement du client
 
-Terminal 1 pour installer les dépendance
+Terminal 1 pour installer les dépendances
 
 ```
 cd ToDoList/Client/
 npm install
 ```
 
-Terminal 3 pour lancer le client
+Terminal 2 pour lancer le client
 
 ```
 cd ToDoList/Client/
