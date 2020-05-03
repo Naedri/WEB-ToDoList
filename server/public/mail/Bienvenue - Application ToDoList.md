@@ -2,7 +2,7 @@
 
 # Bienvenue - Application ToDoList
 
-Vous utiliser actuellement l'email suivant pour vous connecter :
+Vous utilisez actuellement l'email suivant pour vous connecter :
 
 + *Email : **email** *
 
