@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useHistory } from 'react-router-dom';
 import { Ripple } from 'react-spinners-css';
+import '../css/styleUser.css' ;
 import { resetPwdUserApi } from '../api.js';
-import '../css/styleUser.css';
 
 
 const ResetPassword = (props) => {
@@ -46,13 +47,16 @@ const ResetPassword = (props) => {
         }
     };
 
-    const try_updating_password = async (e) => {
+    let history = useHistory();
+
+    const try_reseting_password = async (e) => {
         e.preventDefault();
         if (validateForm_pwd(errors)) {
             try {
                 startLoading('pwd');
-
-                let statusUpdate = await resetPwdUserApi(form.password2);
+                const id = props.match.params.id;
+                const password2 = form.password2;
+                let statusUpdate = await resetPwdUserApi(password2, id);
                 if(statusUpdate.password2==='updated') {
                     setValues({
                         ...form,
@@ -168,11 +172,11 @@ const ResetPassword = (props) => {
 
     return (
         <div className="container">
-            <div className="row">
-                <div className="col-sm col-md-8 col-lg-8">
-                    <form onSubmit={try_updating_password}>
+            <div className="row justify-content-center py-5 my-5">
+                <div className="col-sm col-md-6 col-lg-4">
+                    <form onSubmit={try_reseting_password}>
                         <div className="form-group">
-                            <h3>Mot de passe</h3>
+                            <h4 id="ResetPassword">Réinitialisation du mot de passe</h4>
                             <label htmlFor="password1">
                                 Nouveau mot de passe
                             </label>

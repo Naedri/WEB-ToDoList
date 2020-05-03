@@ -22,7 +22,8 @@
     "nodemailer": "^6.4.6",
     "path": "^0.12.7",
     "pg": "^8.0.2",
-    "shortid": "^2.2.15"
+    "shortid": "^2.2.15",
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 
 //service reset password
-const uuidv1 = require('uuid/v1'); //lien unique
+const { v4: uuidv4 } = require('uuid'); //lien unique
 const { createResetRequest } = require("./reset");
 
 
@@ -257,7 +257,7 @@ function sendEmailPwd(email , callback){
             const user = result ;
             
             //creating uuid
-            const id = uuidv1();
+            const id = uuidv4();
             const request = {
                 id: id,
                 email: user.email,

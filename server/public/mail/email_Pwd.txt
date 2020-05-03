@@ -4,7 +4,7 @@ Mot de passe - Application ToDoList
 
 Pour reinitialiser votre mot de passer veuiller cliquer au lien suivant :
 
--   Reset Password : #pwd#
+    #pwd#
 
 Si vous vous souvenez de nouveau de votre mot de passe, vous pouvez toujours vous connecter.
 Si vous n'avez pas souscris à notre application VaN veuillez contacter un des auteurs visibles au lien suivant :

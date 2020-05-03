@@ -10,6 +10,7 @@ const ServiceUser = require("../services/users/user.js");
 const jwt = require('jsonwebtoken');
 const config = require("../db/config.js");
 const helpers = require("../helpers/helpers");
+const ServiceReset = require("../services/users/reset.js");
 
 // router
 const express = require("express");
@@ -450,7 +451,7 @@ router.post('/user/forgetpassword', (req, res, next) => {
 //router able to reset the password without the old pwd
 router.patch("/user/reset/password", (req, res) => {
   const idRequest = req.body.id ;
-  const thisRequest = getResetRequest(idRequest);
+  const thisRequest = ServiceReset.getResetRequest(idRequest);
   let request = {
     email: '',
     password2: '',
@@ -463,10 +464,10 @@ router.patch("/user/reset/password", (req, res) => {
   
   if (thisRequest) {
     //getting email and new password (password2)
-    request.email =  getUser(thisRequest.email);;
+    request.email =  thisRequest.email;
     request.password2 = req.body.password2;
     //updating
-    ServiceUser.resetPassword(user.email, user.password2, (err, result) => {
+    ServiceUser.resetPassword(request.email, request.password2, (err, result) => {
       if (err) {
         res.status(500).json({ message: result });
         return;

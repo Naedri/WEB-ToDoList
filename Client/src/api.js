@@ -397,10 +397,10 @@ export async function updatePwdUserApi(email, password, password2) {
  * reset of the password of a user
  * @param {*} password2
  */
-export async function resetPwdUserApi(password2) {
+export async function resetPwdUserApi(password2, id) {
     let url = getEndpointURL('/api/user/reset/password')
     let user = {
-        email: email,
+        id: id,
         password2: password2,
     };
     let response = await fetch(url, {
