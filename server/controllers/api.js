@@ -10,6 +10,7 @@ const ServiceUser = require("../services/users/user.js");
 const jwt = require('jsonwebtoken');
 const config = require("../db/config.js");
 const helpers = require("../helpers/helpers");
+const ServiceReset = require("../services/users/reset.js");
 
 // router
 const express = require("express");
@@ -265,33 +266,31 @@ router.post("/user/login", (req, res, next) => {
       res.status(500).json({ message: result });
       return;
     } else {
-      let userFound = result ;
-      console.log(userFound)
+      let userFound = (result.email===req.body.email) ;
       if (userFound) {
-        console.log(userFound.rows[0]);
         const token = jwt.sign(
           { 
-            userId: userFound.rows[0].iduser,
-            email: userFound.rows[0].email,
+            userId: result.iduser,
+            email: userFound.email,
            },
           config.secret,
           { expiresIn: '24h' }
         );
         res.json({
           state: true,
-          userId: userFound.rows[0].iduser,
-          email: userFound.rows[0].email,
+          userId: result.iduser,
+          email: result.email,
           token: token,
           message: "Auth successful",
         });
-      
+
       } else {
         res.status(403).json({
           state: false,
           message: "Auth fail",
         });
       }
-      let status = result ? 'successfull' : 'failed';
+      let status = userFound ? 'successfull' : 'failed';
       console.log(status + ' authentification');
     }
   });
@@ -324,45 +323,6 @@ router.delete("/:userId", (req, res, next) => {
     });
 });
 */
-
-
-
-// state : done
-// does an email is already used
-// return true or error
-// @param: email
-router.post('/user/forgetpassword', (req, res, next) => {
-
-  //does it exist 
-  ServiceUser.isFree(req.body.email, (err, result) => {
-    if (err) {
-      res.status(500).json({ message: result });
-      return;
-    } else {
-      let state = result ? ' not ' : ' ';
-      console.log('email' + state + 'found');
-
-      if (!result){
-        //sending email
-        ServiceUser.sendEmailPwd(req.body.email, (err2, result2) => {
-          if (err2){
-            res.status(501).json({ message: result2 });
-            return;
-          } else {
-            console.log("NO ERROR FROM API.JS");
-            console.log(result2);//keep it to diplay email details
-            let state = result2 ? ' ' : ' not ';
-            console.log('email' + state + 'sent');
-            result = result2;
-          }
-        });
-      }
-      //res.json(result);
-      res.json(true); // we do not say wheter or not if email are valide
-    }
-  });
-});
-
 
 // state : done
 // updating an email
@@ -448,6 +408,87 @@ router.patch('/user/update/password', helpers.checkToken, (req, res, next) => {
   });
 });
 
+
+/* EMAIL RESET */
+
+
+// state : done
+// does an email is already used
+// return true or error
+// @param: email
+router.post('/user/forgetpassword', (req, res, next) => {
+
+  //does it exist 
+  ServiceUser.isFree(req.body.email, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    } else {
+      let state = result ? ' not ' : ' ';
+      console.log('email' + state + 'found');
+
+      if (!result){
+        //sending email
+        ServiceUser.sendEmailPwd(req.body.email, (err2, result2) => {
+          if (err2){
+            res.status(501).json({ message: result2 });
+            return;
+          } else {
+            console.log("NO ERROR FROM API.JS");
+            console.log(result2);//keep it to diplay email details
+            let state = result2 ? ' ' : ' not ';
+            console.log('email' + state + 'sent');
+            result = result2;
+          }
+        });
+      }
+      //res.json(result);
+      res.json(true); // we do not say wheter or not if email are valide
+    }
+  });
+});
+
+//router able to reset the password without the old pwd
+router.patch("/user/reset/password", (req, res) => {
+  const idRequest = req.body.id ;
+
+  ServiceReset.getResetRequest(idRequest, (err, result) => {
+    if (err) {
+      res.status(510).json({ message: result });
+      return;
+    } else {
+      const thisRequest = result;
+      let request = {
+        email: '',
+        password2: '',
+      };
+      let user = {
+        password2: '',
+      };
+      let passwordUpdating ;
+
+      if (thisRequest) {
+        //getting email and new password (password2)
+        request.email =  thisRequest.email;
+        request.password2 = req.body.password2;
+        //updating
+        ServiceUser.resetPassword(request.email, request.password2, (err, result) => {
+          if (err) {
+            res.status(500).json({ message: result });
+            return;
+          } else {
+            passwordUpdating = result.password2 ? '' : 'not ';
+            passwordUpdating = passwordUpdating.concat('updated');
+            console.log('password2 ' + passwordUpdating);
+            
+            user.password2 = passwordUpdating;
+            res.json(user);
+          }
+        });
+      }
+    }
+  });
+});
 
 
 module.exports = router;

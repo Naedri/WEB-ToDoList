@@ -2,11 +2,11 @@ Compte VaN
 
 Mot de passe - Application ToDoList
 
-Veuillez utiliser les identifiants suivants afin de vous connecter :
+Pour reinitialiser votre mot de passer veuiller cliquer au lien suivant :
 
--   Email : #email#
--   Password : #pwd#
+    #pwd#
 
+Si vous vous souvenez de nouveau de votre mot de passe, vous pouvez toujours vous connecter.
 Si vous n'avez pas souscris à notre application VaN veuillez contacter un des auteurs visibles au lien suivant :
 
 https://github.com/Naedri/WEB-ToDoList

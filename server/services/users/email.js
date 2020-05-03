@@ -1,10 +1,10 @@
-
 //"use strict";
 const nodemailer = require("nodemailer"); //envoie des mail par le service mail
 const fs = require('fs'); //lecture des templates
 const path = require('path'); //take from parent folder files not in .js
 require('dotenv').config({path: __dirname + '/.env'}); // fait reference aux log du service mail
 
+//template
 let text_Welcome = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Welcome.txt', 'utf8');
 let text_Pwd = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Pwd.txt', 'utf8');
 let html_Welcome = fs.readFileSync(path.join(__dirname, '../../public/mail') + '/email_Welcome.html', 'utf8');
@@ -30,31 +30,27 @@ module.exports = {
    generateHtml_Welcome,
 };
 
-function generateText_Pwd(email, pwd){
+function generateText_Pwd(pwd){
     let text = text_Pwd ;
-    text = text.replace("#email#", email);
     text = text.replace("#pwd#", pwd);
     return text ;
 };
 
-function generateText_Welcome(email, pwd){
+function generateText_Welcome(email){
     let text = text_Welcome ;
     text = text.replace("#email#", email);
-    text = text.replace("#pwd#", pwd);
     return text ;
 };
 
-function generateHtml_Pwd(email, pwd){
+function generateHtml_Pwd(pwd){
     let text = html_Pwd ;
-    text = text.replace("#email#", email);
     text = text.replace("#pwd#", pwd);
     return text ;
 };
 
-function generateHtml_Welcome(email, pwd){
+function generateHtml_Welcome(email){
     let text = html_Welcome ;
     text = text.replace("#email#", email);
-    text = text.replace("#pwd#", pwd);
     return text ;
 };
 
@@ -119,7 +115,7 @@ function getFromMailOptions(fromMail){
 
 
 // async..await is not allowed in global scope, must use a wrapper
-function sendEmail(emaillDetails, callback){
+async function sendEmail(emaillDetails, callback){
 
     //which email service do you choose
     //const choice = "gmail";
@@ -128,7 +124,7 @@ function sendEmail(emaillDetails, callback){
 
   // create reusable transporter object using the default SMTP transport
     const transporterOptions = getLogDetails(choice);
-    const transporter = nodemailer.createTransport(transporterOptions, (err, result) => {
+    const transporter = await nodemailer.createTransport(transporterOptions, (err, result) => {
         if (err) {
             console.log("ERROR transporter");
             console.log(err);
@@ -150,7 +146,7 @@ function sendEmail(emaillDetails, callback){
         text: details.text, // plain text body
         html: details.html, // html body
     };
-    transporter.sendMail(mailOptions, (err, result) => {
+    await transporter.sendMail(mailOptions, (err, result) => {
         if (err) {
             console.log("ERROR sendMail");
             console.log(err);

@@ -4,8 +4,7 @@
 
 Veuillez utiliser les identifiants suivants afin de vous connecter :
 
-+ *Email : **email** *
-+ *Password : **pwd** *
++ *Reset Password : **pwd** *
 
 Si vous ne reconnaissez pas le compte VaN veuillez contacter un des auteurs visibles au lien suivant :
 

@@ -3,7 +3,7 @@ Compte VaN
 Bienvenue - Application ToDoList
 
 L'équipe VaN vous remercie d'avoir choisi son application.
-Veuillez utiliser l'identifiant suivant afin de vous connecter :
+Vous utiliser actuellement l'email suivant pour vous connecter :
 
 -   Email : #email#
 
