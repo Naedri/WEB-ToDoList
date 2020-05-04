@@ -215,12 +215,12 @@ Ensuite, il faut ajouter les détails de login dans des fichiers :
 2. `ToDoList\server\db\.env`
    
    + contenant les indicatons de la base de données ElephantSQL suivantes : 
-   + `USER=xxx`
-   + `HOST=yyyyyyy.db.elephantsql.com`
-   + `DATABASE=xxx`
-   + `PASSWORD=dddddd`
-   + `PORT=5432`
-   + `SECRET=ssssss`
+   + `DB_USER=xxx`
+   + `DB_HOST=yyyyyyy.db.elephantsql.com`
+   + `DB_DATABASE=xxx`
+   + `DB_PASSWORD=dddddd`
+   + `DB_PORT=5432`
+   + `DB_SECRET=ssssss`
 
 ### Lancement du serveur
 

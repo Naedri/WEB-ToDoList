@@ -1,12 +1,12 @@
 //config.js
 require('dotenv').config({path: __dirname + '/.env'}); // fait reference aux log du service database en pgsql
 
-const USER = process.env.USER;
-const HOST = process.env.HOST;
-const DATABASE = process.env.DATABASE;
-const PASSWORD = process.env.PASSWORD;
-const PORT = Number(process.env.PORT);
-const SECRET = process.env.SECRET;
+const USER = process.env.DB_USER;
+const HOST = process.env.DB_HOST;
+const DATABASE = process.env.DB_DATABASE;
+const PASSWORD = process.env.DB_PASSWORD;
+const PORT = Number(process.env.DB_PORT);
+const SECRET = process.env.DB_SECRET;
 
 module.exports = {
 	database: {
