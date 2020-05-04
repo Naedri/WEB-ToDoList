@@ -281,7 +281,6 @@ function sendEmailPwd(email , callback){
                             callback(true, err3);
                         } else {
                             console.log("NO ERROR sendMail from user.js");
-                            console.log(result3);
                             const info = result3;
                             callback(undefined, info);
                         }
@@ -318,11 +317,10 @@ function sendEmailWelcome(email , callback){
             ServiceEmail.sendEmail( emailDetails, (err2, result2) => {
                 if (err2) {
                     console.log("ERROR sendMail from user.js");
-                    console.log(err);
+                    console.log(err2);
                     callback(true, err2);
                 } else {
                     console.log("NO ERROR sendMail from user.js");
-                    console.log(err);
                     const info = result2;
                     callback(undefined, info);
                 }
